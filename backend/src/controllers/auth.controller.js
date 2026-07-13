@@ -1,81 +1,23 @@
 import { User } from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { generateOTP, sendOTPViaFast2SMS } from "../services/otp.service.js";
 
 // ===============================
-// Beneficiary: Request OTP
-// POST /api/auth/send-otp
+// Beneficiary Login (Mobile Number only — no SMS/OTP step)
+// POST /api/auth/beneficiary-login
 // ===============================
-export const sendOTP = async (req, res) => {
+export const beneficiaryLogin = async (req, res) => {
   try {
     const { mobileNumber } = req.body;
 
-    if (!mobileNumber) {
-      return res.status(400).json({ message: "Mobile number required" });
+    if (!mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
+      return res.status(400).json({ message: "A valid 10 digit mobile number is required" });
     }
 
-    let user = await User.findOne({ mobileNumber });
-
-    // Create beneficiary if not exist
+    let user = await User.findOne({ mobileNumber, role: "beneficiary" });
     if (!user) {
-      user = await User.create({ mobileNumber, role: "beneficiary" });
+      user = await User.create({ mobileNumber, role: "beneficiary", isVerified: true });
     }
-
-    // The hackathon "Demo Login" button drives this same endpoint with a
-    // fixed demo number — never attempt a real SMS for it, since Fast2SMS
-    // would reject a non-existent number and break the bypass entirely.
-    const isDemoNumber = mobileNumber === "9999999999";
-
-    // No Fast2SMS account yet — use a fixed test OTP instead of sending a real SMS.
-    // Once FAST2SMS_API_KEY is set to a working key, this automatically switches to real SMS.
-    const hasSmsProvider = Boolean(process.env.FAST2SMS_API_KEY) && !isDemoNumber;
-    const otp = hasSmsProvider ? generateOTP() : "123456";
-
-    user.tempOtp = otp;
-    user.otpExpires = Date.now() + 5 * 60 * 1000; // 5 min expiry
-    await user.save();
-
-    if (hasSmsProvider) {
-      await sendOTPViaFast2SMS(mobileNumber, otp);
-    } else {
-      console.log(`📩 [TEST MODE] OTP for ${mobileNumber}: ${otp}`);
-    }
-
-    return res.status(200).json({ message: "OTP sent successfully" });
-
-  } catch (error) {
-    console.error("❌ sendOTP error:", error);
-    return res.status(500).json({ message: "Failed to send OTP" });
-  }
-};
-
-// ===============================
-// Beneficiary: Verify OTP
-// POST /api/auth/verify-otp
-// ===============================
-export const verifyOTP = async (req, res) => {
-  try {
-    const { mobileNumber, otp } = req.body;
-
-    if (!mobileNumber || !otp) {
-      return res.status(400).json({ message: "Mobile number and OTP required" });
-    }
-
-    const user = await User.findOne({ mobileNumber });
-
-    if (!user || !user.tempOtp || user.tempOtp !== otp) {
-      return res.status(400).json({ message: "Invalid OTP" });
-    }
-
-    if (Date.now() > user.otpExpires) {
-      return res.status(400).json({ message: "OTP expired, request a new one" });
-    }
-
-    user.tempOtp = undefined;
-    user.otpExpires = undefined;
-    user.isVerified = true;
-    await user.save();
 
     const token = jwt.sign(
       { id: user._id, role: "beneficiary", mobileNumber: user.mobileNumber },
@@ -84,26 +26,22 @@ export const verifyOTP = async (req, res) => {
     );
 
     return res.json({
-      message: "OTP verified successfully",
+      message: "Login successful",
       token,
-      role: "beneficiary"
+      role: "beneficiary",
     });
 
   } catch (error) {
-    console.error("❌ verifyOTP error:", error);
+    console.error("❌ beneficiaryLogin error:", error);
     return res.status(500).json({ message: "Server error" });
   }
 };
 
-
-
-
-
-
-
 // ===============================
-// Officer Login (Employee ID + Password)
+// Officer / Channel Partner Login (Employee ID + Password)
 // POST /api/auth/officer-login
+// Works for both roles — the account's own `role` field (set at creation)
+// decides what the issued token is scoped to, not this endpoint.
 // ===============================
 export const officerLogin = async (req, res) => {
   try {
@@ -115,7 +53,7 @@ export const officerLogin = async (req, res) => {
 
     const officer = await User.findOne({ employeeId }).select("+passwordHash");
     if (!officer) {
-      return res.status(404).json({ message: "Officer not found" });
+      return res.status(404).json({ message: "Account not found" });
     }
 
     const match = await bcrypt.compare(password, officer.passwordHash);
@@ -130,9 +68,13 @@ export const officerLogin = async (req, res) => {
     );
 
     return res.json({
-      message: "Officer login successful",
+      message: "Login successful",
       token,
-      officer
+      officer: {
+        id: officer._id,
+        role: officer.role,
+        employeeId: officer.employeeId,
+      }
     });
 
   } catch (error) {

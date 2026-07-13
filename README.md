@@ -1,6 +1,6 @@
 # Dhansetu
 
-A loan-eligibility and credit-scoring platform for beneficiaries, officers, and channel partners. Beneficiaries apply for loans via OTP-authenticated login; a Python ML service scores each application; officers review and approve/reject applications; channel partners bulk-import financial data via CSV.
+A loan-eligibility and credit-scoring platform for beneficiaries, officers, and channel partners. Beneficiaries log in with just their mobile number; a Python ML service scores each application; officers review and approve/reject applications; channel partners (SHGs/NGOs/field agents) log in separately and bulk-import financial data via CSV.
 
 ## Architecture
 
@@ -49,9 +49,9 @@ npm run dev
 | `ML_API_URL` | yes | full URL to the ML service's `/predict` endpoint |
 | `JWT_SECRET` | yes | signs/verifies login tokens |
 | `GEMINI_API_KEY` | yes | powers OCR + speech-to-text (`/api/ai/*`) |
-| `FAST2SMS_API_KEY` | no | sends real login OTP SMS via Fast2SMS. If unset, `sendOTP` falls back to a fixed test OTP (`123456`), logged to the server console — fine for demo/dev, not for real users. |
 | `FRONTEND_URL` | yes | comma-separated allowed CORS origins |
-| `BHASHINI_USER_ID` / `BHASHINI_API_KEY` | no | credentials from [bhashini.gov.in](https://bhashini.gov.in) for `POST /api/bhashini/translate`. If unset, that endpoint returns `503 { configured: false }` and the frontend keeps using its built-in i18next translations. |
+| `BHASHINI_USER_ID` / `BHASHINI_UDYAT_API_KEY` / `BHASHINI_INFERENCE_API_KEY` | no | credentials from [bhashini.gov.in](https://bhashini.gov.in) for `POST /api/bhashini/translate`. If unset, that endpoint returns `503 { configured: false }` and the frontend keeps using its built-in i18next translations. |
+| `BHASHINI_PIPELINE_ID` | no | defaults to Bhashini's public translation pipeline ID if unset |
 
 ### `frontend/.env`
 
@@ -61,14 +61,24 @@ npm run dev
 
 ## Authentication model
 
-- **Beneficiaries** log in via mobile number + SMS OTP (`POST /api/auth/send-otp`, `POST /api/auth/verify-otp`), receiving a JWT with `role: "beneficiary"`.
+- **Beneficiaries** log in with just a mobile number (`POST /api/auth/beneficiary-login`) — no OTP/SMS step. The account is created on first login. Receives a JWT with `role: "beneficiary"`.
 - **Officers** log in with employee ID + password (`POST /api/auth/officer-login`).
-- **Channel partners** currently authenticate using officer credentials — there is no dedicated channel-partner login/role yet. If you need a separate channel-partner identity, add a `"channel"` role to `backend/src/models/User.js` and a matching login flow.
-- All protected routes require `Authorization: Bearer <token>` and are role-gated via `authorizeRole` in `backend/src/middlewares/`.
+- **Channel partners** (SHGs/NGOs/field agents) log in the same way, at `/login/channel` — same endpoint as officers, but their account's `role` field is `"channel"`, which is what the issued JWT is scoped to.
+- Both officer and channel-partner accounts must be provisioned ahead of time (no self-signup) — see "Demo accounts" below for how a fresh deployment gets its first ones.
+- All protected routes require `Authorization: Bearer <token>` and are role-gated via `authorizeRole` in `backend/src/middlewares/`. The frontend mirrors this with `ProtectedRoute` (`frontend/src/components/auth/ProtectedRoute.jsx`) so an unauthenticated visit to any dashboard/apply route redirects to the matching login page instead of rendering with no data.
 
 Known limitation: a beneficiary's JWT is scoped by role only, not by Aadhaar number — the app never links a verified phone number to a specific Aadhaar identity. Anyone authenticated as a beneficiary can currently query loan/application history for any Aadhaar number they enter. The frontend works around this by remembering the Aadhaar used on the beneficiary's last loan application in `localStorage` (falling back to a manual "enter your Aadhaar" prompt on `/dashboard/beneficiary` otherwise) so "My Applications" has something to look up by — but this is not real authorization. Closing the gap for production requires deciding how Aadhaar gets bound to a verified identity (e.g. collected and locked in at first login) — a product decision, not just a wiring fix.
 
-The Beneficiary Login page also has a **Demo Login** button that skips real OTP delivery via a pre-verified test account — intended for presentations/demos only; remove it before a real production launch.
+### Demo accounts
+
+`backend/src/utils/seedDemoAccounts.js` runs on every server start and idempotently creates two accounts if they don't already exist, so a fresh database always has something to log in as:
+
+| Role | Login | Credentials |
+|---|---|---|
+| Officer | `/login/officer` | Employee ID `DEMO001` / password `demo1234` |
+| Channel partner | `/login/channel` | Partner ID `SHG001` / password `demo1234` |
+
+Both login pages, plus the beneficiary login, also have a **Demo Login** button that fills and submits these automatically — intended for presentations/demos only; remove before a real production launch (and rotate/remove the seeded accounts).
 
 ## Deployment
 
@@ -76,7 +86,7 @@ The Beneficiary Login page also has a **Demo Login** button that skips real OTP 
 
 1. In Render, "New +" → "Blueprint", point at this repo.
 2. Render creates two services: `dhansetu-backend` and `dhansetu-ml`.
-3. Fill in the backend's env vars (`MONGODB_URI`, `ML_API_URL`, `JWT_SECRET`, `GEMINI_API_KEY`, `FAST2SMS_API_KEY`, `FRONTEND_URL`, optionally `BHASHINI_USER_ID`/`BHASHINI_API_KEY`) in the Render dashboard — set `ML_API_URL` to the `dhansetu-ml` service's public URL + `/predict`.
+3. Fill in the backend's env vars (`MONGODB_URI`, `ML_API_URL`, `JWT_SECRET`, `GEMINI_API_KEY`, `FRONTEND_URL`, optionally the `BHASHINI_*` vars) in the Render dashboard — set `ML_API_URL` to the `dhansetu-ml` service's public URL + `/predict`.
 
 **Frontend → Vercel**:
 

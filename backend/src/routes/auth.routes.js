@@ -1,15 +1,12 @@
 import express from "express";
-import { sendOTP, verifyOTP, officerLogin } from "../controllers/auth.controller.js";
+import { beneficiaryLogin, officerLogin } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
-// Beneficiary Aadhaar OTP login
-// backend/routes/auth.routes.js
-router.post("/send-otp", sendOTP);        // expects mobileNumber
-router.post("/verify-otp", verifyOTP);    // expects mobileNumber + otp
+// Beneficiary login — mobile number only, no SMS/OTP step
+router.post("/beneficiary-login", beneficiaryLogin);
 
-
-// Officer login
+// Officer / channel-partner login (role comes from the stored account)
 router.post("/officer-login", officerLogin);
 
 export default router;

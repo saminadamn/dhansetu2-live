@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema(
   {
     role: {
       type: String,
-      enum: ["beneficiary", "officer"],
+      enum: ["beneficiary", "officer", "channel"],
       required: true,
       default: "beneficiary",
     },
@@ -23,13 +23,11 @@ const userSchema = new mongoose.Schema(
     passwordHash: {
       type: String,
       required: function () {
-        return this.role === "officer";
+        return this.role === "officer" || this.role === "channel";
       },
       select: false,
     },
 
-    tempOtp: String,
-    otpExpires: Date,
     isVerified: { type: Boolean, default: false }
   },
   { timestamps: true }

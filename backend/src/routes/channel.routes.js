@@ -7,8 +7,7 @@ import { authorizeRole } from "../middlewares/authorizeRole.js";
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-// No dedicated channel-partner login exists yet; gated behind officer auth for now.
-router.use(authMiddleware, authorizeRole("officer"));
+router.use(authMiddleware, authorizeRole("channel"));
 
 router.get("/financial-data", getFinancialData);
 router.post("/upload-csv", upload.single("file"), uploadCSV);

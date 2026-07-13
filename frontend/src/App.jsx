@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import LandingPage from "./pages/Landing/LandingPage";
 import BeneficiaryLogin from "./pages/Auth/BeneficiaryLogin";
 import OfficerLogin from "./pages/Auth/OfficerLogin";
+import ChannelLogin from "./pages/Auth/ChannelLogin";
 import ApplicationFormPage from "./pages/Application/ApplicationFormPage";
 import MyApplicationStatus from "./pages/Application/MyApplicationStatus";
 import BeneficiaryDashboard from "./pages/Dashboard/BeneficiaryDashboard";
@@ -15,6 +16,7 @@ import ChannelPartnerDashboard from "./pages/Landing/ChannelPartnerDashboard";
 import GeminiTools from "./pages/AI/GeminiTools";
 
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function NotFound() {
   return (
@@ -38,19 +40,42 @@ function App() {
             {/* Auth */}
             <Route path="/login/beneficiary" element={<BeneficiaryLogin />} />
             <Route path="/login/officer" element={<OfficerLogin />} />
+            <Route path="/login/channel" element={<ChannelLogin />} />
 
             {/* Beneficiary */}
-            <Route path="/loans/apply" element={<ApplicationFormPage />} />
-            <Route path="/application/new" element={<ApplicationFormPage />} />
-            <Route path="/dashboard/beneficiary" element={<BeneficiaryDashboard />} />
-            <Route path="/my-applications/:id" element={<MyApplicationStatus />} />
+            <Route
+              path="/loans/apply"
+              element={<ProtectedRoute role="beneficiary"><ApplicationFormPage /></ProtectedRoute>}
+            />
+            <Route
+              path="/application/new"
+              element={<ProtectedRoute role="beneficiary"><ApplicationFormPage /></ProtectedRoute>}
+            />
+            <Route
+              path="/dashboard/beneficiary"
+              element={<ProtectedRoute role="beneficiary"><BeneficiaryDashboard /></ProtectedRoute>}
+            />
+            <Route
+              path="/my-applications/:id"
+              element={<ProtectedRoute role="beneficiary"><MyApplicationStatus /></ProtectedRoute>}
+            />
 
             {/* Officer */}
-            <Route path="/dashboard/officer" element={<OfficerDashboard />} />
-            <Route path="/applications/:id" element={<ApplicationDetails />} />
-            <Route path="/dashboard/channel" element={<ChannelPartnerDashboard />} />
+            <Route
+              path="/dashboard/officer"
+              element={<ProtectedRoute role="officer"><OfficerDashboard /></ProtectedRoute>}
+            />
+            <Route
+              path="/applications/:id"
+              element={<ProtectedRoute role="officer"><ApplicationDetails /></ProtectedRoute>}
+            />
 
-            
+            {/* Third-party / channel partner */}
+            <Route
+              path="/dashboard/channel"
+              element={<ProtectedRoute role="channel"><ChannelPartnerDashboard /></ProtectedRoute>}
+            />
+
             {/* GEMINI API */}
             <Route path="/ai-tools" element={<GeminiTools />} />
 
@@ -64,4 +89,3 @@ function App() {
 }
 
 export default App;
- 

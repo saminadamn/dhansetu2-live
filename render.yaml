@@ -14,8 +14,6 @@ services:
         sync: false
       - key: GEMINI_API_KEY
         sync: false
-      - key: FAST2SMS_API_KEY
-        sync: false
       - key: FRONTEND_URL
         sync: false
       - key: BHASHINI_USER_ID

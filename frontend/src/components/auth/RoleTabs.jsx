@@ -1,7 +1,7 @@
 const TABS = [
   { key: "beneficiary", label: "Beneficiary / Citizen", href: "/login/beneficiary" },
   { key: "officer", label: "Internal Officer", href: "/login/officer" },
-  { key: "channel", label: "Third-Party / SHG", href: "/dashboard/channel" },
+  { key: "channel", label: "Third-Party / SHG", href: "/login/channel" },
 ];
 
 export default function RoleTabs({ active }) {
