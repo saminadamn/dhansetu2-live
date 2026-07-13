@@ -1,10 +1,15 @@
 from fastapi import FastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 from score_prediction import ScorePredictor
 from utils.risk_band import calculate_ccs_and_band
 from utils.insights import generate_insights
 
 app = FastAPI(title="Dhansetu ML Service")
 predictor = ScorePredictor()
+
+# Exposes GET /metrics (request count/latency by path+status, plus default
+# process metrics) — same Prometheus convention the Node backend uses.
+Instrumentator().instrument(app).expose(app)
 
 @app.post("/predict")
 def predict(input_data: dict):

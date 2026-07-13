@@ -6,6 +6,7 @@ import { publishEvent } from "../services/eventBus.js";
 import { persistScoreAndUpdateApplication } from "../services/scoring.service.js";
 
 export const applyForLoan = async (req, res) => {
+  const log = req.log || console;
   try {
     const {
       applicantName,
@@ -76,14 +77,17 @@ export const applyForLoan = async (req, res) => {
 
     // Event-driven path: hand off to the scoring/decision/notification
     // worker pipeline (backend/src/workers/) via RabbitMQ and return
-    // immediately — see README for the architecture.
-    const published = await publishEvent("application.submitted", {
-      applicationId: application._id.toString(),
-      aadhaarHash,
-      mlPayload,
-    });
+    // immediately — see README for the architecture. The correlation ID
+    // rides along as the AMQP message's correlationId property so every
+    // worker's logs for this application can be grepped together.
+    const published = await publishEvent(
+      "application.submitted",
+      { applicationId: application._id.toString(), aadhaarHash, mlPayload },
+      { correlationId: req.correlationId }
+    );
 
     if (published) {
+      log.info({ applicationId: application._id.toString() }, "Application published to scoring pipeline");
       return res.status(202).json({
         message: "Application submitted — scoring in progress",
         application,
@@ -93,6 +97,7 @@ export const applyForLoan = async (req, res) => {
 
     // Fallback: no message broker configured/reachable — score
     // synchronously so the app still works end-to-end without RabbitMQ.
+    log.warn({ applicationId: application._id.toString() }, "RabbitMQ unavailable — scoring synchronously");
     const mlResult = await getMLPrediction(mlPayload);
     const { application: scoredApplication, savedScore } = await persistScoreAndUpdateApplication({
       applicationId: application._id,
@@ -112,7 +117,7 @@ export const applyForLoan = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("❌ applyForLoan error:", error.message);
+    log.error({ err: error.message }, "applyForLoan error");
     return res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -7,17 +7,23 @@ dotenv.config();
 import mongoose from "mongoose";
 import { consumeEvents, publishEvent } from "../services/eventBus.js";
 import { getMLPrediction } from "../services/ml.service.js";
+import { logger } from "../config/logger.js";
+import { startMetricsServer } from "../config/metrics.js";
 
 const QUEUE = "scoring-worker-queue";
 const ROUTING_KEY = "application.submitted";
 
-async function handle({ applicationId, aadhaarHash, mlPayload }) {
-  console.log(`⚙️  Scoring application ${applicationId}`);
+async function handle({ applicationId, aadhaarHash, mlPayload }, { correlationId, log }) {
+  log.info({ applicationId }, "Scoring application");
 
   const mlResult = await getMLPrediction(mlPayload);
 
-  await publishEvent("application.scored", { applicationId, aadhaarHash, mlResult });
-  console.log(`✅ Scored application ${applicationId} — published application.scored`);
+  await publishEvent(
+    "application.scored",
+    { applicationId, aadhaarHash, mlResult },
+    { correlationId }
+  );
+  log.info({ applicationId }, "Scored application — published application.scored");
 }
 
 async function start() {
@@ -26,14 +32,17 @@ async function start() {
   // others and ready if scoring logic ever needs profile lookups directly.
   if (process.env.MONGODB_URI) {
     await mongoose.connect(process.env.MONGODB_URI, { dbName: "dhansetu" });
-    console.log("✅ Scoring worker connected to MongoDB");
+    logger.info("Scoring worker connected to MongoDB");
   }
 
   await consumeEvents(QUEUE, ROUTING_KEY, handle);
-  console.log("🚀 Scoring worker is running");
+
+  const metricsPort = Number(process.env.SCORING_METRICS_PORT || 9101);
+  startMetricsServer(metricsPort);
+  logger.info({ metricsPort }, "Scoring worker is running");
 }
 
 start().catch((err) => {
-  console.error("❌ Scoring worker failed to start:", err.message);
+  logger.error({ err: err.message }, "Scoring worker failed to start");
   process.exit(1);
 });

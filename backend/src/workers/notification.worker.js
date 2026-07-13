@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { consumeEvents } from "../services/eventBus.js";
+import { logger } from "../config/logger.js";
+import { startMetricsServer } from "../config/metrics.js";
 
 const QUEUE = "notification-worker-queue";
 const ROUTING_KEY = "application.decided";
@@ -15,23 +17,26 @@ const ROUTING_KEY = "application.decided";
 // observable end-to-end. Swap this out for a real provider call (SNS,
 // Twilio, SendGrid, etc.) when one is available; the event contract
 // upstream doesn't need to change.
-async function sendNotification({ applicantName, applicationId, status, risk_band }) {
+async function sendNotification({ applicantName, applicationId, status, risk_band }, log) {
   const message = `Hi ${applicantName || "there"}, your loan application (${applicationId}) has been assessed: ${risk_band}. Current status: ${status}.`;
-  console.log(`📩 [NOTIFICATION] ${message}`);
+  log.info({ applicationId, channel: "sms+email" }, message);
   return true;
 }
 
-async function handle(payload) {
-  console.log(`🔔 Notifying applicant for application ${payload.applicationId}`);
-  await sendNotification(payload);
+async function handle(payload, { log }) {
+  log.info({ applicationId: payload.applicationId }, "Notifying applicant");
+  await sendNotification(payload, log);
 }
 
 async function start() {
   await consumeEvents(QUEUE, ROUTING_KEY, handle);
-  console.log("🚀 Notification worker is running");
+
+  const metricsPort = Number(process.env.NOTIFICATION_METRICS_PORT || 9103);
+  startMetricsServer(metricsPort);
+  logger.info({ metricsPort }, "Notification worker is running");
 }
 
 start().catch((err) => {
-  console.error("❌ Notification worker failed to start:", err.message);
+  logger.error({ err: err.message }, "Notification worker failed to start");
   process.exit(1);
 });

@@ -26,6 +26,12 @@ Client → API Gateway (Express) → RabbitMQ → Scoring Worker → Decision Wo
 
 Run the workers locally with `npm run worker:scoring`, `npm run worker:decision`, `npm run worker:notification` (each in `backend/`, each its own process/terminal).
 
+### Observability
+
+- **Structured logging** — every backend/worker log line is JSON (pretty-printed in dev via `pino-pretty`) via `backend/src/config/logger.js`. Every HTTP request gets a correlation ID (`req.correlationId`, echoed back as the `X-Correlation-Id` response header) that also rides along as the AMQP message's `correlationId` property through the whole pipeline — grep any worker's logs for one ID and see that single application's entire journey across all three workers.
+- **Retries with exponential backoff + dead-letter queue** — `eventBus.js` implements the standard RabbitMQ "TTL + DLX" delayed-retry pattern: a failed message retries up to 5 times (2s, 4s, 8s, 16s, 32s delays) via a per-queue `<queue>.retry` holding queue, then gets routed to `<queue>.dlq` for manual inspection instead of retrying forever or being silently dropped. **Verified for real**: killed the ML service mid-pipeline, watched the scoring worker retry with the logged delays increasing exactly as expected (same correlation ID on every attempt), confirmed the message landed in `scoring-worker-queue.dlq` via the RabbitMQ management API after all 5 retries were exhausted, then brought the ML service back and confirmed a fresh application scored normally.
+- **Prometheus metrics** — `GET /metrics` on the backend (`http_requests_total`, `http_request_duration_seconds`, `events_published_total`, plus default Node process metrics) and on the ML service (via `prometheus-fastapi-instrumentator`). Each worker, having no HTTP server of its own, runs a tiny dedicated one just for `/metrics` (ports `9101`/`9102`/`9103` for scoring/decision/notification respectively, overridable via `SCORING_METRICS_PORT`/`DECISION_METRICS_PORT`/`NOTIFICATION_METRICS_PORT`), exposing `events_processed_total{queue,outcome}` (`success`/`retry`/`dead_letter`) and `worker_processing_duration_seconds`. Point a Grafana instance at any of these — no code changes needed, just a Prometheus scrape config.
+
 ## Local setup
 
 ### 1. ML service
@@ -71,6 +77,8 @@ npm run dev
 | `BHASHINI_USER_ID` / `BHASHINI_UDYAT_API_KEY` / `BHASHINI_INFERENCE_API_KEY` | no | credentials from [bhashini.gov.in](https://bhashini.gov.in) for `POST /api/bhashini/translate`. If unset, that endpoint returns `503 { configured: false }` and the frontend keeps using its built-in i18next translations. |
 | `BHASHINI_PIPELINE_ID` | no | defaults to Bhashini's public translation pipeline ID if unset |
 | `RABBITMQ_URL` | no | enables the async scoring pipeline (see above). Unset/unreachable → synchronous fallback. |
+| `LOG_LEVEL` | no | pino log level (`info` default) — set `debug` for verbose output |
+| `SCORING_METRICS_PORT` / `DECISION_METRICS_PORT` / `NOTIFICATION_METRICS_PORT` | no | port each worker's `/metrics` server listens on (defaults `9101`/`9102`/`9103`) |
 
 ### `frontend/.env`
 

@@ -7,12 +7,14 @@ dotenv.config();
 import mongoose from "mongoose";
 import { consumeEvents, publishEvent } from "../services/eventBus.js";
 import { persistScoreAndUpdateApplication } from "../services/scoring.service.js";
+import { logger } from "../config/logger.js";
+import { startMetricsServer } from "../config/metrics.js";
 
 const QUEUE = "decision-worker-queue";
 const ROUTING_KEY = "application.scored";
 
-async function handle({ applicationId, aadhaarHash, mlResult }) {
-  console.log(`🧾 Recording decision for application ${applicationId}`);
+async function handle({ applicationId, aadhaarHash, mlResult }, { correlationId, log }) {
+  log.info({ applicationId }, "Recording decision for application");
 
   const { application, savedScore } = await persistScoreAndUpdateApplication({
     applicationId,
@@ -20,26 +22,33 @@ async function handle({ applicationId, aadhaarHash, mlResult }) {
     mlResult,
   });
 
-  await publishEvent("application.decided", {
-    applicationId,
-    applicantName: application?.applicantName,
-    status: application?.status,
-    risk_band: mlResult.risk_band,
-    risk_score: savedScore.risk_score,
-  });
+  await publishEvent(
+    "application.decided",
+    {
+      applicationId,
+      applicantName: application?.applicantName,
+      status: application?.status,
+      risk_band: mlResult.risk_band,
+      risk_score: savedScore.risk_score,
+    },
+    { correlationId }
+  );
 
-  console.log(`✅ Decision stored for application ${applicationId} — status ${application?.status}`);
+  log.info({ applicationId, status: application?.status }, "Decision stored");
 }
 
 async function start() {
   await mongoose.connect(process.env.MONGODB_URI, { dbName: "dhansetu" });
-  console.log("✅ Decision worker connected to MongoDB");
+  logger.info("Decision worker connected to MongoDB");
 
   await consumeEvents(QUEUE, ROUTING_KEY, handle);
-  console.log("🚀 Decision worker is running");
+
+  const metricsPort = Number(process.env.DECISION_METRICS_PORT || 9102);
+  startMetricsServer(metricsPort);
+  logger.info({ metricsPort }, "Decision worker is running");
 }
 
 start().catch((err) => {
-  console.error("❌ Decision worker failed to start:", err.message);
+  logger.error({ err: err.message }, "Decision worker failed to start");
   process.exit(1);
 });
