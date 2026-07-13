@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const scoreSchema = new mongoose.Schema(
   {
-    aadhaarNumber: {
+    aadhaarHash: {
       type: String,
       required: true,
       index: true,
@@ -38,6 +38,6 @@ const scoreSchema = new mongoose.Schema(
 );
 
 // Index for fast lookups
-scoreSchema.index({ aadhaarNumber: 1 });
+scoreSchema.index({ aadhaarHash: 1 });
 
 export const Score = mongoose.model("Score", scoreSchema);

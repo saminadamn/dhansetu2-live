@@ -1,10 +1,11 @@
 import LoanApplication from "../models/LoanApplication.js";
+import { hashAadhaar } from "../utils/hashAadhaar.js";
 
 export const getBeneficiaryApplications = async (req, res) => {
   try {
     const { aadhaar } = req.params;
 
-    const applications = await LoanApplication.find({ aadhaarNumber: aadhaar })
+    const applications = await LoanApplication.find({ aadhaarHash: hashAadhaar(aadhaar) })
       .populate("scoresRef");
 
     return res.status(200).json({

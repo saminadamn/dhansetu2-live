@@ -1,6 +1,7 @@
 import joblib
 import pandas as pd
 import numpy as np
+import shap
 
 class ScorePredictor:
     def __init__(self):
@@ -33,6 +34,11 @@ class ScorePredictor:
             if col not in self.imputer_features:
                 self.imputer_features.append(col)
 
+        # SHAP explainers — built lazily so a model that TreeExplainer can't
+        # handle doesn't break scoring; explanations just degrade to empty.
+        self._rep_explainer = None
+        self._inc_explainer = None
+
     def preprocess(self, input_dict):
         df = pd.DataFrame([input_dict])
 
@@ -59,3 +65,36 @@ class ScorePredictor:
         inc = float(self.inc_model.predict(df[self.income_features])[0])
 
         return rep, inc
+
+    def _top_contributors(self, explainer_attr, model, features, df, top_n=5):
+        try:
+            explainer = getattr(self, explainer_attr)
+            if explainer is None:
+                explainer = shap.TreeExplainer(model)
+                setattr(self, explainer_attr, explainer)
+
+            shap_values = explainer.shap_values(df[features])
+            row = shap_values[0] if shap_values.ndim > 1 else shap_values
+
+            contributors = [
+                {"feature": feat, "impact": round(float(val), 4)}
+                for feat, val in zip(features, row)
+            ]
+            contributors.sort(key=lambda c: abs(c["impact"]), reverse=True)
+            return contributors[:top_n]
+        except Exception as exc:
+            # Explainability is best-effort — never let it break scoring.
+            print(f"SHAP explanation failed for {explainer_attr}: {exc}")
+            return []
+
+    def explain(self, input_dict):
+        df = self.preprocess(input_dict)
+
+        return {
+            "repayment_contributors": self._top_contributors(
+                "_rep_explainer", self.rep_model, self.repayment_features, df
+            ),
+            "income_contributors": self._top_contributors(
+                "_inc_explainer", self.inc_model, self.income_features, df
+            ),
+        }

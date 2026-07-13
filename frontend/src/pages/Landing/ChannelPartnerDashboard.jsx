@@ -67,7 +67,7 @@
 //         <tbody>
 //           {profiles.map((p) => (
 //             <tr key={p._id} className="border-b">
-//               <td className="p-2">{p.aadhaarNumber}</td>
+//               <td className="p-2 font-mono">**** **** {p.aadhaarLast4}</td>
 //               <td className="p-2">{p.num_past_loans}</td>
 //               <td className="p-2">{p.past_defaults}</td>
 //               <td className="p-2">{p.active_loans_count}</td>
@@ -173,7 +173,7 @@ formData.append("file", file); // MUST match multer.single("file")
         <tbody>
           {profiles.map((p) => (
             <tr key={p._id} className="border-b border-slate-100 dark:border-slate-800">
-              <td className="p-2">{p.aadhaarNumber}</td>
+              <td className="p-2 font-mono">**** **** {p.aadhaarLast4}</td>
               <td className="p-2">{p.num_past_loans}</td>
               <td className="p-2">{p.past_defaults}</td>
               <td className="p-2">{p.active_loans_count}</td>

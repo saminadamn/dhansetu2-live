@@ -1,36 +1,7 @@
-// import FinancialProfile from "../models/FinancialProfile.js";
-import XLSX from "xlsx";
-
-// export const uploadFinancialCSV = async (req, res) => {
-//   try {
-//     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-
-//     const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
-//     const sheet = workbook.Sheets[workbook.SheetNames[0]];
-//     const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-//     // Insert into MongoDB
-//     await FinancialProfile.insertMany(jsonData, { ordered: false });
-
-//     return res.status(201).json({
-//       message: "Financial profiles uploaded successfully",
-//       count: jsonData.length,
-//     });
-//   } catch (error) {
-//     console.error("CSV Upload Error:", error);
-//     res.status(500).json({ message: "Failed to upload file" });
-//   }
-// };
-
-// export const getAllFinancialProfiles = async (req, res) => {
-//   try {
-//     const data = await FinancialProfile.find().sort({ createdAt: -1 });
-//     return res.status(200).json({ message: "Profiles fetched", data });
-//   } catch (error) {
-//     res.status(500).json({ message: "Failed to fetch records" });
-//   }
-// };
 import FinancialProfile from "../models/FinancialProfile.js";
+import csv from "csv-parser";
+import { Readable } from "stream";
+import { hashAadhaar, aadhaarLast4 } from "../utils/hashAadhaar.js";
 
 export const getFinancialData = async (req, res) => {
   try {
@@ -46,9 +17,6 @@ export const getFinancialData = async (req, res) => {
   }
 };
 
-import csv from "csv-parser";
-import { Readable } from "stream";
-
 export const uploadCSV = async (req, res) => {
   try {
     if (!req.file) {
@@ -58,15 +26,17 @@ export const uploadCSV = async (req, res) => {
     console.log("File received:", req.file.originalname);
 
     const results = [];
-
-    // Convert buffer to stream
     const stream = Readable.from(req.file.buffer);
 
     stream
       .pipe(csv())
       .on("data", (row) => {
+        const rawAadhaar = row.aadhaarNumber || row.aadhaar || row.AADHAAR;
+        if (!rawAadhaar) return; // skip rows with no Aadhaar to hash
+
         results.push({
-          aadhaarNumber: row.aadhaarNumber || row.aadhaar || row.AADHAAR,
+          aadhaarHash: hashAadhaar(rawAadhaar),
+          aadhaarLast4: aadhaarLast4(rawAadhaar),
 
           num_past_loans: Number(row.num_past_loans),
           past_defaults: Number(row.past_defaults),
@@ -92,32 +62,19 @@ export const uploadCSV = async (req, res) => {
         });
       })
       .on("end", async () => {
-const result = await FinancialProfile.insertMany(results, {
-  ordered: false
-});
+        try {
+          const inserted = await FinancialProfile.insertMany(results, { ordered: false });
+          console.log("Inserted rows:", inserted.length);
 
-console.log("Inserted Count:", result.length);
-
-
-        res.status(200).json({
-          message: "CSV imported successfully",
-          count: results.length
-        });
-      })
-.on("end", async () => {
-  try {
-    const inserted = await FinancialProfile.insertMany(results, { ordered: false });
-    console.log("Inserted rows:", inserted.length);
-
-    res.status(200).json({
-      message: "CSV imported successfully",
-      inserted: inserted.length
-    });
-  } catch (err) {
-    console.error("Insert Failure:", err);
-  }
-});
-
+          res.status(200).json({
+            message: "CSV imported successfully",
+            inserted: inserted.length
+          });
+        } catch (err) {
+          console.error("Insert Failure:", err);
+          res.status(500).json({ message: "Failed to import CSV rows" });
+        }
+      });
 
   } catch (error) {
     console.error("CSV Upload Error:", error);

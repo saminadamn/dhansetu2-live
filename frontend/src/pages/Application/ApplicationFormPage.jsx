@@ -6,6 +6,7 @@ import UploadCard from "../../components/ui/UploadCard.jsx";
 import { useTranslation } from "react-i18next";
 import VoiceInputButton from "../../components/ui/VoiceInputButton.jsx";
 import SearchableDropdown from "../../components/ui/SearchableDropdown.jsx";
+import BhashiniTranslate from "../../components/ui/BhashiniTranslate.jsx";
 import { districts } from "../../constants/districts.js";
 
 
@@ -31,6 +32,7 @@ export default function ApplicationFormPage() {
 
 //new
 const [errors, setErrors] = useState({});
+const [consentGiven, setConsentGiven] = useState(false);
 
 
   // Form state aligned with backend field names
@@ -98,6 +100,11 @@ function nextStep() {
 async function handleSubmit(e) {
   e.preventDefault();
 
+  if (!consentGiven) {
+    setErrors((prev) => ({ ...prev, consent: "Account Aggregator consent is required to submit" }));
+    return;
+  }
+
   const payload = {
     applicantName: formData.applicantName,
     aadhaarNumber: formData.aadhaarNumber,
@@ -147,6 +154,9 @@ async function handleSubmit(e) {
            {t("form.helperText")}{" "}
             <span className="text-red-600 font-semibold">*</span> {t("form.mandatory")}
           </p>
+          <div className="mt-2">
+            <BhashiniTranslate text="Fill the sections step by step. Fields marked with * are mandatory." />
+          </div>
         </div>
         <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-govSoftBlue text-xs text-govBlue border border-blue-200 font-medium">
           {t("form.draftNote")}
@@ -586,17 +596,28 @@ async function handleSubmit(e) {
               </div>
             </div>
 
-            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 text-xs md:text-sm text-slate-700">
-              <p className="font-semibold text-govInk mb-2">Consent Summary</p>
-              <p className="leading-relaxed">
-                By submitting this form, you confirm that the provided
-                information is accurate to the best of your knowledge and agree
-                to the use of your data for eligibility assessment under
-                specified schemes. In a production system, explicit digital
-                consent flows and Account Aggregator consents will be displayed
-                here.
-              </p>
-            </div>
+            <label className="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-lg p-4 text-xs md:text-sm text-slate-700 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={consentGiven}
+                onChange={(e) => setConsentGiven(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-govBlue"
+              />
+              <span>
+                <span className="font-semibold text-govInk block mb-1">
+                  Account Aggregator Consent
+                </span>
+                <span className="leading-relaxed">
+                  I confirm that the information provided above is accurate to the best of my
+                  knowledge, and I explicitly authorize DHANSETU to fetch my financial data
+                  (loan history, bank inflows, and utility consumption signals) via the Account
+                  Aggregator framework for the sole purpose of assessing my loan eligibility.
+                  {!consentGiven && (
+                    <span className="text-red-600 font-medium"> This consent is required to submit your application.</span>
+                  )}
+                </span>
+              </span>
+            </label>
           </section>
         )}
 
@@ -616,7 +637,7 @@ async function handleSubmit(e) {
               Next →
             </Button>
           ) : (
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" disabled={!consentGiven}>
               Submit Application
             </Button>
           )}

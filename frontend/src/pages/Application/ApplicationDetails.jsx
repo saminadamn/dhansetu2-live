@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../../services/axiosInstance.js";
 import ScoreCard from "../../components/ui/ScoreCard.jsx";
+import ShapExplainability from "../../components/ui/ShapExplainability.jsx";
 import { statusStyle, riskBandStyle } from "../../lib/riskBand.js";
 
 export default function ApplicationDetails() {
@@ -51,7 +52,7 @@ export default function ApplicationDetails() {
       <div className="card p-4">
         <h2 className="text-xl font-semibold mb-3">Applicant Information</h2>
         <p><strong>Name:</strong> {application.applicantName}</p>
-        <p><strong>Aadhaar:</strong> {application.aadhaarNumber}</p>
+        <p><strong>Aadhaar:</strong> {application.aadhaarLast4 ? `****-****-${application.aadhaarLast4}` : "—"}</p>
         <p><strong>District:</strong> {application.district}</p>
       </div>
 
@@ -81,6 +82,10 @@ export default function ApplicationDetails() {
               <p className="font-semibold text-govBlue dark:text-blue-300 text-sm">Income Proxy Score</p>
               <p className="text-sm">{scores.income_proxy_score} / 100</p>
             </div>
+          </div>
+
+          <div className="mt-6">
+            <ShapExplainability explanation={scores.explanation} />
           </div>
         </div>
       ) : (

@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 const financialProfileSchema = new mongoose.Schema(
   {
-    aadhaarNumber: { type: String, required: true, unique: true },
+    // The raw Aadhaar number is never stored — only its SHA-256 hash (used
+    // as the lookup/join key) and last 4 digits (for masked display).
+    aadhaarHash: { type: String, required: true, unique: true },
+    aadhaarLast4: { type: String, required: true },
 
     // Loan history & repayment features
     num_past_loans: Number,

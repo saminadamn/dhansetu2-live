@@ -156,7 +156,7 @@ export default function OfficerDashboard() {
                       return (
                         <tr key={app._id} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50">
                           <td className="p-3">{app.applicantName}</td>
-                          <td className="p-3 font-mono text-xs">**** **** {app.aadhaarNumber.slice(-4)}</td>
+                          <td className="p-3 font-mono text-xs">**** **** {app.aadhaarLast4}</td>
                           <td className="p-3">{app.scoresRef?.risk_score ?? "N/A"}</td>
                           <td className="p-3">
                             {band ? (
@@ -213,9 +213,9 @@ export default function OfficerDashboard() {
                   </thead>
                   <tbody>
                     {repeatedUsers.map((u) => (
-                      <tr key={u.aadhaarNumber} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                      <tr key={u.latestApplication._id} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50">
                         <td className="p-3">{u.applicantName}</td>
-                        <td className="p-3 font-mono text-xs">**** **** {u.aadhaarNumber.slice(-4)}</td>
+                        <td className="p-3 font-mono text-xs">**** **** {u.aadhaarLast4}</td>
                         <td className="p-3">{u.applicationCount}</td>
                         <td className="p-3">{u.firstScore}</td>
                         <td className="p-3">{u.latestScore}</td>

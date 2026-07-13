@@ -41,8 +41,8 @@ export const getRepeatedUsers = async (req, res) => {
 
     const byAadhaar = {};
     for (const app of applications) {
-      if (!byAadhaar[app.aadhaarNumber]) byAadhaar[app.aadhaarNumber] = [];
-      byAadhaar[app.aadhaarNumber].push(app);
+      if (!byAadhaar[app.aadhaarHash]) byAadhaar[app.aadhaarHash] = [];
+      byAadhaar[app.aadhaarHash].push(app);
     }
 
     const repeatedUsers = [];
@@ -57,7 +57,7 @@ export const getRepeatedUsers = async (req, res) => {
       if (firstScore == null || latestScore == null || latestScore <= firstScore) continue;
 
       repeatedUsers.push({
-        aadhaarNumber: latest.aadhaarNumber,
+        aadhaarLast4: latest.aadhaarLast4,
         applicantName: latest.applicantName,
         applicationCount: apps.length,
         firstScore,

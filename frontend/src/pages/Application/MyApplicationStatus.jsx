@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import API from "../../services/axiosInstance.js";
 import ScoreCard from "../../components/ui/ScoreCard.jsx";
+import ShapExplainability from "../../components/ui/ShapExplainability.jsx";
 import { statusStyle, riskBandStyle } from "../../lib/riskBand.js";
 
 export default function MyApplicationStatus() {
@@ -86,7 +87,7 @@ export default function MyApplicationStatus() {
           <p><span className="font-medium">Ration Card:</span> {application.ration_card_type || "—"}</p>
           <p>
             <span className="font-medium">Aadhaar:</span>{" "}
-            {application.aadhaarNumber ? `****-****-${application.aadhaarNumber.slice(-4)}` : "—"}
+            {application.aadhaarLast4 ? `****-****-${application.aadhaarLast4}` : "—"}
           </p>
           <p>
             <span className="font-medium">Submitted:</span>{" "}
@@ -125,6 +126,10 @@ export default function MyApplicationStatus() {
                 Estimated from utility consumption and declared income signals.
               </p>
             </div>
+          </div>
+
+          <div className="mt-6">
+            <ShapExplainability explanation={scores.explanation} />
           </div>
         </section>
       ) : (

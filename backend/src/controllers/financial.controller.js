@@ -1,4 +1,5 @@
 import FinancialProfile from "../models/FinancialProfile.js";
+import { hashAadhaar, aadhaarLast4 } from "../utils/hashAadhaar.js";
 
 // POST /api/financial/add
 export const addFinancialProfile = async (req, res) => {
@@ -32,13 +33,16 @@ export const addFinancialProfile = async (req, res) => {
       return res.status(400).json({ message: "Aadhaar number is required" });
     }
 
-    const exists = await FinancialProfile.findOne({ aadhaarNumber });
+    const aadhaarHash = hashAadhaar(aadhaarNumber);
+
+    const exists = await FinancialProfile.findOne({ aadhaarHash });
     if (exists) {
       return res.status(400).json({ message: "Profile already exists for this Aadhaar" });
     }
 
     const newProfile = await FinancialProfile.create({
-      aadhaarNumber,
+      aadhaarHash,
+      aadhaarLast4: aadhaarLast4(aadhaarNumber),
       num_past_loans,
       past_defaults,
       late_payments_count,
@@ -78,7 +82,7 @@ export const getFinancialProfile = async (req, res) => {
   try {
     const { aadhaar } = req.params;
 
-    const profile = await FinancialProfile.findOne({ aadhaarNumber: aadhaar });
+    const profile = await FinancialProfile.findOne({ aadhaarHash: hashAadhaar(aadhaar) });
     if (!profile) {
       return res.status(404).json({ message: "No financial profile found for this Aadhaar" });
     }

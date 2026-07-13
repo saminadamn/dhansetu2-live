@@ -3,7 +3,10 @@ import mongoose from "mongoose";
 const LoanApplicationSchema = new mongoose.Schema(
   {
     applicantName: { type: String, required: true },
-    aadhaarNumber: { type: String, required: true, index: true },
+    // The raw Aadhaar number is never stored — only its SHA-256 hash (used
+    // as the lookup/join key) and last 4 digits (for masked display).
+    aadhaarHash: { type: String, required: true, index: true },
+    aadhaarLast4: { type: String, required: true },
     gender: { type: String },
     category: { type: String, default: "OBC" },
 

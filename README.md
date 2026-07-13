@@ -69,6 +69,10 @@ npm run dev
 
 Known limitation: a beneficiary's JWT is scoped by role only, not by Aadhaar number — the app never links a verified phone number to a specific Aadhaar identity. Anyone authenticated as a beneficiary can currently query loan/application history for any Aadhaar number they enter. The frontend works around this by remembering the Aadhaar used on the beneficiary's last loan application in `localStorage` (falling back to a manual "enter your Aadhaar" prompt on `/dashboard/beneficiary` otherwise) so "My Applications" has something to look up by — but this is not real authorization. Closing the gap for production requires deciding how Aadhaar gets bound to a verified identity (e.g. collected and locked in at first login) — a product decision, not just a wiring fix.
 
+### Aadhaar handling
+
+The raw Aadhaar number is never persisted. `backend/src/utils/hashAadhaar.js` SHA-256 hashes it the moment a request lands (`FinancialProfile`, `LoanApplication`, and `Score` all store `aadhaarHash` + `aadhaarLast4`, never the number itself) — the hash is the lookup/join key everywhere, and `aadhaarLast4` exists purely so the UI can show `****-****-1234` style masking. The frontend still collects and transmits the full number (form submission, Aadhaar-lookup on "My Applications") since a hash can't be reversed to look anything up by partial input — it's just never written to the database. Note the number still appears in plaintext in request URLs/bodies and any server access logs, which hashing at the DB layer doesn't address; that would need a different fix (e.g. moving Aadhaar lookups to a request body instead of a URL param) if request-log exposure matters for your deployment.
+
 ### Demo accounts
 
 `backend/src/utils/seedDemoAccounts.js` runs on every server start and idempotently creates two accounts if they don't already exist, so a fresh database always has something to log in as:

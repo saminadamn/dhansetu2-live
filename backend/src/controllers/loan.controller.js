@@ -2,6 +2,7 @@ import LoanApplication from "../models/LoanApplication.js";
 import FinancialProfile from "../models/FinancialProfile.js";
 import { Score } from "../models/Score.js";
 import { getMLPrediction } from "../services/ml.service.js";
+import { hashAadhaar, aadhaarLast4 } from "../utils/hashAadhaar.js";
 
 
 
@@ -28,16 +29,15 @@ export const applyForLoan = async (req, res) => {
     } = req.body;
 
 
-    //documnet 
+    //documnet
 
-
+    const aadhaarHash = hashAadhaar(aadhaarNumber);
 
     // Try to fetch Financial history
-    let financialData = await FinancialProfile.findOne({ aadhaarNumber });
+    let financialData = await FinancialProfile.findOne({ aadhaarHash });
 
     // Step 1: Build ML Payload dynamically
     const mlPayload = {
-      aadhaarNumber,
       ration_card_type,
       household_size,
       occupation_type,
@@ -73,7 +73,7 @@ export const applyForLoan = async (req, res) => {
 
     // Step 3: Save ML Scores
     const savedScore = await Score.create({
-      aadhaarNumber,
+      aadhaarHash,
       risk_score:normalizeScore( mlResult.ccs),
       repayment_score: normalizeScore(mlResult.repayment_score),
       income_proxy_score: normalizeScore(mlResult.income_proxy_score),
@@ -83,7 +83,8 @@ export const applyForLoan = async (req, res) => {
     // Step 4: Save loan application
     const application = await LoanApplication.create({
       applicantName,
-      aadhaarNumber,
+      aadhaarHash,
+      aadhaarLast4: aadhaarLast4(aadhaarNumber),
       gender,
       occupation_type,
       education_level,
@@ -129,7 +130,7 @@ export const getLoanHistory = async (req, res) => {
     }
 
     // Fetch all loan applications for this user in sorted order (latest first)
-    const applications = await LoanApplication.find({ aadhaarNumber: aadhaar })
+    const applications = await LoanApplication.find({ aadhaarHash: hashAadhaar(aadhaar) })
       .populate("scoresRef")
       .populate("financialDataRef")
       .sort({ createdAt: -1 });
