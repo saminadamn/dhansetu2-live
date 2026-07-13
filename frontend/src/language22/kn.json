@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "ಸಾಮಾಜಿಕ ನ್ಯಾಯ ಮತ್ತು ಸಬಲೀಕರಣ ಸಚಿವಾಲಯ",
+    "title": "ಸ್ಮಾರ್ಟ್ NBCFDC ಸಾಲ ತಪಾಸಣೆ ಪೋರ್ಟಲ್",
+    "subtitle": "ನಿಷ್ಪಕ್ಷಪಾತ ಮತ್ತು ಡೇಟಾ ಆಧಾರಿತ ಸಾಲ ಮೌಲ್ಯಮಾಪನದ ಪೈಲಟ್ ಯೋಜನೆ",
+    "home": "ಮುಖಪುಟ",
+    "apply": "ಅರ್ಜಿಸಿ",
+    "login": "ಲಾಗಿನ್",
+    "contact": "ಸಂಪರ್ಕ"
+  },
+  "form": {
+    "newApplicationTitle": "ಹೊಸ ಫಲಾನುಭವಿಗಳ ಅರ್ಜಿ",
+    "applicantName": "ಅರ್ಜಿದಾರರ ಹೆಸರು",
+    "age": "ವಯಸ್ಸು",
+    "gender": "ಲಿಂಗ",
+    "district": "ಜಿಲ್ಲೆ",
+    "address": "ವಿಳಾಸ",
+    "occupation_type": "ಉದ್ಯೋಗದ ಪ್ರಕಾರ",
+    "education_level": "ಶೈಕ್ಷಣಿಕ ಮಟ್ಟ",
+    "household_size": "ಕುಟುಂಬದ ಗಾತ್ರ",
+    "ration_card_type": "ರೇಷನ್ ಕಾರ್ಡ್ ಪ್ರಕಾರ",
+    "aadhaarNumber": "ಆಧಾರ್ ಸಂಖ್ಯೆ",
+    "electricityBill": "ವಿದ್ಯುತ್ ಬಿಲ್",
+    "incomeCertificate": "ಆದಾಯ ಪ್ರಮಾಣ ಪತ್ರ (ಐಚ್ಛಿಕ)",
+    "businessProof": "ವ್ಯಾಪಾರ ಸಾಬೀತು (ಸ್ವಯಂ ಉದ್ಯೋಗದವರಿಗೆ)",
+    "lpgInfo": "ಎಲ್‌ಪಿಜಿ / ಬಳಕೆ ವಿವರಗಳು",
+    "digitalPaymentsInfo": "ಡಿಜಿಟಲ್ ಪಾವತಿ / UPI ಬಳಕೆ",
+    "reviewTitle": "ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಸಲ್ಲಿಸಿ",
+    "submit": "ಅರ್ಜಿಯನ್ನು ಸಲ್ಲಿಸಿ",
+    "next": "ಮುಂದೆ",
+    "previous": "ಹಿಂದೆ"
+  }
+}

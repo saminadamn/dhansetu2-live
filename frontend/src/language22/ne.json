@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "सामाजिक न्याय तथा अधिकारिता मन्त्रालय",
+    "title": "स्मार्ट NBCFDC ऋण स्क्रिनिङ पोर्टल",
+    "subtitle": "न्यायपूर्ण तथा तथ्य—आधारित ऋण मूल्यांकनका लागि एक पायलट पहल",
+    "home": "गृहपृष्ठ",
+    "apply": "आवेदन गर्नुहोस्",
+    "login": "लग–इन",
+    "contact": "सम्पर्क"
+  },
+  "form": {
+    "newApplicationTitle": "नयाँ लाभग्राही आवेदन",
+    "applicantName": "आवेदकको नाम",
+    "age": "उमेर",
+    "gender": "लिङ्ग",
+    "district": "जिल्ला",
+    "address": "ठेगाना",
+    "occupation_type": "पेशाको प्रकार",
+    "education_level": "शैक्षिक स्तर",
+    "household_size": "परिवारको संख्या",
+    "ration_card_type": "रासन कार्डको प्रकार",
+    "aadhaarNumber": "आधार नम्बर",
+    "electricityBill": "विद्युत बिल",
+    "incomeCertificate": "आय प्रमाणपत्र (वैकल्पिक)",
+    "businessProof": "व्यवसाय प्रमाण (स्वरोजगार भएमा)",
+    "lpgInfo": "एलपीजी / उपयोग विवरण",
+    "digitalPaymentsInfo": "डिजिटल भुक्तानी / UPI उपयोग",
+    "reviewTitle": "समिक्षा गरी पेश गर्नुहोस्",
+    "submit": "आवेदन पेश गर्नुहोस्",
+    "next": "अर्को",
+    "previous": "अघिल्लो"
+  }
+}

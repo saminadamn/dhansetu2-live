@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   await connectDB();
   app.listen(PORT, () => {
-    console.log(`🚀 Backend server running at http://localhost:${PORT}`);
+    console.log(`🚀 Backend server listening on port ${PORT}`);
   });
 };
 

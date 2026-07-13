@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "सामाजिक न्याय आनी अधिकारिता मंत्रालय",
+    "title": "स्मार्ट NBCFDC लोण स्क्रीनिंग पोर्टल",
+    "subtitle": "न्यायिक आनी डेटा–आधारित लोण मूल्यमापनाखातीर एक पायलट उपक्रम",
+    "home": "होम",
+    "apply": "अर्ज करचें",
+    "login": "लॉगिन",
+    "contact": "संपर्क"
+  },
+  "form": {
+    "newApplicationTitle": "नवो लाभार्थी अर्ज",
+    "applicantName": "अर्जदाराचे नाव",
+    "age": "वय",
+    "gender": "लिंग",
+    "district": "जिल्हो",
+    "address": "विलास",
+    "occupation_type": "व्यवसायाचो प्रकार",
+    "education_level": "शिक्षणाचो स्तर",
+    "household_size": "कुटुंबाचो आकार",
+    "ration_card_type": "राशन कार्डाचो प्रकार",
+    "aadhaarNumber": "आधार क्रमांक",
+    "electricityBill": "वीज बिल",
+    "incomeCertificate": "उपार्जन प्रमाणपत्र (ऐच्छिक)",
+    "businessProof": "व्यवसायाचो पुरावो (स्वयंरोजगारी आसल्यार)",
+    "lpgInfo": "LPG / वापर विवरण",
+    "digitalPaymentsInfo": "डिजिटल भुगतान / UPI वापर",
+    "reviewTitle": "समिक्षा करूं सादर करचें",
+    "submit": "अर्ज सादर करचें",
+    "next": "फुडें",
+    "previous": "आदीं"
+  }
+}

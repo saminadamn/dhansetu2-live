@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "وزارةِ سماجي انصاف ۽ بااختياري",
+    "title": "اسمارٽ NBCFDC لون اسڪريننگ پورٽل",
+    "subtitle": "منصفاڻو ۽ ڊيٽا بيسڊ لون جائزي لاءِ هڪ پائلٽ قدم",
+    "home": "هوم",
+    "apply": "درخواست ڏيو",
+    "login": "لاگ اِن",
+    "contact": "رابطو"
+  },
+  "form": {
+    "newApplicationTitle": "نئون مستفيد درخواست فارم",
+    "applicantName": "درخواست ڏيندڙ جو نالو",
+    "age": "عمر",
+    "gender": "صنف",
+    "district": "ضلعي",
+    "address": "پتو",
+    "occupation_type": "روزگار جو قسم",
+    "education_level": "تعليمي سطح",
+    "household_size": "گهر ڀاتين جو تعداد",
+    "ration_card_type": "راشن ڪارڊ جو قسم",
+    "aadhaarNumber": "آڌار نمبر",
+    "electricityBill": "بجلي جو بل",
+    "incomeCertificate": "آمدني سرٽيفڪيٽ (اختياري)",
+    "businessProof": "ڪاروباري ثبوت (جيڪڏهن خود روزگار آهيو)",
+    "lpgInfo": "ايل پي جي / استعمال جي تفصيل",
+    "digitalPaymentsInfo": "ڊيجيٽل ادائيگي / UPI استعمال",
+    "reviewTitle": "جائزو وٺو ۽ جمع ڪريو",
+    "submit": "درخواست جمع ڪريو",
+    "next": "اڳيون",
+    "previous": "گذريل"
+  }
+}

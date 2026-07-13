@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "وزارتِ سماجی اِنصاف تٲم اختیار بخشی",
+    "title": "سماٹ NBCFDC لون سکرینِنگ پورٹل",
+    "subtitle": "نِصاف پٲر بنیادٕ، ڈیٹہ بُنیادہ کرن ہٕند ایک پائلٹ اِقدام",
+    "home": "ہوم",
+    "apply": "درخواست دِیو",
+    "login": "لاگ اِن",
+    "contact": "رابٕطہ"
+  },
+  "form": {
+    "newApplicationTitle": "نو لابھپاتری درخواست",
+    "applicantName": "درخواست گۄرہ ناو",
+    "age": "عمر",
+    "gender": "جنس",
+    "district": "ضِلع",
+    "address": "پتہ",
+    "occupation_type": "پیشہ تِہٕند قسم",
+    "education_level": "تعلیمۍ سطح",
+    "household_size": "خاندانء ہٕند تعداد",
+    "ration_card_type": "ریشن کارڈہ ہٕند قسم",
+    "aadhaarNumber": "آدھار نمبر",
+    "electricityBill": "بجلی بل",
+    "incomeCertificate": "آمدن سرٹیفیکیٹ (اختیاری)",
+    "businessProof": "کاروبار ثبوت (اگر خود روزگار)",
+    "lpgInfo": "ایل پی جی / استعمال تفصیل",
+    "digitalPaymentsInfo": "ڈیجیٹل ادائګیہ / UPI استعمال",
+    "reviewTitle": "جائزہ تھٲیو تِہ جمع کٲریو",
+    "submit": "درخواست جمع کٲریو",
+    "next": "اگٕر",
+    "previous": "پتیم"
+  }
+}

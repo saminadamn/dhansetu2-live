@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "सामाजिक न्याय आणि अधिकारिता मंत्रालय",
+    "title": "स्मार्ट NBCFDC कर्ज स्क्रीनिंग पोर्टल",
+    "subtitle": "निष्पक्ष आणि माहितीआधारित कर्ज मूल्यांकनासाठी एक पायलट उपक्रम",
+    "home": "मुख्यपृष्ठ",
+    "apply": "अर्ज करा",
+    "login": "लॉगिन",
+    "contact": "संपर्क"
+  },
+  "form": {
+    "newApplicationTitle": "नवीन लाभार्थी अर्ज",
+    "applicantName": "अर्जदाराचे नाव",
+    "age": "वय",
+    "gender": "लिंग",
+    "district": "जिल्हा",
+    "address": "पत्ता",
+    "occupation_type": "व्यवसायाचा प्रकार",
+    "education_level": "शैक्षणिक स्तर",
+    "household_size": "कुटुंबातील सदस्य संख्या",
+    "ration_card_type": "रation कार्ड प्रकार",
+    "aadhaarNumber": "आधार क्रमांक",
+    "electricityBill": "वीज बिल",
+    "incomeCertificate": "उत्पन्न प्रमाणपत्र (पर्यायी)",
+    "businessProof": "व्यवसाय पुरावा (स्वयंरोजगार असल्यास)",
+    "lpgInfo": "एलपीजी / वापर तपशील",
+    "digitalPaymentsInfo": "डिजिटल पेमेंट / UPI वापर",
+    "reviewTitle": "पुनरावलोकन करा व सबमिट करा",
+    "submit": "अर्ज सबमिट करा",
+    "next": "पुढे",
+    "previous": "मागे"
+  }
+}

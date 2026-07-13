@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "ସମାଜିକ ନ୍ୟାୟ ଏବଂ ଅଧିକାରିକରଣ ମନ୍ତ୍ରାଳୟ",
+    "title": "ସ୍ମାର୍ଟ NBCFDC ଋଣ ସ୍କ୍ରିନିଂ ପୋର୍ଟାଲ",
+    "subtitle": "ନ୍ୟାୟସଂଗତ ଏବଂ ତଥ୍ୟାଧାରିତ ଋଣ ମୂଲ୍ୟାଙ୍କନ ପାଇଁ ଗୋଟିଏ ପାଇଲଟ୍ ପ୍ରୟାସ",
+    "home": "ହୋମ୍",
+    "apply": "ଆବେଦନ କରନ୍ତୁ",
+    "login": "ଲଗଇନ୍",
+    "contact": "ଯୋଗାଯୋଗ"
+  },
+  "form": {
+    "newApplicationTitle": "ନୂତନ ଲାଭୁକ ଆବେଦନ",
+    "applicantName": "ଆବେଦକଙ୍କ ନାମ",
+    "age": "ବୟସ",
+    "gender": "ଲିଙ୍ଗ",
+    "district": "ଜିଲ୍ଲା",
+    "address": "ଠିକଣା",
+    "occupation_type": "ବ୍ୟବସାୟ ପ୍ରକାର",
+    "education_level": "ଶିକ୍ଷା ଦରଜା",
+    "household_size": "ପରିବାର ସଂଖ୍ୟା",
+    "ration_card_type": "ରେସନ୍ କାର୍ଡ ପ୍ରକାର",
+    "aadhaarNumber": "ଆଧାର ସଂଖ୍ୟା",
+    "electricityBill": "ବିଦ୍ୟୁତ ବିଲ୍",
+    "incomeCertificate": "ଆୟ ପ୍ରମାଣପତ୍ର (ଇଚ୍ଛାନୁସାରେ)",
+    "businessProof": "ବ୍ୟବସାୟ ପ୍ରମାଣ (ସ୍ୱୟଂରୋଜଗାରୀ ହେଲେ)",
+    "lpgInfo": "ଏଲ୍‌ପିଜି / ବ୍ୟବହାର ବିବରଣୀ",
+    "digitalPaymentsInfo": "ଡିଜିଟାଲ୍ ଭୁଗତାନ / UPI ବ୍ୟବହାର",
+    "reviewTitle": "ପୁନଃପରୀକ୍ଷଣ କରି ଦାଖଲ କରନ୍ତୁ",
+    "submit": "ଆବେଦନ ଦାଖଲ କରନ୍ତୁ",
+    "next": "ପରବର୍ତ୍ତୀ",
+    "previous": "ପୂର୍ବବର୍ତ୍ତୀ"
+  }
+}

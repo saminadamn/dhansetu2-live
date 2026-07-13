@@ -4,11 +4,12 @@ import numpy as np
 
 class ScorePredictor:
     def __init__(self):
-        self.rep_model = joblib.load("ml_model/repayment_model.pkl")
-        self.inc_model = joblib.load("ml_model/income_model.pkl")
-        self.label_encoders = joblib.load("ml_model/label_encoders.pkl")
-        self.knn_imputer = joblib.load("ml_model/knn_imputer.pkl")
-        self.group_medians = joblib.load("ml_model/group_medians.pkl")
+        self.rep_model = joblib.load("repayment_model.pkl")
+        self.inc_model = joblib.load("income_model.pkl")
+        self.label_encoders = joblib.load("label_encoders.pkl")
+        self.knn_imputer = joblib.load("knn_imputer.pkl")
+        self.group_medians = joblib.load("group_medians.pkl")
+
 
         # Feature lists
         self.repayment_features = [

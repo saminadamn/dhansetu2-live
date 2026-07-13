@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "सामाजिक न्याय आ अधिकारिता मंत्रालय",
+    "title": "Smart NBCFDC ऋण स्क्रिनिंग पोर्टल",
+    "subtitle": "निष्पक्ष आ डेटा–आधारित ऋण मूल्यांकन लेल एकटा पायलट पहल",
+    "home": "होम",
+    "apply": "आवेदन करू",
+    "login": "लॉगिन",
+    "contact": "संपर्क"
+  },
+  "form": {
+    "newApplicationTitle": "नव लाभार्थी आवेदन",
+    "applicantName": "आवेदकक नाम",
+    "age": "उमर",
+    "gender": "लिंग",
+    "district": "जिला",
+    "address": "पता",
+    "occupation_type": "व्यवसायक प्रकार",
+    "education_level": "शिक्षा स्तर",
+    "household_size": "गृह सदस्य संख्या",
+    "ration_card_type": "राशन कार्डक प्रकार",
+    "aadhaarNumber": "आधार नंबर",
+    "electricityBill": "बिजली बिल",
+    "incomeCertificate": "आय प्रमाणपत्र (वैकल्पिक)",
+    "businessProof": "व्यवसाय प्रमाण (यदि स्वयं–रोजगार)",
+    "lpgInfo": "एलपीजी / उपभोग विवरण",
+    "digitalPaymentsInfo": "डिजिटल भुगतान / UPI उपयोग",
+    "reviewTitle": "समिक्षा करू आ सबमिट करू",
+    "submit": "आवेदन सबमिट करू",
+    "next": "अगिला",
+    "previous": "पहिलका"
+  }
+}

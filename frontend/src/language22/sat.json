@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "ᱥᱟᱢᱟᱡᱤᱠ ᱧᱟᱭ ᱟᱨ ᱩᱫᱤᱠᱟᱨᱛᱤᱴᱟ ᱢᱮᱸᱴᱨᱮᱞ",
+    "title": "ᱥᱢᱟᱨᱴ NBCFDC ᱞᱟᱹᱱ ᱥᱠᱨᱤᱱᱤᱝ ᱯᱚᱨᱴᱟᱞ",
+    "subtitle": "ᱵᱟᱹᱲᱛᱟᱜ ᱟᱨ ᱰᱮᱴᱟ–ᱟᱹᱱᱤᱫ ᱞᱟᱹᱱ ᱢᱩᱞᱤᱭᱟᱝᱠᱟᱱ ᱨᱮ ᱵᱟᱺᱫ ᱧᱮᱞ ᱵᱟᱹᱲᱛᱟᱜ ᱯᱟᱭᱞᱟᱴ",
+    "home": "ᱦᱚᱢ",
+    "apply": "ᱟᱹᱵᱚᱱ ᱟᱨᱡᱟ",
+    "login": "ᱞᱚᱜᱤᱱ",
+    "contact": "ᱠᱚᱱᱴᱟᱠᱴ"
+  },
+  "form": {
+    "newApplicationTitle": "ᱱᱟᱶᱟ ᱞᱟᱵᱚᱛᱟ ᱟᱹᱵᱚᱱ",
+    "applicantName": "ᱟᱹᱵᱚᱱᱤᱠᱟ ᱧᱩᱛᱩᱢ",
+    "age": "ᱢᱩᱝ",
+    "gender": "ᱡᱤᱱᱤᱠ",
+    "district": "ᱡᱤᱞᱟ",
+    "address": "ᱦᱚᱛᱚᱞ",
+    "occupation_type": "ᱵᱟᱹᱦᱤᱭᱟᱜ ᱢᱟᱯᱟᱛ",
+    "education_level": "ᱥᱤᱥᱟ ᱞᱮᱵᱮᱞ",
+    "household_size": "ᱫᱩᱞ ᱧᱩᱛᱩᱢ",
+    "ration_card_type": "ᱨᱮᱥᱚᱱ ᱠᱟᱨᱰ ᱢᱟᱯᱟᱛ",
+    "aadhaarNumber": "ᱟᱫᱟᱹᱨ ᱰᱟᱹᱜᱤᱛᱟ",
+    "electricityBill": "ᱵᱤᱞᱢᱟᱹᱜ ᱦᱩᱵᱚᱭ",
+    "incomeCertificate": "ᱥᱮᱸᱫᱤ ᱠᱚᱴᱟ (ᱟᱞᱚᱢ ᱧᱮᱞ)",
+    "businessProof": "ᱵᱤᱥᱩᱱᱮᱥ ᱯᱨᱩᱯ (ᱥᱟᱱᱛᱟᱲᱤᱡᱽᱤᱠ ᱵᱟᱢ)",
+    "lpgInfo": "LPG / ᱵᱷᱩᱞ ᱞᱮᱱᱟᱜ",
+    "digitalPaymentsInfo": "ᱰᱤᱡᱤᱴᱟᱞ ᱯᱮᱢᱟᱱᱴ / UPI ᱵᱷᱩᱞ",
+    "reviewTitle": "ᱛᱮᱭᱟᱜ ᱦᱚᱪᱚᱜ ᱥᱟᱱᱛᱟᱲᱤᱡᱽᱤᱠ",
+    "submit": "ᱟᱹᱵᱚᱱ ᱥᱟᱱᱛᱟᱲᱤᱡᱽᱤᱠ",
+    "next": "ᱛᱮᱭᱟᱜ",
+    "previous": "ᱛᱷᱟᱹᱞ"
+  }
+}

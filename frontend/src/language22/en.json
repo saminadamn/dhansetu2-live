@@ -1,0 +1,50 @@
+{
+  "header": {
+    "ministry": "Ministry of Social Justice & Empowerment",
+    "title": "Smart NBCFDC Loan Screening Portal",
+    "subtitle": "A pilot initiative for fair & data-driven credit access",
+    "home": "Home",
+    "apply": "Apply",
+    "login": "Login",
+    "contact": "Contact"
+  },
+  "landing": {
+    "heroTitle": "Building fair digital credit rails for every beneficiary",
+    "heroCta": "Start Application",
+    "aboutTitle": "About the Portal",
+    "benefitsTitle": "Why this matters",
+    "howItWorksTitle": "How the system works"
+  },
+ "form": {
+  "newApplicationTitle": "New Beneficiary Application",
+  "helperText": "Fill the sections step by step. Fields marked with",
+  "mandatory": "are mandatory.",
+  "draftNote": "Mobile-first form · Draft not yet connected",
+  "personalDetails": "Personal Details",
+  "applicantName": "Applicant Name",
+  "age": "Age",
+  "gender": "Gender",
+  "district": "District",
+  "address": "Address",
+  "occupation": "Occupation Type",
+  "education": "Education Level",
+  "select": "Select",
+  "female": "Female",
+  "male": "Male",
+  "other": "Other",
+  "farmer": "Farmer",
+  "dailyWage": "Daily Wage",
+  "selfEmployed": "Self Employed",
+  "privateJob": "Private Job",
+  "govtJob": "Govt Job",
+  "noEducation": "No Formal Education",
+  "primary": "Primary",
+  "middle": "Middle",
+  "secondary": "Secondary (10th)",
+  "higherSecondary": "Higher Secondary (12th)",
+  "graduate": "Graduate",
+  "postgraduate": "Postgraduate & above",
+  "householdSize": "Household Size",
+  "submitError": "Something went wrong while applying for loan!"
+}
+}

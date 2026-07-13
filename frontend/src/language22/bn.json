@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "সামাজিক ন্যায় ও অধিকারের মন্ত্রণালয়",
+    "title": "স্মার্ট NBCFDC ঋণ স্ক্রিনিং পোর্টাল",
+    "subtitle": "ন্যায়সঙ্গত ও তথ্যভিত্তিক ঋণ মূল্যায়নের জন্য একটি পাইলট উদ্যোগ",
+    "home": "হোম",
+    "apply": "আবেদন করুন",
+    "login": "লগইন",
+    "contact": "যোগাযোগ"
+  },
+  "form": {
+    "newApplicationTitle": "নতুন উপভোক্তা আবেদন",
+    "applicantName": "আবেদনকারীর নাম",
+    "age": "বয়স",
+    "gender": "লিঙ্গ",
+    "district": "জেলা",
+    "address": "ঠিকানা",
+    "occupation_type": "পেশার ধরন",
+    "education_level": "শিক্ষার স্তর",
+    "household_size": "পরিবারের সদস্য সংখ্যা",
+    "ration_card_type": "রেশন কার্ডের ধরন",
+    "aadhaarNumber": "আধার নম্বর",
+    "electricityBill": "বিদ্যুতের বিল",
+    "incomeCertificate": "আয় শংসাপত্র (ঐচ্ছিক)",
+    "businessProof": "ব্যবসার প্রমাণ (স্ব-নিয়োজিত হলে)",
+    "lpgInfo": "এলপিজি / ব্যবহার বিবরণ",
+    "digitalPaymentsInfo": "ডিজিটাল পেমেন্ট / UPI ব্যবহার",
+    "reviewTitle": "পর্যালোচনা ও জমা করুন",
+    "submit": "আবেদন জমা দিন",
+    "next": "পরবর্তী",
+    "previous": "পূর্ববর্তী"
+  }
+}

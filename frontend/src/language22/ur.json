@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "وزارتِ سماجی انصاف و اختیاریت",
+    "title": "اسمارٹ NBCFDC قرض اسکریننگ پورٹل",
+    "subtitle": "منصفانہ اور ڈیٹا پر مبنی قرض کے جائزے کے لیے ایک پائلٹ منصوبہ",
+    "home": "ہوم",
+    "apply": "درخواست دیں",
+    "login": "لاگ اِن",
+    "contact": "رابطہ"
+  },
+  "form": {
+    "newApplicationTitle": "نیا مستفید کنندہ درخواست فارم",
+    "applicantName": "درخواست گزار کا نام",
+    "age": "عمر",
+    "gender": "صنف",
+    "district": "ضلع",
+    "address": "پتہ",
+    "occupation_type": "پیشہ کی قسم",
+    "education_level": "تعلیمی سطح",
+    "household_size": "گھر کے افراد کی تعداد",
+    "ration_card_type": "راشن کارڈ کی قسم",
+    "aadhaarNumber": "آدھار نمبر",
+    "electricityBill": "بجلی کا بل",
+    "incomeCertificate": "آمدنی سرٹیفکیٹ (اختیاری)",
+    "businessProof": "کاروباری ثبوت (اگر خود روزگار ہو)",
+    "lpgInfo": "ایل پی جی / استعمال کی تفصیل",
+    "digitalPaymentsInfo": "ڈیجیٹل ادائیگی / UPI استعمال",
+    "reviewTitle": "جائزہ لیں اور جمع کریں",
+    "submit": "درخواست جمع کریں",
+    "next": "اگلا",
+    "previous": "پچھلا"
+  }
+}

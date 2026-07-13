@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "সামাজিক ন্যায় অমসুং অধিকাৰতা মন্ত্রলয়",
+    "title": "Smart NBCFDC লোণ Screening Portal",
+    "subtitle": "নোংগাইয়বা অমসুং data-based লোণ মুল্যাংকনগী পাইলট ইনিৎয়েটিভ",
+    "home": "হোম",
+    "apply": "অপ্লাই তৌবা",
+    "login": "লগইন",
+    "contact": "কন্তাক তৌবা"
+  },
+  "form": {
+    "newApplicationTitle": "অনৌবা লোন ফাংবা অশরী আবেদন",
+    "applicantName": "অশরীগী মিং",
+    "age": "মহুতপা",
+    "gender": "পিবাম",
+    "district": "জিলা",
+    "address": "মপুংফম",
+    "occupation_type": "থবমগী মচাম",
+    "education_level": "শিক্ষাগী লেভেল",
+    "household_size": "ইমাইশিংগী সংখ্যাবা",
+    "ration_card_type": "রেশন কাৰ্ডগী মচাম",
+    "aadhaarNumber": "আধাৰ নম্বর",
+    "electricityBill": "ইলেকট্রিসিটি বিল",
+    "incomeCertificate": "ইনকাম Certificate (optional)",
+    "businessProof": "Business Proof (Self-employed অসিরেবা)",
+    "lpgInfo": "LPG / ইউজিং ফমবামশিং",
+    "digitalPaymentsInfo": "ডিজিটাল পেমেন্ট / UPI ইউজ",
+    "reviewTitle": "রিভিউ তৌরি সাবমিট তৌবা",
+    "submit": "অপ্লিকেশন সাবমিট তৌবা",
+    "next": "মথম ওইবা",
+    "previous": "মমাংদা ওইবা"
+  }
+}

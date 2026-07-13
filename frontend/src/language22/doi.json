@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "समाजिक न्याय अते अधिकारता मंत्रालै",
+    "title": "स्मार्ट NBCFDC लोन स्क्रीनिंग पोर्टल",
+    "subtitle": "न्यायसंगत अते डेटा–आधारित लोन मूल्यांकन लेई इक पायलट पहल",
+    "home": "होम",
+    "apply": "अर्ज करो",
+    "login": "लॉगिन",
+    "contact": "संपर्क"
+  },
+  "form": {
+    "newApplicationTitle": "नवा लाभपातरियें दा अर्ज",
+    "applicantName": "अर्जकर्ते दा नाँ",
+    "age": "उम्र",
+    "gender": "लिंग",
+    "district": "जिला",
+    "address": "पता",
+    "occupation_type": "रोज़गार दा प्रकार",
+    "education_level": "शिक्षा दा स्तर",
+    "household_size": "परिवार दा आकार",
+    "ration_card_type": "राशन कार्ड दा प्रकार",
+    "aadhaarNumber": "आधार नंबर",
+    "electricityBill": "बिजली बिल",
+    "incomeCertificate": "आमदनी प्रमाण–पत्र (वैकल्पिक)",
+    "businessProof": "व्यापार दा सबूत (जेकर स्वयं–रोजगार)",
+    "lpgInfo": "LPG / उपयोग विवरण",
+    "digitalPaymentsInfo": "डिजिटल भुगतान / UPI दा उपयोग",
+    "reviewTitle": "जाँच करियो अते जमा करियो",
+    "submit": "अर्ज जमा करियो",
+    "next": "अग्गे",
+    "previous": "पिछों"
+  }
+}

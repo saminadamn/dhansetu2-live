@@ -25,14 +25,13 @@ export const addFinancialProfile = async (req, res) => {
       asset_owned_count,
       district_poverty_index,
       income_to_loan_ratio,
-      monthly_obligation_ratio,
-      ration_card_type,
-      household_size,
-      occupation_type,
-      education_level
+      monthly_obligation_ratio
     } = req.body;
 
-    // check if exists
+    if (!aadhaarNumber) {
+      return res.status(400).json({ message: "Aadhaar number is required" });
+    }
+
     const exists = await FinancialProfile.findOne({ aadhaarNumber });
     if (exists) {
       return res.status(400).json({ message: "Profile already exists for this Aadhaar" });
@@ -60,39 +59,34 @@ export const addFinancialProfile = async (req, res) => {
       asset_owned_count,
       district_poverty_index,
       income_to_loan_ratio,
-      monthly_obligation_ratio,
-      ration_card_type,
-      household_size,
-      occupation_type,
-      education_level
+      monthly_obligation_ratio
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Financial data saved successfully",
       data: newProfile
     });
 
   } catch (err) {
     console.error("❌ addFinancialProfile error:", err);
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 };
-
 
 // GET /api/financial/:aadhaar
 export const getFinancialProfile = async (req, res) => {
   try {
     const { aadhaar } = req.params;
-    const profile = await FinancialProfile.findOne({ aadhaarNumber: aadhaar });
 
+    const profile = await FinancialProfile.findOne({ aadhaarNumber: aadhaar });
     if (!profile) {
       return res.status(404).json({ message: "No financial profile found for this Aadhaar" });
     }
 
-    res.json(profile);
+    return res.json(profile);
 
   } catch (err) {
     console.error("❌ getFinancialProfile error:", err);
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 };

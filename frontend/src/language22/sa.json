@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "सामाजिक न्याय तथा अधिकारिता मंत्रालय",
+    "title": "स्मार्ट NBCFDC ऋण परीक्षेपण पोर्टलम्",
+    "subtitle": "निष्पक्षं तथा दत्ताधारितं ऋणमूल्यांकनस्य पायलट्–प्रयोजनम्",
+    "home": "मुखपृष्ठम्",
+    "apply": "आवेदनं कुर्वन्तु",
+    "login": "लॉगिन",
+    "contact": "सम्पर्कः"
+  },
+  "form": {
+    "newApplicationTitle": "नवीन लाभार्थी–आवेदनम्",
+    "applicantName": "आवेदकस्य नाम",
+    "age": "वयः",
+    "gender": "लिङ्गम्",
+    "district": "जिल्ला",
+    "address": "निवास–स्थलम्",
+    "occupation_type": "व्यवसायस्य प्रकारः",
+    "education_level": "शैक्षणिक–स्तरः",
+    "household_size": "कुटुम्बस्य आकारः",
+    "ration_card_type": "रशन–कार्डस्य प्रकारः",
+    "aadhaarNumber": "आधार–संख्या",
+    "electricityBill": "विद्युत्–बिल्",
+    "incomeCertificate": "आय–प्रमाणपत्रम् (ऐच्छिकम्)",
+    "businessProof": "व्यवसाय–प्रमाणम् (स्वरोजगारिणः कृते)",
+    "lpgInfo": "LPG / उपयोग–विवरणम्",
+    "digitalPaymentsInfo": "डिजिटल्–भुगतानम् / UPI उपयोगः",
+    "reviewTitle": "समालोक्य समर्पयन्तु",
+    "submit": "आवेदनं समर्पयन्तु",
+    "next": "अग्रे",
+    "previous": "पूर्वम्"
+  }
+}

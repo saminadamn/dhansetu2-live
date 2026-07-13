@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "સામાજિક ન્યાય અને અધિકારિતાનું મંત્રાલય",
+    "title": "સ્માર્ટ NBCFDC લોન સ્ક્રીનિંગ પોર્ટલ",
+    "subtitle": "ન્યાયસંગત અને ડેટા આધારિત લોન મૂલ્યાંકન માટેની એક પાયલટ પહેલ",
+    "home": "હોમ",
+    "apply": "અરજી કરો",
+    "login": "લૉગિન",
+    "contact": "સંપર્ક"
+  },
+  "form": {
+    "newApplicationTitle": "નવું લાભાર્થી અરજી",
+    "applicantName": "અરજીકર્તાનું નામ",
+    "age": "ઉમર",
+    "gender": "લિંગ",
+    "district": "જિલ્લો",
+    "address": "સરનામું",
+    "occupation_type": "વ્યવસાયનો પ્રકાર",
+    "education_level": "શૈક્ષણિક સ્તર",
+    "household_size": "કુટુંબનું કદ",
+    "ration_card_type": "રેશન કાર્ડનો પ્રકાર",
+    "aadhaarNumber": "આધાર નંબર",
+    "electricityBill": "વિજળી બિલ",
+    "incomeCertificate": "આવકનું પ્રમાણપત્ર (વૈકલ્પિક)",
+    "businessProof": "વ્યવસાયનો પુરાવો (સ્વરોજગારી હોય તો)",
+    "lpgInfo": "એલપીજી / વપરાશ વિગતો",
+    "digitalPaymentsInfo": "ડિજિટલ પેમેન્ટ / UPI નો ઉપયોગ",
+    "reviewTitle": "સમીક્ષા કરો અને સબમિટ કરો",
+    "submit": "અરજી સબમિટ કરો",
+    "next": "આગળ",
+    "previous": "પાછળ"
+  }
+}

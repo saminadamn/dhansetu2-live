@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "सामाजिक नायारो आरो अधिकारिता मिनिस्ट्रि",
+    "title": "स्मार्ट NBCFDC रिण स्क्रिनिं पोर्टेल",
+    "subtitle": "नायारो आरो डेटा–आधारित रिण मुल्यानंकरणनि खाथा पाइलट पहल",
+    "home": "हओम",
+    "apply": "फोरम फिल खालाम",
+    "login": "लगिन",
+    "contact": "जोगाजोग"
+  },
+  "form": {
+    "newApplicationTitle": "गोरलाइ लाभारथि फोरम",
+    "applicantName": "फोरमखौ फनायग्रा मुं",
+    "age": "हर",
+    "gender": "थां",
+    "district": "जिल्ला",
+    "address": "थांखो",
+    "occupation_type": "जाबोरनि रोखोम",
+    "education_level": "बिद्यानि लेभेल",
+    "household_size": "फांनायनि सान",
+    "ration_card_type": "रेसन कार्डनि रोखोम",
+    "aadhaarNumber": "आधार नाम्बार",
+    "electricityBill": "बिदां बिल",
+    "incomeCertificate": "इनकाम सार्टिफिकेट (सारबायथिखौ)",
+    "businessProof": "बिजनेश प्रुफ (निज–जेबा माना)",
+    "lpgInfo": "LPG / बाहायनि बिबारन",
+    "digitalPaymentsInfo": "डिजिटल पेमेन्ट / UPI बाहाय",
+    "reviewTitle": "हायसन खालामनो आरो फेलानो",
+    "submit": "फोरम फेलानो",
+    "next": "उनबै",
+    "previous": "सिगां"
+  }
+}

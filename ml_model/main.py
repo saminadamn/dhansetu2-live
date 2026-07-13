@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from ml_model.score_prediction import ScorePredictor
-from ml_model.utils.risk_band import calculate_ccs_and_band
+from score_prediction import ScorePredictor
+from utils.risk_band import calculate_ccs_and_band
 
 app = FastAPI(title="Dhansetu ML Service")
 predictor = ScorePredictor()
@@ -15,4 +15,3 @@ def predict(input_data: dict):
         "ccs": ccs,
         "risk_band": band
     }
-

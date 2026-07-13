@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "সামাজিক ন্যায় আৰু অধিকাৰ প্ৰদান মন্ত্রালয়",
+    "title": "স্মাৰ্ট NBCFDC ঋণ স্ক্ৰী닌 পোর্টেল",
+    "subtitle": "ন্যায়সঙ্গত আৰু তথ্য-ভিত্তিক ঋণ মূল্যায়নৰ বাবে এটা পাইলট উদ্যোগ",
+    "home": "হোম",
+    "apply": "আবেদন কৰক",
+    "login": "লগিন",
+    "contact": "যোগাযোগ"
+  },
+  "form": {
+    "newApplicationTitle": "নতুন লাভগ্রাহী আবেদন",
+    "applicantName": "আবেদনকাৰীৰ নাম",
+    "age": "বয়স",
+    "gender": "লিংগ",
+    "district": "জিলা",
+    "address": "ঠিকনা",
+    "occupation_type": "ব্যৱসায়ৰ ধৰণ",
+    "education_level": "শিক্ষাৰ স্তৰ",
+    "household_size": "ঘৰৰ সদস্য সংখ্যা",
+    "ration_card_type": "ৰেচন কাৰ্ডৰ ধৰণ",
+    "aadhaarNumber": "আধাৰ নম্বৰ",
+    "electricityBill": "বিদ্যুত বিল",
+    "incomeCertificate": "আয় প্ৰমাণপত্ৰ (ঐচ্ছিক)",
+    "businessProof": "ব্যৱসায়ৰ প্ৰমাণ (স্ব-নিযুক্ত হলে)",
+    "lpgInfo": "এলপিজি / ব্যৱহাৰ বিৱৰণ",
+    "digitalPaymentsInfo": "ডিজিটেল পেমেন্ট / UPI ব্যৱহাৰ",
+    "reviewTitle": "পৰ্যালোচনা কৰি জমা দিয়ক",
+    "submit": "আবেদন জমা দিয়ক",
+    "next": "পৰিৱৰ্তী",
+    "previous": "পূৰ্বৰ"
+  }
+}

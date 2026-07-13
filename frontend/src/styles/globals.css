@@ -1,0 +1,49 @@
+@config "../../tailwind.config.js";
+@import "tailwindcss";
+
+/* Full height */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Main theme: only body responds to dark mode */
+body {
+  @apply bg-slate-100 text-slate-900;
+  @apply dark:bg-black dark:text-slate-100; /* just change page background */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* Page width */
+.main-container {
+  @apply max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8;
+}
+
+/* Section Wrapper (gov-portal style) */
+/* stays white in both modes so boxes are consistent */
+.section-box {
+  @apply bg-white border border-slate-200 rounded-xl shadow-sm p-6 md:p-8;
+}
+
+/* Section Title */
+.section-title {
+  @apply text-xl md:text-2xl font-semibold mb-4 text-slate-900 border-l-4 pl-3 border-blue-900;
+}
+
+/* Card style – also stays white in both modes */
+.card {
+  @apply bg-white rounded-xl shadow-sm border border-slate-200;
+}
+
+/* Soft background gradients (only really affect light mode) */
+.app-bg {
+  background: radial-gradient(circle at top left, #e2edff, transparent 45%),
+    radial-gradient(circle at bottom right, #e8f4ff, transparent 50%);
+}
+
+/* Links – optional dark tweak, but not required */
+a {
+  @apply text-blue-900 hover:text-blue-700 transition-colors;
+}

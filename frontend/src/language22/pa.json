@@ -1,0 +1,33 @@
+{
+  "header": {
+    "ministry": "ਸਮਾਜਿਕ ਨਿਆਂ ਅਤੇ ਅਧਿਕਾਰਤਾ ਮੰਤਰਾਲਾ",
+    "title": "ਸਮਾਰਟ NBCFDC ਲੋਨ ਸਕ੍ਰੀਨਿੰਗ ਪੋਰਟਲ",
+    "subtitle": "ਇਨਸਾਫ਼ਪੂਰਕ ਅਤੇ ਡਾਟਾ-ਆਧਾਰਿਤ ਲੋਨ ਮੁਲਾਂਕਣ ਲਈ ਇੱਕ ਪਾਇਲਟ ਪਹਿਲ",
+    "home": "ਮੁੱਖ ਪੰਨਾ",
+    "apply": "ਅਰਜ਼ੀ ਕਰੋ",
+    "login": "ਲਾਗਇਨ",
+    "contact": "ਸੰਪਰਕ"
+  },
+  "form": {
+    "newApplicationTitle": "ਨਵਾਂ ਲਾਭਪਾਤਰੀ ਅਰਜ਼ੀ",
+    "applicantName": "ਅਰਜ਼ੀਕਰਤਾ ਦਾ ਨਾਮ",
+    "age": "ਉਮਰ",
+    "gender": "ਲਿੰਗ",
+    "district": "ਜ਼ਿਲ੍ਹਾ",
+    "address": "ਪਤਾ",
+    "occupation_type": "ਰੋਜ਼ਗਾਰ ਦੀ ਕਿਸਮ",
+    "education_level": "ਸਿੱਖਿਆ ਦਾ ਪੱਧਰ",
+    "household_size": "ਪਰਿਵਾਰ ਦਾ ਆਕਾਰ",
+    "ration_card_type": "ਰੇਸ਼ਨ ਕਾਰਡ ਦੀ ਕਿਸਮ",
+    "aadhaarNumber": "ਆਧਾਰ ਨੰਬਰ",
+    "electricityBill": "ਬਿਜਲੀ ਬਿੱਲ",
+    "incomeCertificate": "ਆਮਦਨੀ ਸਰਟੀਫਿਕੇਟ (ਵਿਕਲਪਿਕ)",
+    "businessProof": "ਵਪਾਰ ਦਾ ਸਬੂਤ (ਸਵੈਰੋਜ਼ਗਾਰ ਹੋਣ ਤੇ)",
+    "lpgInfo": "ਐਲਪੀਜੀ / ਵਰਤੋਂ ਦੇ ਵੇਰਵੇ",
+    "digitalPaymentsInfo": "ਡਿਜਿਟਲ ਭੁਗਤਾਨ / UPI ਵਰਤੋ",
+    "reviewTitle": "ਸਮੀਖਿਆ ਕਰਕੇ ਜਮ੍ਹਾਂ ਕਰੋ",
+    "submit": "ਅਰਜ਼ੀ ਜਮ੍ਹਾਂ ਕਰੋ",
+    "next": "ਅੱਗੇ",
+    "previous": "ਪਿੱਛੇ"
+  }
+}
