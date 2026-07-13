@@ -89,20 +89,20 @@ export default function BeneficiaryLogin() {
           </div>
 
           {/* Step indicator */}
-          <div className="flex items-center gap-2 mb-6 text-xs font-medium">
+          <div className="flex items-center mb-6 text-xs font-medium">
             <span className={`flex items-center gap-1.5 ${step === "mobile" ? "text-govBlue dark:text-blue-300" : "text-slate-400 dark:text-slate-500"}`}>
-              <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[11px] ${step === "mobile" ? "bg-govBlue text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400"}`}>1</span>
-              Mobile Number
+              <span className={`h-5 w-5 rounded-full flex items-center justify-center leading-none text-[11px] ${step === "mobile" ? "bg-govBlue text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400"}`}>1</span>
+              <span>Mobile Number</span>
             </span>
-            <span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+            <span className="flex-1 h-px bg-slate-200 dark:bg-slate-700 mx-3" />
             <span className={`flex items-center gap-1.5 ${step === "otp" ? "text-govBlue dark:text-blue-300" : "text-slate-400 dark:text-slate-500"}`}>
-              <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[11px] ${step === "otp" ? "bg-govBlue text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400"}`}>2</span>
-              Verify OTP
+              <span className={`h-5 w-5 rounded-full flex items-center justify-center leading-none text-[11px] ${step === "otp" ? "bg-govBlue text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400"}`}>2</span>
+              <span>Verify OTP</span>
             </span>
           </div>
 
           {errorMsg && (
-            <p className="text-red-600 text-sm text-center mb-4 bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-900 rounded-lg py-2">
+            <p className="text-xs font-medium text-red-500 dark:text-red-400 text-center mb-4 bg-red-50/80 dark:bg-red-950/30 border border-red-100/80 dark:border-red-900/40 rounded-lg py-2.5 tracking-wide">
               {errorMsg}
             </p>
           )}
@@ -126,7 +126,7 @@ export default function BeneficiaryLogin() {
               <button
                 onClick={() => handleSendOTP()}
                 disabled={loading || demoLoading}
-                className="w-full bg-govBlue text-white font-semibold py-2.5 rounded-lg hover:bg-blue-800 transition-colors shadow-md shadow-blue-900/10 text-sm disabled:opacity-60"
+                className="w-full bg-govBlue text-white font-semibold py-2.5 rounded-lg shadow-md shadow-blue-900/10 text-sm transition-all duration-200 hover:brightness-110 active:scale-[0.99] disabled:opacity-60 disabled:hover:brightness-100"
               >
                 {loading ? "Sending..." : "Send OTP"}
               </button>
@@ -150,7 +150,7 @@ export default function BeneficiaryLogin() {
               <button
                 onClick={() => handleVerifyOTP()}
                 disabled={loading || demoLoading}
-                className="w-full bg-govBlue text-white font-semibold py-2.5 rounded-lg hover:bg-blue-800 transition-colors shadow-md shadow-blue-900/10 text-sm disabled:opacity-60"
+                className="w-full bg-govBlue text-white font-semibold py-2.5 rounded-lg shadow-md shadow-blue-900/10 text-sm transition-all duration-200 hover:brightness-110 active:scale-[0.99] disabled:opacity-60 disabled:hover:brightness-100"
               >
                 {loading ? "Verifying..." : "Verify OTP"}
               </button>

@@ -20,7 +20,11 @@ services:
         sync: false
       - key: BHASHINI_USER_ID
         sync: false
-      - key: BHASHINI_API_KEY
+      - key: BHASHINI_UDYAT_API_KEY
+        sync: false
+      - key: BHASHINI_INFERENCE_API_KEY
+        sync: false
+      - key: BHASHINI_PIPELINE_ID
         sync: false
 
   - type: web

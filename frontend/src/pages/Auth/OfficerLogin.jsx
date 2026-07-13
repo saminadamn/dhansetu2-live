@@ -7,30 +7,48 @@ import RoleTabs from "../../components/auth/RoleTabs";
 const inputClass =
   "w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm bg-white dark:bg-slate-800 dark:text-slate-100 transition focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 focus:border-govBlue";
 
+const DEMO_EMPLOYEE_ID = "DEMO001";
+const DEMO_PASSWORD = "demo1234";
+
 export default function OfficerLogin() {
   const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
   const [error, setError] = useState("");
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const attemptLogin = async (id, pass) => {
+    const res = await API.post("/auth/officer-login", { employeeId: id, password: pass });
+    login(res.data.officer, res.data.token);
+    navigate("/dashboard/officer");
+  };
+
   const handleLogin = async () => {
     try {
       setLoading(true);
       setError("");
-
-      const res = await API.post("/auth/officer-login", { employeeId, password });
-
-
-      login(res.data.officer, res.data.token);
-      navigate("/dashboard/officer");
-
+      await attemptLogin(employeeId, password);
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    try {
+      setDemoLoading(true);
+      setError("");
+      setEmployeeId(DEMO_EMPLOYEE_ID);
+      setPassword(DEMO_PASSWORD);
+      await attemptLogin(DEMO_EMPLOYEE_ID, DEMO_PASSWORD);
+    } catch (err) {
+      setError(err.response?.data?.message || "Demo login failed");
+    } finally {
+      setDemoLoading(false);
     }
   };
 
@@ -48,7 +66,7 @@ export default function OfficerLogin() {
           </div>
 
           {error && (
-            <p className="text-red-600 text-sm text-center mb-4 bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-900 rounded-lg py-2">
+            <p className="text-xs font-medium text-red-500 dark:text-red-400 text-center mb-4 bg-red-50/80 dark:bg-red-950/30 border border-red-100/80 dark:border-red-900/40 rounded-lg py-2.5 tracking-wide">
               {error}
             </p>
           )}
@@ -87,12 +105,23 @@ export default function OfficerLogin() {
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full bg-slate-900 dark:bg-slate-700 text-white font-semibold py-2.5 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors shadow-md text-sm disabled:opacity-60"
+              disabled={loading || demoLoading}
+              className="w-full bg-slate-900 dark:bg-slate-700 text-white font-semibold py-2.5 rounded-lg shadow-md text-sm transition-all duration-200 hover:brightness-110 active:scale-[0.99] disabled:opacity-60 disabled:hover:brightness-100"
             >
               {loading ? "Logging in..." : "Secure Officer Login"}
             </button>
           </form>
+
+          <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+            <button
+              onClick={handleDemoLogin}
+              disabled={loading || demoLoading}
+              title="Signs in with a seeded demo officer account — for presentations/testing only"
+              className="text-xs font-medium text-govGold border border-govGold/50 rounded-full px-4 py-1.5 hover:bg-govGold/10 transition disabled:opacity-60"
+            >
+              {demoLoading ? "Signing in…" : "⚡ Demo Login (skip credentials)"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

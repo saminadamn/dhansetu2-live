@@ -22,9 +22,14 @@ export const sendOTP = async (req, res) => {
       user = await User.create({ mobileNumber, role: "beneficiary" });
     }
 
+    // The hackathon "Demo Login" button drives this same endpoint with a
+    // fixed demo number — never attempt a real SMS for it, since Fast2SMS
+    // would reject a non-existent number and break the bypass entirely.
+    const isDemoNumber = mobileNumber === "9999999999";
+
     // No Fast2SMS account yet — use a fixed test OTP instead of sending a real SMS.
     // Once FAST2SMS_API_KEY is set to a working key, this automatically switches to real SMS.
-    const hasSmsProvider = Boolean(process.env.FAST2SMS_API_KEY);
+    const hasSmsProvider = Boolean(process.env.FAST2SMS_API_KEY) && !isDemoNumber;
     const otp = hasSmsProvider ? generateOTP() : "123456";
 
     user.tempOtp = otp;
