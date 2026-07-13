@@ -6,7 +6,25 @@ A loan-eligibility and credit-scoring platform for beneficiaries, officers, and 
 
 - **`frontend/`** — React 19 + Vite + Tailwind. Multi-language UI (22 Indian languages via i18next).
 - **`backend/`** — Node.js + Express 5 + MongoDB (Mongoose). Issues JWTs, orchestrates loan applications, calls the ML service.
-- **`ml_model/`** — FastAPI + scikit-learn/XGBoost. Exposes `POST /predict`, called server-to-server by the backend (never directly by the frontend).
+- **`ml_model/`** — FastAPI + scikit-learn/XGBoost + SHAP. Exposes `POST /predict`, called server-to-server by the backend (never directly by the frontend).
+
+### Asynchronous scoring pipeline
+
+```
+Client → API Gateway (Express) → RabbitMQ → Scoring Worker → Decision Worker → Notification Worker → MongoDB
+```
+
+`POST /api/loans/apply` creates the `LoanApplication` record immediately (status `PENDING`, no score yet) and publishes an `application.submitted` event, returning `202` right away — the request never blocks on the ML call. Three independent worker processes (`backend/src/workers/`) then carry it the rest of the way:
+
+1. **Scoring Worker** consumes `application.submitted`, calls the ML service's `/predict`, and publishes `application.scored`.
+2. **Decision Worker** consumes `application.scored`, persists the `Score` document and attaches it to the `LoanApplication`, and publishes `application.decided`.
+3. **Notification Worker** consumes `application.decided` and sends (currently: logs — no SMS/email provider is wired up yet, see the code comment in `notification.worker.js`) a status update to the applicant.
+
+**RabbitMQ, not Kafka**: both would work for this, but Kafka needs a JVM broker (plus Zookeeper or KRaft mode) for a workload this size — that's a lot of operational weight for a hackathon-scale project. RabbitMQ is a single lightweight service with a mature Node client (`amqplib`) and free hosted options (e.g. [CloudAMQP](https://www.cloudamqp.com/)), which is what `render.yaml` assumes since Render itself doesn't offer a managed broker.
+
+**Graceful fallback**: if `RABBITMQ_URL` isn't set (or the broker is unreachable), `applyForLoan` scores synchronously in-request instead — same code path (`scoring.service.js`) that the Decision Worker uses, just called inline. This means the app works end-to-end with zero extra infrastructure; RabbitMQ is additive, not required. This was verified locally end-to-end (Docker RabbitMQ + MongoDB, all three workers, the real trained models) — a submitted application correctly flowed through all three workers and landed in MongoDB with its full SHAP explanation attached.
+
+Run the workers locally with `npm run worker:scoring`, `npm run worker:decision`, `npm run worker:notification` (each in `backend/`, each its own process/terminal).
 
 ## Local setup
 
@@ -52,6 +70,7 @@ npm run dev
 | `FRONTEND_URL` | yes | comma-separated allowed CORS origins |
 | `BHASHINI_USER_ID` / `BHASHINI_UDYAT_API_KEY` / `BHASHINI_INFERENCE_API_KEY` | no | credentials from [bhashini.gov.in](https://bhashini.gov.in) for `POST /api/bhashini/translate`. If unset, that endpoint returns `503 { configured: false }` and the frontend keeps using its built-in i18next translations. |
 | `BHASHINI_PIPELINE_ID` | no | defaults to Bhashini's public translation pipeline ID if unset |
+| `RABBITMQ_URL` | no | enables the async scoring pipeline (see above). Unset/unreachable → synchronous fallback. |
 
 ### `frontend/.env`
 
@@ -89,8 +108,9 @@ Both login pages, plus the beneficiary login, also have a **Demo Login** button 
 **Backend + ML service → Render**, using the `render.yaml` Blueprint at the repo root:
 
 1. In Render, "New +" → "Blueprint", point at this repo.
-2. Render creates two services: `dhansetu-backend` and `dhansetu-ml`.
-3. Fill in the backend's env vars (`MONGODB_URI`, `ML_API_URL`, `JWT_SECRET`, `GEMINI_API_KEY`, `FRONTEND_URL`, optionally the `BHASHINI_*` vars) in the Render dashboard — set `ML_API_URL` to the `dhansetu-ml` service's public URL + `/predict`.
+2. Render creates five services: `dhansetu-backend`, `dhansetu-ml`, and the three background workers (`dhansetu-scoring-worker`, `dhansetu-decision-worker`, `dhansetu-notification-worker`).
+3. Fill in each service's env vars in the Render dashboard (`MONGODB_URI`, `ML_API_URL`, `JWT_SECRET`, `GEMINI_API_KEY`, `FRONTEND_URL`, optionally the `BHASHINI_*` vars, and `RABBITMQ_URL` from a hosted broker like CloudAMQP) — set `ML_API_URL` to the `dhansetu-ml` service's public URL + `/predict`.
+4. If you skip provisioning `RABBITMQ_URL` entirely, don't deploy the three worker services at all — the backend scores synchronously and there's nothing for them to consume.
 
 **Frontend → Vercel**:
 

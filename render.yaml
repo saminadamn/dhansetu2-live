@@ -24,6 +24,8 @@ services:
         sync: false
       - key: BHASHINI_PIPELINE_ID
         sync: false
+      - key: RABBITMQ_URL
+        sync: false
 
   - type: web
     name: dhansetu-ml
@@ -32,3 +34,43 @@ services:
     pythonVersion: "3.11.9"
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+
+  # Event-driven scoring pipeline (see README "Asynchronous scoring
+  # pipeline"). Each is a Render Background Worker — no HTTP port, just
+  # a long-running RabbitMQ consumer. All three (and the backend above)
+  # need the same RABBITMQ_URL to talk to each other.
+  - type: worker
+    name: dhansetu-scoring-worker
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm run worker:scoring
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: ML_API_URL
+        sync: false
+      - key: RABBITMQ_URL
+        sync: false
+
+  - type: worker
+    name: dhansetu-decision-worker
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm run worker:decision
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: RABBITMQ_URL
+        sync: false
+
+  - type: worker
+    name: dhansetu-notification-worker
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm run worker:notification
+    envVars:
+      - key: RABBITMQ_URL
+        sync: false

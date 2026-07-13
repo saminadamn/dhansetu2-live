@@ -119,17 +119,29 @@ async function handleSubmit(e) {
   try {
     const response = await API.post("/loans/apply", payload);
     console.log("Loan Application Response:", response.data);
-    localStorage.setItem("latestLoanScores", JSON.stringify({
-  risk_score: response.data.risk_score,
-  repayment_score: response.data.repayment_score,
-  income_proxy_score: response.data.income_proxy_score,
-  risk_band: response.data.risk_band,
-}));
+
+    // response.data.async is true when the request was handed off to the
+    // scoring/decision worker pipeline (RabbitMQ) — no scores yet, they'll
+    // appear on "My Applications" once the workers finish. When no message
+    // broker is configured, the backend falls back to scoring synchronously
+    // and scores are already present in the response.
+    if (!response.data.async) {
+      localStorage.setItem("latestLoanScores", JSON.stringify({
+        risk_score: response.data.risk_score,
+        repayment_score: response.data.repayment_score,
+        income_proxy_score: response.data.income_proxy_score,
+        risk_band: response.data.risk_band,
+      }));
+    }
+
     // Beneficiary login doesn't collect Aadhaar (mobile+OTP only), so we
     // remember the Aadhaar used on their latest application to look up
     // "My Applications" without a backend identity-binding change.
     localStorage.setItem("aadhaarNumber", formData.aadhaarNumber);
 
+    if (response.data.async) {
+      alert("Application submitted! It's being scored now — check My Applications shortly for your result.");
+    }
 
     navigate("/dashboard/beneficiary");  // redirect to application list after success
   } catch (error) {

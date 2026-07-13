@@ -5,7 +5,6 @@ const scoreSchema = new mongoose.Schema(
     aadhaarHash: {
       type: String,
       required: true,
-      index: true,
     },
 
     risk_score: {

@@ -1,21 +1,11 @@
 import LoanApplication from "../models/LoanApplication.js";
 import FinancialProfile from "../models/FinancialProfile.js";
-import { Score } from "../models/Score.js";
 import { getMLPrediction } from "../services/ml.service.js";
 import { hashAadhaar, aadhaarLast4 } from "../utils/hashAadhaar.js";
-
-
-
-function normalizeScore(value) {
-  const sigmoid = 1 / (1 + Math.exp(-value / 10));  // smooth transformation
-  return Math.round(sigmoid * 100);                 // convert to 0–100
-}
+import { publishEvent } from "../services/eventBus.js";
+import { persistScoreAndUpdateApplication } from "../services/scoring.service.js";
 
 export const applyForLoan = async (req, res) => {
-
-
-
-
   try {
     const {
       applicantName,
@@ -28,15 +18,31 @@ export const applyForLoan = async (req, res) => {
       district
     } = req.body;
 
-
-    //documnet
-
     const aadhaarHash = hashAadhaar(aadhaarNumber);
 
     // Try to fetch Financial history
-    let financialData = await FinancialProfile.findOne({ aadhaarHash });
+    const financialData = await FinancialProfile.findOne({ aadhaarHash });
 
-    // Step 1: Build ML Payload dynamically
+    // Create the application record immediately (status PENDING, no score
+    // yet) so it shows up in "My Applications" / the officer queue right
+    // away, whether it ends up being scored synchronously below or
+    // asynchronously by the scoring/decision worker pipeline.
+    const application = await LoanApplication.create({
+      applicantName,
+      aadhaarHash,
+      aadhaarLast4: aadhaarLast4(aadhaarNumber),
+      gender,
+      occupation_type,
+      education_level,
+      household_size,
+      ration_card_type,
+      district,
+      financialDataRef: financialData?._id || null,
+      scoresRef: null,
+      status: "PENDING",
+    });
+
+    // Build ML Payload dynamically
     const mlPayload = {
       ration_card_type,
       household_size,
@@ -68,55 +74,48 @@ export const applyForLoan = async (req, res) => {
       monthly_obligation_ratio: financialData?.monthly_obligation_ratio ?? null
     };
 
-    // Step 2: Call ML Service
+    // Event-driven path: hand off to the scoring/decision/notification
+    // worker pipeline (backend/src/workers/) via RabbitMQ and return
+    // immediately — see README for the architecture.
+    const published = await publishEvent("application.submitted", {
+      applicationId: application._id.toString(),
+      aadhaarHash,
+      mlPayload,
+    });
+
+    if (published) {
+      return res.status(202).json({
+        message: "Application submitted — scoring in progress",
+        application,
+        async: true,
+      });
+    }
+
+    // Fallback: no message broker configured/reachable — score
+    // synchronously so the app still works end-to-end without RabbitMQ.
     const mlResult = await getMLPrediction(mlPayload);
-
-    // Step 3: Save ML Scores
-    const savedScore = await Score.create({
+    const { application: scoredApplication, savedScore } = await persistScoreAndUpdateApplication({
+      applicationId: application._id,
       aadhaarHash,
-      risk_score:normalizeScore( mlResult.ccs),
-      repayment_score: normalizeScore(mlResult.repayment_score),
-      income_proxy_score: normalizeScore(mlResult.income_proxy_score),
-      explanation: mlResult.explanation || {}
+      mlResult,
     });
 
-    // Step 4: Save loan application
-    const application = await LoanApplication.create({
-      applicantName,
-      aadhaarHash,
-      aadhaarLast4: aadhaarLast4(aadhaarNumber),
-      gender,
-      occupation_type,
-      education_level,
-      household_size,
-      ration_card_type,
-      district,
-      financialDataRef: financialData?._id || null,
-      scoresRef: savedScore._id,
-      status: "PENDING"
+    return res.status(201).json({
+      message: "Loan application processed successfully",
+      application: scoredApplication,
+      scores: savedScore,
+      risk_score: savedScore.risk_score,
+      repayment_score: savedScore.repayment_score,
+      income_proxy_score: savedScore.income_proxy_score,
+      risk_band: mlResult.risk_band,
+      async: false,
     });
-
-  return res.status(201).json({
-  message: "Loan application processed successfully",
-  application,
-  scores: savedScore,
-  risk_score: savedScore.risk_score,
-  repayment_score: savedScore.repayment_score,
-  income_proxy_score: savedScore.income_proxy_score,
-  risk_band: mlResult.risk_band
-});
-
-
 
   } catch (error) {
     console.error("❌ applyForLoan error:", error.message);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
-
-
-
-
 
 //LOAN HISTORY CONTROLLER
 

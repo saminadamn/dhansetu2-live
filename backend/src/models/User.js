@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.index({ aadhaarNumber: 1 });
-userSchema.index({ employeeId: 1 });
+// No explicit .index() calls needed — `unique: true` above already
+// creates indexes for aadhaarNumber and employeeId.
 
 export const User = mongoose.model("User", userSchema);
