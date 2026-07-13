@@ -44,6 +44,8 @@ body {
 }
 
 /* Links – optional dark tweak, but not required */
-a {
-  @apply text-blue-900 hover:text-blue-700 transition-colors;
+@layer base {
+  a {
+    @apply text-blue-900 hover:text-blue-700 transition-colors;
+  }
 }

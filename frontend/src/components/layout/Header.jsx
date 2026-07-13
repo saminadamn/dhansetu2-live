@@ -15,7 +15,7 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-govBlue text-black shadow-md print:hidden">
+    <header className="bg-govBlue text-white shadow-md print:hidden">
       <div className="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8 py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         {/* Left */}
         <div className="flex items-center gap-3">
@@ -28,13 +28,13 @@ export default function Header() {
           </div>
 
           <div className="leading-tight">
-            <p className="text-[10px] uppercase tracking-wide text-black/90">
+            <p className="text-[10px] uppercase tracking-wide text-white/90">
               {t("header.ministry")}
             </p>
-            <p className="font-semibold text-sm md:text-base text-black">
+            <p className="font-semibold text-sm md:text-base text-white">
               {t("header.title")}
             </p>
-            <p className="text-[11px] text-black/80">
+            <p className="text-[11px] text-white/80">
               {t("header.subtitle")}
             </p>
           </div>
@@ -45,33 +45,34 @@ export default function Header() {
           <nav className="flex gap-3 md:gap-4">
             <a
               href="/"
-              className="text-black hover:text-govGold transition font-medium"
+              className="text-white hover:text-govGold transition font-medium"
             >
               {t("header.home")}
             </a>
-            <a
-              href="/application/new"
-              className="text-black hover:text-govGold transition font-medium"
-            >
-              {t("header.apply")}
-            </a>
 <a
   href="/login/beneficiary"
-  className="text-black hover:text-govGold transition font-medium"
+  className="text-white hover:text-govGold transition font-medium"
 >
   {t("header.login")} (Beneficiary)
 </a>
 
 <a
   href="/login/officer"
-  className="text-black hover:text-govGold transition font-medium"
+  className="text-white hover:text-govGold transition font-medium"
 >
   {t("header.login")} (Officer)
 </a>
 
             <a
+              href="/application/new"
+              className="text-white hover:text-govGold transition font-medium"
+            >
+              {t("header.apply")}
+            </a>
+
+            <a
               href="#contact"
-              className="text-black hover:text-govGold transition font-medium"
+              className="text-white hover:text-govGold transition font-medium"
             >
               {t("header.contact")}
             </a>
@@ -83,7 +84,7 @@ export default function Header() {
             <select
               value={currentLang}
               onChange={handleLangChange}
-              className="bg-transparent outline-none text-xs md:text-sm text-black focus:outline-none"
+              className="bg-transparent outline-none text-xs md:text-sm text-white focus:outline-none"
             >
               <option value="en" className="text-slate-900">English</option>
               <option value="hi" className="text-slate-900">हिन्दी</option>
@@ -114,7 +115,7 @@ export default function Header() {
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className="px-3 py-1 rounded border border-white/40 bg-white/10 text-black text-xs hover:bg-white/20 transition"
+            className="px-3 py-1 rounded border border-white/40 bg-white/10 text-white text-xs hover:bg-white/20 transition"
           >
             {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
           </button>
