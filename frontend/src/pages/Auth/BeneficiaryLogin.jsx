@@ -3,6 +3,9 @@ import API from "../../services/axiosInstance";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+const inputClass =
+  "w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm bg-white transition focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-govBlue";
+
 export default function BeneficiaryLogin() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -53,58 +56,105 @@ export default function BeneficiaryLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md">
-        <h2 className="text-xl font-bold text-center mb-4">Beneficiary Login</h2>
+    <div className="min-h-[65vh] flex items-center justify-center py-8">
+      <div className="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-md overflow-hidden">
+        {/* Role selector tabs */}
+        <div className="flex border-b border-slate-100 bg-slate-50/60 p-2 gap-2">
+          <span className="flex-1 py-2.5 text-center text-sm font-medium rounded-xl bg-white text-govBlue shadow-sm border border-slate-200/70">
+            Beneficiary / Citizen
+          </span>
+          <a
+            href="/login/officer"
+            className="flex-1 py-2.5 text-center text-sm font-medium rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/60 transition"
+          >
+            Internal Officer
+          </a>
+        </div>
 
-        {errorMsg && <p className="text-red-600 text-center mb-4">{errorMsg}</p>}
+        <div className="p-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-slate-900">Welcome to Dhansetu</h2>
+            <p className="text-slate-500 text-sm mt-1">
+              Login with your mobile number to apply for a loan and track your applications.
+            </p>
+          </div>
 
-        {step === "mobile" ? (
-          <>
-            <input
-              type="text"
-              maxLength={10}
-              placeholder="Enter 10 digit mobile number"
-              value={mobileNumber}
-              onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, ""))}
-              className="border w-full px-4 py-2 rounded-lg mb-4"
-            />
+          {/* Step indicator */}
+          <div className="flex items-center gap-2 mb-6 text-xs font-medium">
+            <span className={`flex items-center gap-1.5 ${step === "mobile" ? "text-govBlue" : "text-slate-400"}`}>
+              <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[11px] ${step === "mobile" ? "bg-govBlue text-white" : "bg-slate-200 text-slate-500"}`}>1</span>
+              Mobile Number
+            </span>
+            <span className="flex-1 h-px bg-slate-200" />
+            <span className={`flex items-center gap-1.5 ${step === "otp" ? "text-govBlue" : "text-slate-400"}`}>
+              <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[11px] ${step === "otp" ? "bg-govBlue text-white" : "bg-slate-200 text-slate-500"}`}>2</span>
+              Verify OTP
+            </span>
+          </div>
 
-            <button
-              onClick={handleSendOTP}
-              disabled={loading}
-              className="bg-blue-600 w-full text-white py-2 rounded-lg"
-            >
-              {loading ? "Sending..." : "Send OTP"}
-            </button>
-          </>
-        ) : (
-          <>
-            <input
-              type="text"
-              maxLength={6}
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-              className="border w-full px-4 py-2 rounded-lg mb-4"
-            />
+          {errorMsg && (
+            <p className="text-red-600 text-sm text-center mb-4 bg-red-50 border border-red-100 rounded-lg py-2">
+              {errorMsg}
+            </p>
+          )}
 
-            <button
-              onClick={handleVerifyOTP}
-              disabled={loading}
-              className="bg-blue-600 w-full text-white py-2 rounded-lg"
-            >
-              {loading ? "Verifying..." : "Verify OTP"}
-            </button>
+          {step === "mobile" ? (
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                  Mobile Number
+                </label>
+                <input
+                  type="text"
+                  maxLength={10}
+                  placeholder="Enter 10 digit mobile number"
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, ""))}
+                  className={inputClass}
+                />
+              </div>
 
-            <button
-              onClick={() => { setStep("mobile"); setOtp(""); setErrorMsg(""); }}
-              className="w-full text-sm text-slate-500 mt-3"
-            >
-              Change mobile number
-            </button>
-          </>
-        )}
+              <button
+                onClick={handleSendOTP}
+                disabled={loading}
+                className="w-full bg-govBlue text-white font-semibold py-2.5 rounded-lg hover:bg-blue-800 transition-colors shadow-md shadow-blue-900/10 text-sm disabled:opacity-60"
+              >
+                {loading ? "Sending..." : "Send OTP"}
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                  One-Time Password
+                </label>
+                <input
+                  type="text"
+                  maxLength={6}
+                  placeholder="Enter 6 digit OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                  className={inputClass}
+                />
+              </div>
+
+              <button
+                onClick={handleVerifyOTP}
+                disabled={loading}
+                className="w-full bg-govBlue text-white font-semibold py-2.5 rounded-lg hover:bg-blue-800 transition-colors shadow-md shadow-blue-900/10 text-sm disabled:opacity-60"
+              >
+                {loading ? "Verifying..." : "Verify OTP"}
+              </button>
+
+              <button
+                onClick={() => { setStep("mobile"); setOtp(""); setErrorMsg(""); }}
+                className="w-full text-center text-sm text-slate-500 hover:text-govBlue transition"
+              >
+                ← Change mobile number
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

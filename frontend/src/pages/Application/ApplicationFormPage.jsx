@@ -19,6 +19,11 @@ import { useNavigate } from "react-router-dom";
 
 const TOTAL_STEPS = 4;
 
+const fieldClass = (hasError, withVoice = false) =>
+  `w-full border rounded-lg px-4 py-2.5 text-sm bg-white transition focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-govBlue ${
+    withVoice ? "pr-10" : ""
+  } ${hasError ? "border-red-500" : "border-slate-300"}`;
+
 export default function ApplicationFormPage() {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
@@ -132,15 +137,15 @@ async function handleSubmit(e) {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <div>
           <h1 className="text-2xl md:text-3xl font-semibold text-govBlue">
-            {t("form.New Beneficiary Application")}
+            {t("form.newApplicationTitle")}
           </h1>
           <p className="text-xs md:text-sm text-slate-600 mt-1">
-           {t("form.Fill the sections step by step. Fields marked with")}{" "}
-            <span className="text-red-600 font-semibold">*</span> {t("form.are mandatory.")}
+           {t("form.helperText")}{" "}
+            <span className="text-red-600 font-semibold">*</span> {t("form.mandatory")}
           </p>
         </div>
         <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-govSoftBlue text-xs text-govBlue border border-blue-200 font-medium">
-          {t("form.Mobile-first form · Draft not yet connected")}
+          {t("form.draftNote")}
         </span>
       </div>
 
@@ -153,19 +158,17 @@ async function handleSubmit(e) {
         {/* STEP 1: PERSONAL DETAILS */}
         {step === 1 && (
           <section className="section-box">
-            <h2 className="section-title mb-4">{t("form.Personal Details")}</h2>
+            <h2 className="section-title mb-4">{t("form.personalDetails")}</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField id="applicantName" label="Applicant Name" required>
-            <div className="flex items-center gap-2">
+            <div className="relative">
               <input
                 id="applicantName"
                 type="text"
                 value={formData.applicantName}
                 onChange={(e) => updateField("applicantName", e.target.value)}
-                className={`w-full border rounded-lg px-4 py-2 text-sm ${
-                  errors.applicantName ? "border-red-500" : "border-slate-300"
-                }`}
+                className={fieldClass(errors.applicantName, true)}
               />
               <VoiceInputButton onResult={(text) => updateField("applicantName", text)} />
             </div>
@@ -176,20 +179,19 @@ async function handleSubmit(e) {
 
 
               <FormField id="age" label="Age" required>
-                <input
-                id="age"
-                type="number"
-                min="18"
-                max="100"
-                value={formData.age}
-                onChange={(e) => updateField("age", e.target.value)}
-                className={`w-full border rounded-lg px-4 py-2 ${
-                  errors.age ? "border-red-500" : "border-slate-300"
-                }`}
-              />
-{errors.age && <p className="text-red-600 text-xs mt-1">{errors.age}</p>}
-
-                <VoiceInputButton onResult={(text) => updateField("age", text)} />
+                <div className="relative">
+                  <input
+                    id="age"
+                    type="number"
+                    min="18"
+                    max="100"
+                    value={formData.age}
+                    onChange={(e) => updateField("age", e.target.value)}
+                    className={fieldClass(errors.age, true)}
+                  />
+                  <VoiceInputButton onResult={(text) => updateField("age", text)} />
+                </div>
+                {errors.age && <p className="text-red-600 text-xs mt-1">{errors.age}</p>}
               </FormField>
 
              <FormField id="gender" label="Gender" required>
@@ -210,9 +212,7 @@ async function handleSubmit(e) {
           setErrors((prev) => ({ ...prev, gender: "" }));
         }
       }}
-      className={`w-full border rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none ${
-        errors.gender ? "border-red-500" : "border-slate-300"
-      }`}
+      className={fieldClass(errors.gender)}
     >
       <option value="">Select</option>
       <option value="female">Female</option>
@@ -233,9 +233,7 @@ async function handleSubmit(e) {
                 value={formData.district}
                 options={districts}
                 onChange={(value) => updateField("district", value)}
-                className={`w-full border rounded-lg px-4 py-2 text-sm ${
-                  errors.gender ? "border-red-500" : "border-slate-300"
-                }`}
+                className={fieldClass(errors.district)}
               />
 </FormField>
             </div>
@@ -246,8 +244,8 @@ async function handleSubmit(e) {
                 rows="2"
                 value={formData.address}
                 onChange={(e) => updateField("address", e.target.value)}
-                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-govBlue focus:border-govBlue transition"
-                
+                className={fieldClass(errors.address)}
+
               />
             </FormField>
 
@@ -270,9 +268,7 @@ async function handleSubmit(e) {
           setErrors((prev) => ({ ...prev, occupation_type: "" }));
         }
       }}
-      className={`w-full border rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none ${
-        errors.occupation_type ? "border-red-500" : "border-slate-300"
-      }`}
+      className={fieldClass(errors.occupation_type)}
     >
       <option value="">Select</option>
       <option value="Farmer">Farmer</option>
@@ -307,16 +303,14 @@ async function handleSubmit(e) {
           setErrors((prev) => ({ ...prev, education_level: "" }));
         }
       }}
-      className={`w-full border rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none ${
-        errors.education_level ? "border-red-500" : "border-slate-300"
-      }`}
+      className={fieldClass(errors.education_level)}
     >
       <option value="">Select</option>
       <option value="Illiterate">Illiterate</option>
       <option value="Primary">Primary</option>
       <option value="Secondary">Secondary</option>
       <option value="Graduate ">Graduate </option>
-    
+
     </select>
 
     {errors.education_level && (
@@ -332,17 +326,19 @@ async function handleSubmit(e) {
                 required
                 hint="Number of people supported by this income."
               >
-                <input
-                  id="household_size"
-                  type="number"
-                  min="1"
-                  value={formData.household_size}
-                  onChange={(e) =>
-                    updateField("household_size", e.target.value)
-                  }
-                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-govBlue focus:border-govBlue transition"
-                />
-                <VoiceInputButton onResult={(text) => updateField("household_size", text)} />
+                <div className="relative">
+                  <input
+                    id="household_size"
+                    type="number"
+                    min="1"
+                    value={formData.household_size}
+                    onChange={(e) =>
+                      updateField("household_size", e.target.value)
+                    }
+                    className={fieldClass(false, true)}
+                  />
+                  <VoiceInputButton onResult={(text) => updateField("household_size", text)} />
+                </div>
               </FormField>
             </div>
 
@@ -365,9 +361,7 @@ async function handleSubmit(e) {
           setErrors((prev) => ({ ...prev, ration_card_type: "" }));
         }
       }}
-      className={`w-full border rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none ${
-        errors.ration_card_type ? "border-red-500" : "border-slate-300"
-      }`}
+      className={fieldClass(errors.ration_card_type)}
     >
       <option value="">Select</option>
       <option value="APL">APL</option>
@@ -387,39 +381,36 @@ async function handleSubmit(e) {
                 required
                 hint="Used only as a unique identifier. The raw number is never displayed."
               >
-               <input
-  id="aadhaarNumber"
-  type="text"
-  maxLength={12}
-  value={formData.aadhaarNumber}
-  onChange={(e) => {
-    const raw = e.target.value;
+               <div className="relative">
+                 <input
+                   id="aadhaarNumber"
+                   type="text"
+                   maxLength={12}
+                   value={formData.aadhaarNumber}
+                   onChange={(e) => {
+                     const raw = e.target.value;
 
-    // Check for invalid characters before cleaning
-    if (/[^0-9]/.test(raw)) {
-      setErrors((prev) => ({
-        ...prev,
-        aadhaarNumber: "Only numbers allowed. No spaces or special characters."
-      }));
-    } else {
-      setErrors((prev) => ({ ...prev, aadhaarNumber: "" }));
-    }
+                     // Check for invalid characters before cleaning
+                     if (/[^0-9]/.test(raw)) {
+                       setErrors((prev) => ({
+                         ...prev,
+                         aadhaarNumber: "Only numbers allowed. No spaces or special characters."
+                       }));
+                     } else {
+                       setErrors((prev) => ({ ...prev, aadhaarNumber: "" }));
+                     }
 
-    const cleaned = raw.replace(/\D/g, "").slice(0, 12);
-    updateField("aadhaarNumber", cleaned);
-  }}
-  className={`w-full border rounded-lg px-4 py-2 ${
-    errors.aadhaarNumber ? "border-red-500" : "border-slate-300"
-  }`}
-/>
-
-
+                     const cleaned = raw.replace(/\D/g, "").slice(0, 12);
+                     updateField("aadhaarNumber", cleaned);
+                   }}
+                   className={fieldClass(errors.aadhaarNumber, true)}
+                 />
+                 <VoiceInputButton onResult={(text) => updateField("aadhaarNumber", text)} />
+               </div>
 
 {errors.aadhaarNumber && (
   <p className="text-red-600 text-xs mt-1">{errors.aadhaarNumber}</p>
 )}
-
-                <VoiceInputButton onResult={(text) => updateField("aadhaarNumber", text)} />
               </FormField>
             </div>
           </section>
@@ -445,18 +436,19 @@ async function handleSubmit(e) {
               hint="Enter approximate units (kWh) based on your recent bills."
               required
             >
-              <input
-                id="electricity_units"
-                type="number"
-                min="0"
-                value={formData.electricity_units}
-                onChange={(e) =>
-                  updateField("electricity_units", e.target.value)
-                }
-                className="w-full border border-slate-300 rounded-lg px-4 py-2 text-sm 
-               focus:outline-none focus:ring-2 focus:ring-govBlue focus:border-govBlue transition"
-              />
-              <VoiceInputButton onResult={(text) => updateField("electricity_units", text)} />
+              <div className="relative">
+                <input
+                  id="electricity_units"
+                  type="number"
+                  min="0"
+                  value={formData.electricity_units}
+                  onChange={(e) =>
+                    updateField("electricity_units", e.target.value)
+                  }
+                  className={fieldClass(false, true)}
+                />
+                <VoiceInputButton onResult={(text) => updateField("electricity_units", text)} />
+              </div>
             </FormField>
 
             <UploadCard
@@ -496,7 +488,7 @@ async function handleSubmit(e) {
                 rows="2"
                 value={formData.lpgInfo}
                 onChange={(e) => updateField("lpgInfo", e.target.value)}
-                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-govBlue focus:border-govBlue transition"
+                className={fieldClass(false)}
               />
             </FormField>
 
@@ -512,7 +504,7 @@ async function handleSubmit(e) {
                 onChange={(e) =>
                   updateField("digitalPaymentsInfo", e.target.value)
                 }
-                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-govBlue focus:border-govBlue transition"
+                className={fieldClass(false)}
               />
             </FormField>
 
@@ -616,18 +608,11 @@ async function handleSubmit(e) {
           </Button>
 
           {step < TOTAL_STEPS ? (
-            <Button
-              type="button"
-              onClick={nextStep}
-              className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
-            >
+            <Button type="button" variant="primary" onClick={nextStep}>
               Next →
             </Button>
           ) : (
-            <Button
-              type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
-            >
+            <Button type="submit" variant="primary">
               Submit Application
             </Button>
           )}

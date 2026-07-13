@@ -20,13 +20,13 @@ export default function InfoBanner() {
           <div className="flex flex-col items-stretch gap-3 min-w-fit">
             <a
               href="/application/new"
-              className="px-5 py-2.5 rounded-lg bg-white text-black font-semibold hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-govGold shadow-md transition"
+              className="px-6 py-3 rounded-xl bg-white text-govBlue font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-govGold focus:ring-offset-govBlue transition-all duration-200 text-center"
             >
               Apply for Loan
             </a>
             <a
               href="/login/officer"
-              className="px-5 py-2.5 rounded-lg bg-white border border-blue-100 text-slate-700 hover:bg-white/100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white focus:ring-offset-govBlue font-medium transition"
+              className="px-6 py-3 rounded-xl border border-white/60 text-white font-medium hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white focus:ring-offset-govBlue transition-all duration-200 text-center"
             >
               Officer / Admin Login
             </a>

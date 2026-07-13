@@ -3,7 +3,7 @@ export default function ProgressBar({ currentStep, totalSteps }) {
 
   return (
     <div className="section-box space-y-2 mb-4">
-      <div className="flex items-center justify-between text-xs text-slate-600">
+      <div className="flex items-center justify-between text-xs text-slate-600 mb-3">
         <span className="font-medium">Application Progress</span>
         <span>
           Step {currentStep} of {totalSteps} ({percentage}%)

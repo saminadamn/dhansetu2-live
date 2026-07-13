@@ -35,12 +35,12 @@ export default function DashboardOverviewSection() {
         {items.map((item) => (
           <div
             key={item.role}
-            className="card p-4 flex flex-col justify-between hover:shadow-md hover:-translate-y-[2px] transition"
+            className="border border-slate-100 bg-white rounded-xl shadow-sm p-4 flex flex-col justify-between hover:shadow-md hover:-translate-y-[2px] transition"
           >
             <div className="space-y-2">
-              <p className="text-[11px] uppercase tracking-wide text-slate-500">
+              <span className="inline-block text-[10px] uppercase tracking-wider font-semibold text-govBlue bg-govSoftBlue px-2 py-0.5 rounded-full">
                 {item.tag}
-              </p>
+              </span>
               <h3 className="text-sm md:text-base font-semibold text-slate-900">
                 {item.role}
               </h3>
@@ -51,9 +51,10 @@ export default function DashboardOverviewSection() {
             <div className="mt-3">
               <a
                 href={item.link}
-                className="inline-flex items-center text-xs md:text-sm text-blue-800 hover:text-blue-900 underline"
+                className="group inline-flex items-center text-xs md:text-sm font-medium text-govBlue hover:text-blue-900"
               >
-                Open {item.role.replace(" Dashboard", "")} →
+                Open {item.role.replace(" Dashboard", "")}
+                <span className="ml-1 transition-transform group-hover:translate-x-1">→</span>
               </a>
             </div>
           </div>

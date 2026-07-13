@@ -42,37 +42,37 @@ export default function Header() {
 
         {/* Right */}
         <div className="flex flex-col items-start gap-2 md:flex-row md:items-center md:gap-4 text-xs md:text-sm">
-          <nav className="flex gap-3 md:gap-4">
+          <nav className="flex items-center gap-3 md:gap-4">
             <a
               href="/"
-              className="text-white hover:text-govGold transition font-medium"
+              className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
             >
               {t("header.home")}
             </a>
 <a
   href="/login/beneficiary"
-  className="text-white hover:text-govGold transition font-medium"
+  className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
 >
   {t("header.login")} (Beneficiary)
 </a>
 
 <a
   href="/login/officer"
-  className="text-white hover:text-govGold transition font-medium"
+  className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
 >
   {t("header.login")} (Officer)
 </a>
 
             <a
               href="/application/new"
-              className="text-white hover:text-govGold transition font-medium"
+              className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
             >
               {t("header.apply")}
             </a>
 
             <a
               href="#contact"
-              className="text-white hover:text-govGold transition font-medium"
+              className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
             >
               {t("header.contact")}
             </a>

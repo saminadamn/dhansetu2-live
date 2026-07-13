@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-export default function SearchableDropdown({ label, value, options, onChange }) {
+export default function SearchableDropdown({ label, value, options, onChange, className }) {
   const [search, setSearch] = useState(value || "");
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
@@ -22,7 +22,7 @@ export default function SearchableDropdown({ label, value, options, onChange }) 
 
   return (
     <div className="w-full relative" ref={wrapperRef}>
-      <label className="block mb-1 font-medium">{label}</label>
+      {label && <label className="block mb-1 font-medium">{label}</label>}
 
       <input
         type="text"
@@ -33,7 +33,10 @@ export default function SearchableDropdown({ label, value, options, onChange }) 
           setOpen(true);
         }}
         onFocus={() => setOpen(true)}
-        className="w-full border border-slate-300 rounded-lg px-4 py-2"
+        className={
+          className ||
+          "w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm bg-white transition focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-govBlue"
+        }
       />
 
       {open && filteredOptions.length > 0 && (
