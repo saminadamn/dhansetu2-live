@@ -4,6 +4,7 @@ import {
   getAllApplications,
   getApplicationDetails,
   updateApplicationDecision,
+  getRepeatedUsers,
 } from "../controllers/officer.controller.js";
 import { authMiddleware } from "../middlewares/auth.js";
 import { authorizeRole } from "../middlewares/authorizeRole.js";
@@ -13,6 +14,7 @@ const router = express.Router();
 router.use(authMiddleware, authorizeRole("officer"));
 
 router.get("/applications", getAllApplications);
+router.get("/repeated-users", getRepeatedUsers);
 router.get("/applications/:id", getApplicationDetails);
 router.patch("/applications/:id/decision", updateApplicationDecision);
 

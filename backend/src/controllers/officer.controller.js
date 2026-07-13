@@ -29,6 +29,58 @@ export const getAllApplications = async (req, res) => {
   }
 };
 
+// ======================================================
+// GET REPEATED APPLICANTS WHOSE SCORE HAS IMPROVED
+// ======================================================
+// GET /api/officer/repeated-users
+export const getRepeatedUsers = async (req, res) => {
+  try {
+    const applications = await LoanApplication.find({ scoresRef: { $ne: null } })
+      .populate("scoresRef")
+      .sort({ createdAt: 1 }); // oldest first, so we can compare first vs latest score
+
+    const byAadhaar = {};
+    for (const app of applications) {
+      if (!byAadhaar[app.aadhaarNumber]) byAadhaar[app.aadhaarNumber] = [];
+      byAadhaar[app.aadhaarNumber].push(app);
+    }
+
+    const repeatedUsers = [];
+    for (const apps of Object.values(byAadhaar)) {
+      if (apps.length < 2) continue;
+
+      const first = apps[0];
+      const latest = apps[apps.length - 1];
+      const firstScore = first.scoresRef?.risk_score;
+      const latestScore = latest.scoresRef?.risk_score;
+
+      if (firstScore == null || latestScore == null || latestScore <= firstScore) continue;
+
+      repeatedUsers.push({
+        aadhaarNumber: latest.aadhaarNumber,
+        applicantName: latest.applicantName,
+        applicationCount: apps.length,
+        firstScore,
+        latestScore,
+        scoreImprovement: latestScore - firstScore,
+        latestApplication: latest,
+      });
+    }
+
+    repeatedUsers.sort((a, b) => b.scoreImprovement - a.scoreImprovement);
+
+    return res.status(200).json({
+      message: "Repeated users fetched successfully",
+      count: repeatedUsers.length,
+      repeatedUsers,
+    });
+
+  } catch (error) {
+    console.error("❌ getRepeatedUsers error:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 // ========================================
 // GET APPLICATION DETAILS BY ID FOR OFFICER
 // ========================================
