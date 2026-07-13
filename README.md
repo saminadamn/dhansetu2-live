@@ -1,10 +1,18 @@
 # Dhansetu
 
-A loan-eligibility and credit-scoring platform for beneficiaries, officers, and channel partners. Beneficiaries log in with just their mobile number; a Python ML service scores each application; officers review and approve/reject applications; channel partners (SHGs/NGOs/field agents) log in separately and bulk-import financial data via CSV.
+A loan-eligibility and credit-scoring platform for three roles — **beneficiaries** (citizens applying for loans), **officers** (reviewing/approving applications), and **channel partners** (SHGs/NGOs/field agents bulk-importing applicant data). A Python ML service scores each application on a composite credit score with real SHAP-based explainability; scoring runs through an event-driven pipeline that degrades gracefully to synchronous processing when no message broker is available.
+
+## Feature overview
+
+- **Landing page** — government-portal styling, dark/light theme (fully restyled, not just a page-background toggle), 24-language UI (`frontend/src/language22/`, via i18next; includes 22 of India's scheduled languages plus English and Bodo).
+- **Beneficiary**: logs in with just a mobile number (no OTP/SMS step) → multi-step loan application (inline voice-to-text mic icon on each field, an Account Aggregator consent checkbox gating submission, an on-demand Bhashini translation widget) → redirected to **My Applications** (list of past/current applications with status + risk-band badges) → click into any application for its **status detail page** (composite score gauge, risk band, SHAP feature-impact chart with plain-English insights).
+- **Officer**: logs in with employee ID + password → dashboard with **Pending / Approved / Denied / Repeated Users** queue tabs and a sort control (date, composite score, income proxy) → per-application review screen (same score gauge + SHAP panel as the beneficiary view) → Approve / Reject / Ask Clarification.
+- **Channel partner**: logs in the same way as an officer, at a separate role — bulk-uploads a CSV of applicant financial data for mass onboarding (e.g. SHG cohorts).
+- **Demo Login** buttons on all three login pages, driving the real login endpoints against a mobile number / seeded demo account — for fast walkthroughs, not for production.
 
 ## Architecture
 
-- **`frontend/`** — React 19 + Vite + Tailwind. Multi-language UI (22 Indian languages via i18next).
+- **`frontend/`** — React 19 + Vite + Tailwind.
 - **`backend/`** — Node.js + Express 5 + MongoDB (Mongoose). Issues JWTs, orchestrates loan applications, calls the ML service.
 - **`ml_model/`** — FastAPI + scikit-learn/XGBoost + SHAP. Exposes `POST /predict`, called server-to-server by the backend (never directly by the frontend).
 
@@ -17,20 +25,33 @@ Client → API Gateway (Express) → RabbitMQ → Scoring Worker → Decision Wo
 `POST /api/loans/apply` creates the `LoanApplication` record immediately (status `PENDING`, no score yet) and publishes an `application.submitted` event, returning `202` right away — the request never blocks on the ML call. Three independent worker processes (`backend/src/workers/`) then carry it the rest of the way:
 
 1. **Scoring Worker** consumes `application.submitted`, calls the ML service's `/predict`, and publishes `application.scored`.
-2. **Decision Worker** consumes `application.scored`, persists the `Score` document and attaches it to the `LoanApplication`, and publishes `application.decided`.
+2. **Decision Worker** consumes `application.scored`, persists the `Score` document (including the SHAP explanation) and attaches it to the `LoanApplication`, and publishes `application.decided`.
 3. **Notification Worker** consumes `application.decided` and sends (currently: logs — no SMS/email provider is wired up yet, see the code comment in `notification.worker.js`) a status update to the applicant.
 
-**RabbitMQ, not Kafka**: both would work for this, but Kafka needs a JVM broker (plus Zookeeper or KRaft mode) for a workload this size — that's a lot of operational weight for a hackathon-scale project. RabbitMQ is a single lightweight service with a mature Node client (`amqplib`) and free hosted options (e.g. [CloudAMQP](https://www.cloudamqp.com/)), which is what `render.yaml` assumes since Render itself doesn't offer a managed broker.
+**Why RabbitMQ, not Kafka**: both would work, but Kafka needs a JVM broker (plus Zookeeper or KRaft mode) — a lot of operational weight for a workload this size. RabbitMQ is a single lightweight service with a mature Node client (`amqplib`) and free hosted options (e.g. [CloudAMQP](https://www.cloudamqp.com/)), which is what `render.yaml` assumes since Render itself doesn't offer a managed broker.
 
-**Graceful fallback**: if `RABBITMQ_URL` isn't set (or the broker is unreachable), `applyForLoan` scores synchronously in-request instead — same code path (`scoring.service.js`) that the Decision Worker uses, just called inline. This means the app works end-to-end with zero extra infrastructure; RabbitMQ is additive, not required. This was verified locally end-to-end (Docker RabbitMQ + MongoDB, all three workers, the real trained models) — a submitted application correctly flowed through all three workers and landed in MongoDB with its full SHAP explanation attached.
+**Graceful fallback, by design**: if `RABBITMQ_URL` isn't set (or the broker is unreachable), `applyForLoan` scores synchronously in-request instead — the exact same persistence code (`scoring.service.js`) that the Decision Worker uses, just called inline. The app works end-to-end with zero extra infrastructure; RabbitMQ is additive, never required.
 
 Run the workers locally with `npm run worker:scoring`, `npm run worker:decision`, `npm run worker:notification` (each in `backend/`, each its own process/terminal).
 
 ### Observability
 
 - **Structured logging** — every backend/worker log line is JSON (pretty-printed in dev via `pino-pretty`) via `backend/src/config/logger.js`. Every HTTP request gets a correlation ID (`req.correlationId`, echoed back as the `X-Correlation-Id` response header) that also rides along as the AMQP message's `correlationId` property through the whole pipeline — grep any worker's logs for one ID and see that single application's entire journey across all three workers.
-- **Retries with exponential backoff + dead-letter queue** — `eventBus.js` implements the standard RabbitMQ "TTL + DLX" delayed-retry pattern: a failed message retries up to 5 times (2s, 4s, 8s, 16s, 32s delays) via a per-queue `<queue>.retry` holding queue, then gets routed to `<queue>.dlq` for manual inspection instead of retrying forever or being silently dropped. **Verified for real**: killed the ML service mid-pipeline, watched the scoring worker retry with the logged delays increasing exactly as expected (same correlation ID on every attempt), confirmed the message landed in `scoring-worker-queue.dlq` via the RabbitMQ management API after all 5 retries were exhausted, then brought the ML service back and confirmed a fresh application scored normally.
+- **Retries with exponential backoff + dead-letter queue** — `eventBus.js` implements the standard RabbitMQ "TTL + DLX" delayed-retry pattern: a failed message retries up to 5 times (2s, 4s, 8s, 16s, 32s delays) via a per-queue `<queue>.retry` holding queue, then gets routed to `<queue>.dlq` for manual inspection instead of retrying forever or being silently dropped.
 - **Prometheus metrics** — `GET /metrics` on the backend (`http_requests_total`, `http_request_duration_seconds`, `events_published_total`, plus default Node process metrics) and on the ML service (via `prometheus-fastapi-instrumentator`). Each worker, having no HTTP server of its own, runs a tiny dedicated one just for `/metrics` (ports `9101`/`9102`/`9103` for scoring/decision/notification respectively, overridable via `SCORING_METRICS_PORT`/`DECISION_METRICS_PORT`/`NOTIFICATION_METRICS_PORT`), exposing `events_processed_total{queue,outcome}` (`success`/`retry`/`dead_letter`) and `worker_processing_duration_seconds`. Point a Grafana instance at any of these — no code changes needed, just a Prometheus scrape config.
+- **Not included, on purpose**: OpenTelemetry distributed tracing and a Grafana dashboard file. Both need a deployed backend (a trace collector, a running Grafana server) to show anything real — without one they'd be unverifiable config, not a working feature. The metrics above are exactly what a Grafana dashboard would query, so adding one later is config-only.
+
+## Testing & verification
+
+**There is no automated test suite** — no Jest/Vitest/pytest files exist in this repo (`npm test` in either `backend/` or `frontend/` is a placeholder). Adding one is the natural next step if you want CI-enforced regression protection; candidates would be Jest for the Express controllers, pytest for `score_prediction.py`, and Vitest/Playwright for the frontend.
+
+What *has* been verified, hands-on, with real infrastructure (not just read through):
+
+- SHAP explainability against the actual trained `.pkl` models (not mocked data) — direct Python call and a live `curl` against the running FastAPI endpoint.
+- The full async pipeline end-to-end: real Docker RabbitMQ + MongoDB, all three workers, a submitted application flowing scoring → decision → notification and landing in MongoDB with its SHAP explanation attached.
+- Failure handling: the ML service was killed mid-pipeline, the scoring worker was confirmed retrying at the exact expected exponential-backoff delays (2/4/8/16/32s) with the same correlation ID on every attempt, and the message was confirmed landing in the dead-letter queue via RabbitMQ's management API after all retries were exhausted. Prometheus counters were checked and matched exactly (5 `retry` + 1 `dead_letter`).
+- Recovery: the ML service was restarted and a fresh application was confirmed scoring normally again.
+- Frontend: landing page, header contrast, dark-mode restyling, the application form (i18n leak fix, inline mic icon, consent checkbox), all three login pages plus their demo-login buttons, the officer dashboard's queue tabs/sort/repeated-users view, and route-guard redirects for unauthenticated visits — all checked directly in a browser.
 
 ## Local setup
 
@@ -62,6 +83,24 @@ cp .env.example .env   # VITE_API_URL=http://localhost:5000/api
 npm run dev
 ```
 
+### 4. (Optional) Async pipeline locally
+
+Skip this entirely and the app still works — `applyForLoan` scores synchronously without it.
+
+```bash
+docker run -d -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+```
+
+Then, each in its own terminal (inside `backend/`), with `RABBITMQ_URL=amqp://localhost:5672` set in `.env`:
+
+```bash
+npm run worker:scoring
+npm run worker:decision
+npm run worker:notification
+```
+
+The RabbitMQ management UI is at `http://localhost:15672` (guest/guest) if you want to watch queues/messages directly.
+
 ## Environment variables
 
 ### `backend/.env`
@@ -88,9 +127,9 @@ npm run dev
 
 ## Authentication model
 
-- **Beneficiaries** log in with just a mobile number (`POST /api/auth/beneficiary-login`) — no OTP/SMS step. The account is created on first login. Receives a JWT with `role: "beneficiary"`.
+- **Beneficiaries** log in with just a mobile number (`POST /api/auth/beneficiary-login`) — **no OTP/SMS step**. This was deliberately removed (it originally required Fast2SMS and repeatedly broke: real SMS delivery to test numbers, a demo-bypass button that didn't actually bypass anything) in favor of a single-step login. The account is created on first login; receives a JWT with `role: "beneficiary"`.
 - **Officers** log in with employee ID + password (`POST /api/auth/officer-login`).
-- **Channel partners** (SHGs/NGOs/field agents) log in the same way, at `/login/channel` — same endpoint as officers, but their account's `role` field is `"channel"`, which is what the issued JWT is scoped to.
+- **Channel partners** (SHGs/NGOs/field agents) log in the same way, at `/login/channel` — same endpoint as officers, but their account's `role` field is `"channel"`, which is what the issued JWT is scoped to. (Previously `/dashboard/channel` had no login at all — anyone could reach it directly.)
 - Both officer and channel-partner accounts must be provisioned ahead of time (no self-signup) — see "Demo accounts" below for how a fresh deployment gets its first ones.
 - All protected routes require `Authorization: Bearer <token>` and are role-gated via `authorizeRole` in `backend/src/middlewares/`. The frontend mirrors this with `ProtectedRoute` (`frontend/src/components/auth/ProtectedRoute.jsx`) so an unauthenticated visit to any dashboard/apply route redirects to the matching login page instead of rendering with no data.
 
@@ -111,18 +150,26 @@ The raw Aadhaar number is never persisted. `backend/src/utils/hashAadhaar.js` SH
 
 Both login pages, plus the beneficiary login, also have a **Demo Login** button that fills and submits these automatically — intended for presentations/demos only; remove before a real production launch (and rotate/remove the seeded accounts).
 
-## Deployment
+## Deployment — hosting it live
 
-**Backend + ML service → Render**, using the `render.yaml` Blueprint at the repo root:
+### Backend + ML service + workers → Render, via `render.yaml`
 
-1. In Render, "New +" → "Blueprint", point at this repo.
-2. Render creates five services: `dhansetu-backend`, `dhansetu-ml`, and the three background workers (`dhansetu-scoring-worker`, `dhansetu-decision-worker`, `dhansetu-notification-worker`).
-3. Fill in each service's env vars in the Render dashboard (`MONGODB_URI`, `ML_API_URL`, `JWT_SECRET`, `GEMINI_API_KEY`, `FRONTEND_URL`, optionally the `BHASHINI_*` vars, and `RABBITMQ_URL` from a hosted broker like CloudAMQP) — set `ML_API_URL` to the `dhansetu-ml` service's public URL + `/predict`.
-4. If you skip provisioning `RABBITMQ_URL` entirely, don't deploy the three worker services at all — the backend scores synchronously and there's nothing for them to consume.
+The Blueprint at the repo root defines five services: `dhansetu-backend` (web), `dhansetu-ml` (web), and three background workers (`dhansetu-scoring-worker`, `dhansetu-decision-worker`, `dhansetu-notification-worker`).
 
-**Frontend → Vercel**:
-
-1. Import this repo into Vercel, set the project's **root directory to `frontend`**.
-2. Vercel picks up `frontend/vercel.json` automatically (Vite build, SPA rewrites).
-3. Set `VITE_API_URL` in Vercel's project env vars to the deployed backend's URL + `/api`.
-4. Once you know the Vercel URL, set it as `FRONTEND_URL` on the Render backend and redeploy.
+1. **(Optional, for the async pipeline) Create a RabbitMQ instance first** — e.g. a free [CloudAMQP](https://www.cloudamqp.com/) "Little Lemur" plan. Copy its AMQP URL; you'll paste it into every service below as `RABBITMQ_URL`. Skip this step entirely if you're fine with synchronous scoring — see the fallback behavior above.
+2. In the Render dashboard: **New +** → **Blueprint**, point it at this repo/branch. Render reads `render.yaml` and creates all five services.
+3. **If you skipped step 1**, delete/don't deploy the three worker services — there's nothing for them to consume, and the backend already falls back to scoring synchronously.
+4. Fill in each service's env vars in the Render dashboard (values aren't synced between services automatically — `sync: false` in the Blueprint means you set each one by hand):
+   - `dhansetu-backend`: `MONGODB_URI`, `ML_API_URL` (see step 6), `JWT_SECRET` (any long random string), `GEMINI_API_KEY`, `FRONTEND_URL` (see step 8), optionally the four `BHASHINI_*` vars, optionally `RABBITMQ_URL`.
+   - `dhansetu-scoring-worker`: `MONGODB_URI`, `ML_API_URL`, `RABBITMQ_URL`.
+   - `dhansetu-decision-worker`: `MONGODB_URI`, `RABBITMQ_URL`.
+   - `dhansetu-notification-worker`: `RABBITMQ_URL`.
+5. `MONGODB_URI` — use a free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster if you don't already have one; the same connection string goes on the backend and both DB-touching workers.
+6. Once `dhansetu-ml` finishes deploying, copy its public Render URL and set `ML_API_URL` on `dhansetu-backend` and `dhansetu-scoring-worker` (the only two that call it) to `<that-url>/predict`.
+7. Deploy (or redeploy) all five services once every env var above is filled in.
+8. **Frontend → Vercel**:
+   - Import this repo into Vercel, set the project's **root directory to `frontend`**.
+   - Vercel picks up `frontend/vercel.json` automatically (Vite build, SPA rewrites) — no manual build config needed.
+   - Set `VITE_API_URL` in Vercel's project env vars to `<dhansetu-backend's Render URL>/api`, then deploy.
+9. Once you have the Vercel URL, set it as `FRONTEND_URL` on `dhansetu-backend` in Render and redeploy that one service — this is what CORS checks against, so the frontend can't reach the API until it's set correctly.
+10. Sanity-check the live deployment: open the Vercel URL, use the **Demo Login** button on `/login/beneficiary`, submit a loan application, and confirm it shows up under "My Applications" (scored either instantly, if synchronous, or within a few seconds if the async pipeline is wired up).
