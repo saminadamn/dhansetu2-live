@@ -49,25 +49,12 @@ export default function Header() {
             >
               {t("header.home")}
             </a>
-<a
-  href="/login/beneficiary"
-  className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
->
-  {t("header.login")} (Beneficiary)
-</a>
-
-<a
-  href="/login/officer"
-  className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
->
-  {t("header.login")} (Officer)
-</a>
 
             <a
-              href="/application/new"
+              href="/login/beneficiary"
               className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
             >
-              {t("header.apply")}
+              {t("header.login")}
             </a>
 
             <a
@@ -80,7 +67,6 @@ export default function Header() {
 
           {/* Language selector */}
           <div className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded border border-white/30">
-            <span className="text-xs">🌐</span>
             <select
               value={currentLang}
               onChange={handleLangChange}
@@ -115,9 +101,10 @@ export default function Header() {
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
+            aria-label="Toggle dark mode"
             className="px-3 py-1 rounded border border-white/40 bg-white/10 text-white text-xs hover:bg-white/20 transition"
           >
-            {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
           </button>
         </div>
       </div>

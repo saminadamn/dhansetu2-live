@@ -136,7 +136,7 @@ formData.append("file", file); // MUST match multer.single("file")
     <div className="p-6 space-y-6">
       <h2 className="text-xl font-semibold text-govBlue">Channel Partner Dashboard</h2>
 
-      <div className="border p-4 rounded bg-white">
+      <div className="card p-4">
         <label className="block font-medium mb-2">Upload CSV / Excel File</label>
 
         <input
@@ -160,9 +160,9 @@ formData.append("file", file); // MUST match multer.single("file")
 
       <h3 className="text-lg font-bold mt-6">Uploaded Financial Data</h3>
 
-      <table className="w-full text-left border">
+      <table className="w-full text-left border border-slate-200 dark:border-slate-800">
         <thead>
-          <tr className="bg-gray-200">
+          <tr className="bg-gray-200 dark:bg-slate-800">
             <th className="p-2">Aadhaar</th>
             <th className="p-2">Past Loans</th>
             <th className="p-2">Defaults</th>
@@ -172,7 +172,7 @@ formData.append("file", file); // MUST match multer.single("file")
 
         <tbody>
           {profiles.map((p) => (
-            <tr key={p._id} className="border-b">
+            <tr key={p._id} className="border-b border-slate-100 dark:border-slate-800">
               <td className="p-2">{p.aadhaarNumber}</td>
               <td className="p-2">{p.num_past_loans}</td>
               <td className="p-2">{p.past_defaults}</td>

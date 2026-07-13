@@ -37,7 +37,7 @@ export default function ApplicationDetails() {
         Application Details
       </h1>
 
-      <div className="bg-white rounded-lg shadow p-4 border">
+      <div className="card p-4">
         <h2 className="text-xl font-semibold mb-3">Applicant Information</h2>
         <p><strong>Name:</strong> {application.applicantName}</p>
         <p><strong>Aadhaar:</strong> {application.aadhaarNumber}</p>
@@ -45,7 +45,7 @@ export default function ApplicationDetails() {
         <p><strong>Status:</strong> {application.status}</p>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-4 border">
+      <div className="card p-4">
         <h2 className="text-xl font-semibold mb-3">Score Insights</h2>
         {application.scoresRef ? (
           <>

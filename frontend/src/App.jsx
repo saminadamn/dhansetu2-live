@@ -7,6 +7,7 @@ import LandingPage from "./pages/Landing/LandingPage";
 import BeneficiaryLogin from "./pages/Auth/BeneficiaryLogin";
 import OfficerLogin from "./pages/Auth/OfficerLogin";
 import ApplicationFormPage from "./pages/Application/ApplicationFormPage";
+import MyApplicationStatus from "./pages/Application/MyApplicationStatus";
 import BeneficiaryDashboard from "./pages/Dashboard/BeneficiaryDashboard";
 import OfficerDashboard from "./pages/Dashboard/OfficerDashboard";
 import ApplicationDetails from "./pages/Application/ApplicationDetails";
@@ -42,6 +43,7 @@ function App() {
             <Route path="/loans/apply" element={<ApplicationFormPage />} />
             <Route path="/application/new" element={<ApplicationFormPage />} />
             <Route path="/dashboard/beneficiary" element={<BeneficiaryDashboard />} />
+            <Route path="/my-applications/:id" element={<MyApplicationStatus />} />
 
             {/* Officer */}
             <Route path="/dashboard/officer" element={<OfficerDashboard />} />

@@ -22,30 +22,62 @@ body {
 }
 
 /* Section Wrapper (gov-portal style) */
-/* stays white in both modes so boxes are consistent */
 .section-box {
   @apply bg-white border border-slate-200 rounded-xl shadow-sm p-6 md:p-8;
+  @apply dark:bg-slate-900 dark:border-slate-800;
 }
 
 /* Section Title */
 .section-title {
   @apply text-xl md:text-2xl font-semibold mb-4 text-slate-900 border-l-4 pl-3 border-blue-900;
+  @apply dark:text-slate-100 dark:border-blue-500;
 }
 
-/* Card style – also stays white in both modes */
+/* Card style */
 .card {
   @apply bg-white rounded-xl shadow-sm border border-slate-200;
+  @apply dark:bg-slate-900 dark:border-slate-800;
 }
 
-/* Soft background gradients (only really affect light mode) */
+/* Soft background gradients (light mode only — dark mode uses a flat page bg) */
 .app-bg {
   background: radial-gradient(circle at top left, #e2edff, transparent 45%),
     radial-gradient(circle at bottom right, #e8f4ff, transparent 50%);
 }
+:root[data-theme-dark] .app-bg,
+.dark .app-bg {
+  background: none;
+}
 
-/* Links – optional dark tweak, but not required */
+/* Links */
 @layer base {
   a {
     @apply text-blue-900 hover:text-blue-700 transition-colors;
+    @apply dark:text-blue-300 dark:hover:text-blue-200;
+  }
+}
+
+/* Generic text color helpers used across cards/sections so dark mode reads correctly
+   without having to touch every component individually */
+@layer base {
+  .section-box,
+  .card {
+    @apply text-slate-800 dark:text-slate-200;
+  }
+  .section-box h1,
+  .section-box h2,
+  .section-box h3,
+  .card h1,
+  .card h2,
+  .card h3 {
+    @apply text-slate-900 dark:text-slate-100;
+  }
+  .section-box input,
+  .section-box select,
+  .section-box textarea,
+  .card input,
+  .card select,
+  .card textarea {
+    @apply bg-white dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100;
   }
 }

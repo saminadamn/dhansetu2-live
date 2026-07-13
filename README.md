@@ -51,6 +51,7 @@ npm run dev
 | `GEMINI_API_KEY` | yes | powers OCR + speech-to-text (`/api/ai/*`) |
 | `FAST2SMS_API_KEY` | no | sends real login OTP SMS via Fast2SMS. If unset, `sendOTP` falls back to a fixed test OTP (`123456`), logged to the server console — fine for demo/dev, not for real users. |
 | `FRONTEND_URL` | yes | comma-separated allowed CORS origins |
+| `BHASHINI_USER_ID` / `BHASHINI_API_KEY` | no | credentials from [bhashini.gov.in](https://bhashini.gov.in) for `POST /api/bhashini/translate`. If unset, that endpoint returns `503 { configured: false }` and the frontend keeps using its built-in i18next translations. |
 
 ### `frontend/.env`
 
@@ -65,7 +66,9 @@ npm run dev
 - **Channel partners** currently authenticate using officer credentials — there is no dedicated channel-partner login/role yet. If you need a separate channel-partner identity, add a `"channel"` role to `backend/src/models/User.js` and a matching login flow.
 - All protected routes require `Authorization: Bearer <token>` and are role-gated via `authorizeRole` in `backend/src/middlewares/`.
 
-Known limitation: a beneficiary's JWT is scoped by role only, not by Aadhaar number — the app never links a verified phone number to a specific Aadhaar identity. Anyone authenticated as a beneficiary can currently query loan/application history for any Aadhaar number they enter. Closing this gap requires deciding how Aadhaar gets bound to a verified identity (e.g. collected and locked in at first login) — a product decision, not just a wiring fix.
+Known limitation: a beneficiary's JWT is scoped by role only, not by Aadhaar number — the app never links a verified phone number to a specific Aadhaar identity. Anyone authenticated as a beneficiary can currently query loan/application history for any Aadhaar number they enter. The frontend works around this by remembering the Aadhaar used on the beneficiary's last loan application in `localStorage` (falling back to a manual "enter your Aadhaar" prompt on `/dashboard/beneficiary` otherwise) so "My Applications" has something to look up by — but this is not real authorization. Closing the gap for production requires deciding how Aadhaar gets bound to a verified identity (e.g. collected and locked in at first login) — a product decision, not just a wiring fix.
+
+The Beneficiary Login page also has a **Demo Login** button that skips real OTP delivery via a pre-verified test account — intended for presentations/demos only; remove it before a real production launch.
 
 ## Deployment
 
@@ -73,7 +76,7 @@ Known limitation: a beneficiary's JWT is scoped by role only, not by Aadhaar num
 
 1. In Render, "New +" → "Blueprint", point at this repo.
 2. Render creates two services: `dhansetu-backend` and `dhansetu-ml`.
-3. Fill in the backend's env vars (`MONGODB_URI`, `ML_API_URL`, `JWT_SECRET`, `GEMINI_API_KEY`, `FAST2SMS_API_KEY`, `FRONTEND_URL`) in the Render dashboard — set `ML_API_URL` to the `dhansetu-ml` service's public URL + `/predict`.
+3. Fill in the backend's env vars (`MONGODB_URI`, `ML_API_URL`, `JWT_SECRET`, `GEMINI_API_KEY`, `FAST2SMS_API_KEY`, `FRONTEND_URL`, optionally `BHASHINI_USER_ID`/`BHASHINI_API_KEY`) in the Render dashboard — set `ML_API_URL` to the `dhansetu-ml` service's public URL + `/predict`.
 
 **Frontend → Vercel**:
 

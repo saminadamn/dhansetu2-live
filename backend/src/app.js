@@ -9,6 +9,7 @@ import officerRoutes from "./routes/officer.routes.js";
 import beneficiaryRoutes from "./routes/beneficiary.routes.js";
 import aiRoutes from "./routes/ai.routes.js";
 import channelRoutes from "./routes/channel.routes.js";
+import bhashiniRoutes from "./routes/bhashini.routes.js";
 
 
 
@@ -43,6 +44,7 @@ app.use("/api/ai", aiRoutes);
 
 
 app.use("/api/channel", channelRoutes);
+app.use("/api/bhashini", bhashiniRoutes);
 
 
 

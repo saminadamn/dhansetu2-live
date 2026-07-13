@@ -118,9 +118,13 @@ async function handleSubmit(e) {
   income_proxy_score: response.data.income_proxy_score,
   risk_band: response.data.risk_band,
 }));
+    // Beneficiary login doesn't collect Aadhaar (mobile+OTP only), so we
+    // remember the Aadhaar used on their latest application to look up
+    // "My Applications" without a backend identity-binding change.
+    localStorage.setItem("aadhaarNumber", formData.aadhaarNumber);
 
 
-    navigate("/dashboard/beneficiary");  // redirect to dashboard after success
+    navigate("/dashboard/beneficiary");  // redirect to application list after success
   } catch (error) {
     console.error("Loan application failed:", error);
     alert("Something went wrong while applying for loan!");

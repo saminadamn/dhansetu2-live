@@ -2,9 +2,13 @@ import React, { useState, useContext } from "react";
 import API from "../../services/axiosInstance";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import RoleTabs from "../../components/auth/RoleTabs";
 
 const inputClass =
-  "w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm bg-white transition focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-govBlue";
+  "w-full border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm bg-white dark:bg-slate-800 dark:text-slate-100 transition focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 focus:border-govBlue";
+
+const DEMO_MOBILE = "9999999999";
+const DEMO_OTP = "123456";
 
 export default function BeneficiaryLogin() {
   const { login } = useContext(AuthContext);
@@ -14,37 +18,41 @@ export default function BeneficiaryLogin() {
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSendOTP = async () => {
+  const handleSendOTP = async (number = mobileNumber) => {
     setErrorMsg("");
 
-    if (mobileNumber.length !== 10) {
+    if (number.length !== 10) {
       setErrorMsg("Enter a valid 10 digit mobile number");
-      return;
+      return false;
     }
 
     setLoading(true);
     try {
-      await API.post("/auth/send-otp", { mobileNumber });
+      await API.post("/auth/send-otp", { mobileNumber: number });
       setStep("otp");
+      return true;
     } catch (err) {
       setErrorMsg(err.response?.data?.message || "Failed to send OTP");
+      return false;
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  const handleVerifyOTP = async () => {
+  const handleVerifyOTP = async (number = mobileNumber, code = otp) => {
     setErrorMsg("");
 
-    if (otp.length !== 6) {
+    if (code.length !== 6) {
       setErrorMsg("Enter 6 digit OTP");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await API.post("/auth/verify-otp", { mobileNumber, otp });
+      const res = await API.post("/auth/verify-otp", { mobileNumber: number, otp: code });
 
       login(res.data.role, res.data.token);
       navigate("/dashboard/beneficiary"); // redirect on success
@@ -55,45 +63,46 @@ export default function BeneficiaryLogin() {
     setLoading(false);
   };
 
+  const handleDemoLogin = async () => {
+    setDemoLoading(true);
+    setErrorMsg("");
+    setMobileNumber(DEMO_MOBILE);
+    setOtp(DEMO_OTP);
+    const sent = await handleSendOTP(DEMO_MOBILE);
+    if (sent) {
+      await handleVerifyOTP(DEMO_MOBILE, DEMO_OTP);
+    }
+    setDemoLoading(false);
+  };
+
   return (
     <div className="min-h-[65vh] flex items-center justify-center py-8">
-      <div className="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-md overflow-hidden">
-        {/* Role selector tabs */}
-        <div className="flex border-b border-slate-100 bg-slate-50/60 p-2 gap-2">
-          <span className="flex-1 py-2.5 text-center text-sm font-medium rounded-xl bg-white text-govBlue shadow-sm border border-slate-200/70">
-            Beneficiary / Citizen
-          </span>
-          <a
-            href="/login/officer"
-            className="flex-1 py-2.5 text-center text-sm font-medium rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/60 transition"
-          >
-            Internal Officer
-          </a>
-        </div>
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 w-full max-w-md overflow-hidden">
+        <RoleTabs active="beneficiary" />
 
         <div className="p-8">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-slate-900">Welcome to Dhansetu</h2>
-            <p className="text-slate-500 text-sm mt-1">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Welcome to Dhansetu</h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
               Login with your mobile number to apply for a loan and track your applications.
             </p>
           </div>
 
           {/* Step indicator */}
           <div className="flex items-center gap-2 mb-6 text-xs font-medium">
-            <span className={`flex items-center gap-1.5 ${step === "mobile" ? "text-govBlue" : "text-slate-400"}`}>
-              <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[11px] ${step === "mobile" ? "bg-govBlue text-white" : "bg-slate-200 text-slate-500"}`}>1</span>
+            <span className={`flex items-center gap-1.5 ${step === "mobile" ? "text-govBlue dark:text-blue-300" : "text-slate-400 dark:text-slate-500"}`}>
+              <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[11px] ${step === "mobile" ? "bg-govBlue text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400"}`}>1</span>
               Mobile Number
             </span>
-            <span className="flex-1 h-px bg-slate-200" />
-            <span className={`flex items-center gap-1.5 ${step === "otp" ? "text-govBlue" : "text-slate-400"}`}>
-              <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[11px] ${step === "otp" ? "bg-govBlue text-white" : "bg-slate-200 text-slate-500"}`}>2</span>
+            <span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+            <span className={`flex items-center gap-1.5 ${step === "otp" ? "text-govBlue dark:text-blue-300" : "text-slate-400 dark:text-slate-500"}`}>
+              <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[11px] ${step === "otp" ? "bg-govBlue text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400"}`}>2</span>
               Verify OTP
             </span>
           </div>
 
           {errorMsg && (
-            <p className="text-red-600 text-sm text-center mb-4 bg-red-50 border border-red-100 rounded-lg py-2">
+            <p className="text-red-600 text-sm text-center mb-4 bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-900 rounded-lg py-2">
               {errorMsg}
             </p>
           )}
@@ -101,7 +110,7 @@ export default function BeneficiaryLogin() {
           {step === "mobile" ? (
             <div className="space-y-4">
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                   Mobile Number
                 </label>
                 <input
@@ -115,8 +124,8 @@ export default function BeneficiaryLogin() {
               </div>
 
               <button
-                onClick={handleSendOTP}
-                disabled={loading}
+                onClick={() => handleSendOTP()}
+                disabled={loading || demoLoading}
                 className="w-full bg-govBlue text-white font-semibold py-2.5 rounded-lg hover:bg-blue-800 transition-colors shadow-md shadow-blue-900/10 text-sm disabled:opacity-60"
               >
                 {loading ? "Sending..." : "Send OTP"}
@@ -125,7 +134,7 @@ export default function BeneficiaryLogin() {
           ) : (
             <div className="space-y-4">
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                   One-Time Password
                 </label>
                 <input
@@ -139,8 +148,8 @@ export default function BeneficiaryLogin() {
               </div>
 
               <button
-                onClick={handleVerifyOTP}
-                disabled={loading}
+                onClick={() => handleVerifyOTP()}
+                disabled={loading || demoLoading}
                 className="w-full bg-govBlue text-white font-semibold py-2.5 rounded-lg hover:bg-blue-800 transition-colors shadow-md shadow-blue-900/10 text-sm disabled:opacity-60"
               >
                 {loading ? "Verifying..." : "Verify OTP"}
@@ -148,12 +157,23 @@ export default function BeneficiaryLogin() {
 
               <button
                 onClick={() => { setStep("mobile"); setOtp(""); setErrorMsg(""); }}
-                className="w-full text-center text-sm text-slate-500 hover:text-govBlue transition"
+                className="w-full text-center text-sm text-slate-500 dark:text-slate-400 hover:text-govBlue dark:hover:text-blue-300 transition"
               >
                 ← Change mobile number
               </button>
             </div>
           )}
+
+          <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+            <button
+              onClick={handleDemoLogin}
+              disabled={loading || demoLoading}
+              title="Skips real OTP delivery using a pre-verified demo account — for presentations/testing only"
+              className="text-xs font-medium text-govGold border border-govGold/50 rounded-full px-4 py-1.5 hover:bg-govGold/10 transition disabled:opacity-60"
+            >
+              {demoLoading ? "Signing in…" : "⚡ Demo Login (skip OTP)"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

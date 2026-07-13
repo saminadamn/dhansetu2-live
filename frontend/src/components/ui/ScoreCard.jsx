@@ -15,7 +15,7 @@ export default function ScoreCard({
             cx="48"
             cy="48"
             r="42"
-            className="text-slate-200"
+            className="text-slate-200 dark:text-slate-700"
             stroke="currentColor"
             strokeWidth="6"
             fill="transparent"
@@ -24,7 +24,7 @@ export default function ScoreCard({
             cx="48"
             cy="48"
             r="42"
-            className="text-govBlue"
+            className="text-govBlue dark:text-blue-400"
             stroke="currentColor"
             strokeWidth="6"
             fill="transparent"
@@ -37,10 +37,10 @@ export default function ScoreCard({
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <p className="text-xl font-semibold text-slate-900">
+            <p className="text-xl font-semibold text-slate-900 dark:text-slate-100">
               {safeScore}
             </p>
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wide">
               / 100
             </p>
           </div>
@@ -49,15 +49,15 @@ export default function ScoreCard({
 
       {/* Text */}
       <div className="flex-1 space-y-1">
-        <p className="text-xs font-medium text-slate-500 uppercase tracking-[0.15em]">
+        <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-[0.15em]">
           {title}
         </p>
-        <p className="text-sm md:text-base text-slate-800">
+        <p className="text-sm md:text-base text-slate-800 dark:text-slate-300">
           {subtitle ||
             "Composite ML-based score combining repayment and income proxy models."}
         </p>
         {bandLabel && (
-          <p className="mt-1 text-xs font-medium text-govBlue">
+          <p className="mt-1 text-xs font-medium text-govBlue dark:text-blue-300">
             Risk Band: <span className="font-semibold">{bandLabel}</span>
           </p>
         )}
