@@ -17,6 +17,7 @@ import GeminiTools from "./pages/AI/GeminiTools";
 
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import PublicOnlyRoute from "./components/auth/PublicOnlyRoute";
 
 function NotFound() {
   return (
@@ -39,12 +40,12 @@ function App() {
         <PageShell>
           <Routes>
             {/* Public */}
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<PublicOnlyRoute><LandingPage /></PublicOnlyRoute>} />
 
             {/* Auth */}
-            <Route path="/login/beneficiary" element={<BeneficiaryLogin />} />
-            <Route path="/login/officer" element={<OfficerLogin />} />
-            <Route path="/login/channel" element={<ChannelLogin />} />
+            <Route path="/login/beneficiary" element={<PublicOnlyRoute><BeneficiaryLogin /></PublicOnlyRoute>} />
+            <Route path="/login/officer" element={<PublicOnlyRoute><OfficerLogin /></PublicOnlyRoute>} />
+            <Route path="/login/channel" element={<PublicOnlyRoute><ChannelLogin /></PublicOnlyRoute>} />
 
             {/* Beneficiary */}
             <Route

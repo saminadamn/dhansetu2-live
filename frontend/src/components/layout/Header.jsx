@@ -1,12 +1,22 @@
 // src/components/layout/Header.jsx
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import ashoka from "./ashoka.png";
 import { useTheme } from "../../lib/useTheme";
 import { useTranslation } from "react-i18next";
+import { AuthContext } from "../../context/AuthContext.jsx";
+
+const DASHBOARD_PATH = {
+  beneficiary: "/dashboard/beneficiary",
+  officer: "/dashboard/officer",
+  channel: "/dashboard/channel",
+};
 
 export default function Header() {
  const { theme, toggleTheme } = useTheme();
   const { t, i18n } = useTranslation();
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const currentLang = i18n.resolvedLanguage || i18n.language || "en";
 
@@ -14,6 +24,11 @@ export default function Header() {
     const value = e.target.value;
     localStorage.setItem("dhansetu-language", value);
     i18n.changeLanguage(value);
+  }
+
+  function handleLogout() {
+    logout();
+    navigate("/", { replace: true });
   }
 
   return (
@@ -45,28 +60,48 @@ export default function Header() {
         {/* Right */}
         <div className="flex flex-col items-start gap-2 md:flex-row md:items-center md:gap-4 text-xs md:text-sm">
           <nav className="flex items-center gap-3 md:gap-4">
-            <Link
-              to="/"
-              className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
-            >
-              {t("header.home")}
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  to={DASHBOARD_PATH[user.role] || "/"}
+                  className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/"
+                  className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
+                >
+                  {t("header.home")}
+                </Link>
 
-            <Link
-              to="/login/beneficiary"
-              className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
-            >
-              {t("header.login")}
-            </Link>
+                <Link
+                  to="/login/beneficiary"
+                  className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
+                >
+                  {t("header.login")}
+                </Link>
 
-            {/* Plain anchor on purpose: hash scroll to the landing page's
-                contact section works via native browser behavior. */}
-            <a
-              href="/#contact"
-              className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
-            >
-              {t("header.contact")}
-            </a>
+                {/* Plain anchor on purpose: hash scroll to the landing page's
+                    contact section works via native browser behavior. */}
+                <a
+                  href="/#contact"
+                  className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
+                >
+                  {t("header.contact")}
+                </a>
+              </>
+            )}
           </nav>
 
           {/* Language selector */}
