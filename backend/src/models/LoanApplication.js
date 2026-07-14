@@ -31,6 +31,16 @@ const LoanApplicationSchema = new mongoose.Schema(
       default: null,
     },
 
+    // Supporting documents already uploaded to Cloudinary by the form
+    // (label: e.g. "Electricity Bill"; url: hosted secure_url)
+    documents: [
+      {
+        label: { type: String },
+        url: { type: String },
+        publicId: { type: String },
+      },
+    ],
+
     // Status for officer workflow
     status: {
       type: String,

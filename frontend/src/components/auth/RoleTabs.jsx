@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const TABS = [
   { key: "beneficiary", label: "Beneficiary / Citizen", href: "/login/beneficiary" },
   { key: "officer", label: "Internal Officer", href: "/login/officer" },
@@ -17,13 +19,13 @@ export default function RoleTabs({ active }) {
               {tab.label}
             </span>
           ) : (
-            <a
+            <Link
               key={tab.key}
-              href={tab.href}
+              to={tab.href}
               className="flex-1 text-center text-xs font-medium py-2.5 px-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-white/70 dark:hover:bg-slate-900/60 transition-colors"
             >
               {tab.label}
-            </a>
+            </Link>
           )
         )}
       </div>

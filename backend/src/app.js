@@ -15,6 +15,7 @@ import beneficiaryRoutes from "./routes/beneficiary.routes.js";
 import aiRoutes from "./routes/ai.routes.js";
 import channelRoutes from "./routes/channel.routes.js";
 import bhashiniRoutes from "./routes/bhashini.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";
 
 
 
@@ -74,6 +75,7 @@ app.use("/api/ai", aiRoutes);
 
 app.use("/api/channel", channelRoutes);
 app.use("/api/bhashini", bhashiniRoutes);
+app.use("/api/uploads", uploadRoutes);
 
 
 

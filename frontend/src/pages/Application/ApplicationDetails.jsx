@@ -54,6 +54,26 @@ export default function ApplicationDetails() {
         <p><strong>Name:</strong> {application.applicantName}</p>
         <p><strong>Aadhaar:</strong> {application.aadhaarLast4 ? `****-****-${application.aadhaarLast4}` : "—"}</p>
         <p><strong>District:</strong> {application.district}</p>
+
+        {application.documents?.length > 0 && (
+          <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <p className="font-semibold text-sm mb-2">Submitted Documents</p>
+            <ul className="space-y-1">
+              {application.documents.map((doc, i) => (
+                <li key={i}>
+                  <a
+                    href={doc.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-govBlue dark:text-blue-300 hover:underline"
+                  >
+                    📎 {doc.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       {scores ? (

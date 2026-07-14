@@ -15,6 +15,7 @@ export async function persistScoreAndUpdateApplication({ applicationId, aadhaarH
     risk_score: normalizeScore(mlResult.ccs),
     repayment_score: normalizeScore(mlResult.repayment_score),
     income_proxy_score: normalizeScore(mlResult.income_proxy_score),
+    risk_band: mlResult.risk_band || "",
     explanation: mlResult.explanation || {},
   });
 

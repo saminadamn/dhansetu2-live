@@ -13,6 +13,7 @@ import { districts } from "../../constants/districts.js";
 
 
 import API from "../../services/axiosInstance.js";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 
@@ -97,6 +98,37 @@ function nextStep() {
     if (step > 1) setStep(step - 1);
   }
 
+// Uploads whichever documents the applicant attached to Cloudinary (via our
+// backend) and returns [{label, url, publicId}]. Degrades gracefully: if the
+// server has no Cloudinary credentials configured (503), the application is
+// still submitted — just without hosted document links.
+async function uploadDocuments(formData) {
+  const files = [
+    { label: "Electricity Bill", file: formData.electricityBill },
+    { label: "Income Certificate", file: formData.incomeCertificate },
+    { label: "Business Proof", file: formData.businessProof },
+  ].filter((d) => d.file);
+
+  const uploaded = [];
+  for (const { label, file } of files) {
+    const body = new FormData();
+    body.append("file", file);
+    try {
+      const res = await API.post("/uploads/document", body, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      uploaded.push({ label, url: res.data.url, publicId: res.data.publicId });
+    } catch (err) {
+      if (err.response?.status === 503) {
+        toast("Document storage isn't configured on this server — submitting without attachments.", { icon: "ℹ️" });
+        return [];
+      }
+      toast.error(`Failed to upload ${label} — submitting without it.`);
+    }
+  }
+  return uploaded;
+}
+
 async function handleSubmit(e) {
   e.preventDefault();
 
@@ -104,6 +136,8 @@ async function handleSubmit(e) {
     setErrors((prev) => ({ ...prev, consent: "Account Aggregator consent is required to submit" }));
     return;
   }
+
+  const documents = await uploadDocuments(formData);
 
   const payload = {
     applicantName: formData.applicantName,
@@ -113,7 +147,8 @@ async function handleSubmit(e) {
     education_level: formData.education_level,
     household_size: Number(formData.household_size || 0),
     ration_card_type: formData.ration_card_type,
-    district: formData.district
+    district: formData.district,
+    documents
   };
 
   try {
@@ -140,13 +175,15 @@ async function handleSubmit(e) {
     localStorage.setItem("aadhaarNumber", formData.aadhaarNumber);
 
     if (response.data.async) {
-      alert("Application submitted! It's being scored now — check My Applications shortly for your result.");
+      toast.success("Application submitted! It's being scored now — check My Applications shortly for your result.");
+    } else {
+      toast.success("Application submitted and scored!");
     }
 
     navigate("/dashboard/beneficiary");  // redirect to application list after success
   } catch (error) {
     console.error("Loan application failed:", error);
-    alert("Something went wrong while applying for loan!");
+    toast.error("Something went wrong while applying for loan. Please try again.");
   }
 }
 

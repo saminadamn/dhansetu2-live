@@ -1,8 +1,7 @@
 // Notification Worker — consumes `application.decided` events and sends
 // (or, without a provider configured, logs) an SMS/email to the applicant.
 // Runs as its own process: `npm run worker:notification`.
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config"; // first import so env is set before hoisted imports evaluate
 
 import { consumeEvents } from "../services/eventBus.js";
 import { logger } from "../config/logger.js";

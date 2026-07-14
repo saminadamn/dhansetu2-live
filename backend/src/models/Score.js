@@ -28,6 +28,11 @@ const scoreSchema = new mongoose.Schema(
       max: 100,
     },
 
+    risk_band: {
+      type: String,
+      default: "",
+    },
+
     explanation: {
       type: mongoose.Schema.Types.Mixed, // feature importance mapping
       default: {},

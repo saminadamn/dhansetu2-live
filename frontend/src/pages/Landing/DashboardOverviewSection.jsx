@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function DashboardOverviewSection() {
   const items = [
     {
@@ -27,7 +29,7 @@ export default function DashboardOverviewSection() {
     <section className="section-box">
       <h2 className="section-title">Role-based Dashboards</h2>
 
-      <p className="text-xs md:text-sm text-slate-700 mb-4">
+      <p className="text-xs md:text-sm text-slate-700 dark:text-slate-300 mb-4">
         The portal provides a dedicated view for each type of user.
       </p>
 
@@ -35,27 +37,27 @@ export default function DashboardOverviewSection() {
         {items.map((item) => (
           <div
             key={item.role}
-            className="border border-slate-100 bg-white rounded-xl shadow-sm p-4 flex flex-col justify-between hover:shadow-md hover:-translate-y-[2px] transition"
+            className="border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800/60 rounded-xl shadow-sm p-4 flex flex-col justify-between hover:shadow-md hover:-translate-y-[2px] transition"
           >
             <div className="space-y-2">
-              <span className="inline-block text-[10px] uppercase tracking-wider font-semibold text-govBlue bg-govSoftBlue px-2 py-0.5 rounded-full">
+              <span className="inline-block text-[10px] uppercase tracking-wider font-semibold text-govBlue dark:text-blue-300 bg-govSoftBlue dark:bg-blue-900/40 px-2 py-0.5 rounded-full">
                 {item.tag}
               </span>
-              <h3 className="text-sm md:text-base font-semibold text-slate-900">
+              <h3 className="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100">
                 {item.role}
               </h3>
-              <p className="text-xs md:text-sm text-slate-700">
+              <p className="text-xs md:text-sm text-slate-700 dark:text-slate-300">
                 {item.description}
               </p>
             </div>
             <div className="mt-3">
-              <a
-                href={item.link}
-                className="group inline-flex items-center text-xs md:text-sm font-medium text-govBlue hover:text-blue-900"
+              <Link
+                to={item.link}
+                className="group inline-flex items-center text-xs md:text-sm font-medium text-govBlue dark:text-blue-300 hover:text-blue-900 dark:hover:text-blue-200"
               >
                 Open {item.role.replace(" Dashboard", "")}
                 <span className="ml-1 transition-transform group-hover:translate-x-1">→</span>
-              </a>
+              </Link>
             </div>
           </div>
         ))}

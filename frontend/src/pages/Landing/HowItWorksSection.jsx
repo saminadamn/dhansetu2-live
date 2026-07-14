@@ -18,7 +18,7 @@ export default function HowItWorksSection() {
             <div className="h-9 w-9 rounded-full bg-govBlue text-white flex items-center justify-center font-bold text-base flex-shrink-0">
               {index + 1}
             </div>
-            <p className="text-sm text-slate-700 leading-relaxed">{text}</p>
+            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{text}</p>
 
             {index % 3 !== 2 && index !== steps.length - 1 && (
               <span className="hidden md:flex absolute top-1/2 -right-4 -translate-y-1/2 h-6 w-6 items-center justify-center text-govBlue/50 text-lg select-none">

@@ -1,4 +1,5 @@
 // src/components/layout/Header.jsx
+import { Link } from "react-router-dom";
 import ashoka from "./ashoka.png";
 import { useTheme } from "../../lib/useTheme";
 import { useTranslation } from "react-i18next";
@@ -43,22 +44,24 @@ export default function Header() {
         {/* Right */}
         <div className="flex flex-col items-start gap-2 md:flex-row md:items-center md:gap-4 text-xs md:text-sm">
           <nav className="flex items-center gap-3 md:gap-4">
-            <a
-              href="/"
+            <Link
+              to="/"
               className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
             >
               {t("header.home")}
-            </a>
+            </Link>
 
-            <a
-              href="/login/beneficiary"
+            <Link
+              to="/login/beneficiary"
               className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
             >
               {t("header.login")}
-            </a>
+            </Link>
 
+            {/* Plain anchor on purpose: hash scroll to the landing page's
+                contact section works via native browser behavior. */}
             <a
-              href="#contact"
+              href="/#contact"
               className="text-white hover:text-govGold transition font-medium border-b-2 border-transparent hover:border-govGold pb-0.5"
             >
               {t("header.contact")}

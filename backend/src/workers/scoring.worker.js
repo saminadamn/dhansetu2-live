@@ -1,8 +1,7 @@
 // Scoring Worker — consumes `application.submitted` events, calls the
 // Python ML service, and publishes `application.scored`. Runs as its own
 // process: `npm run worker:scoring`.
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config"; // first import so env is set before hoisted imports evaluate
 
 import mongoose from "mongoose";
 import { consumeEvents, publishEvent } from "../services/eventBus.js";

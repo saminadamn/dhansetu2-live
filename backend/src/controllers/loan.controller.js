@@ -16,8 +16,17 @@ export const applyForLoan = async (req, res) => {
       education_level,
       household_size,
       ration_card_type,
-      district
+      district,
+      documents
     } = req.body;
+
+    // Only accept well-formed {label, url, publicId} entries — the URLs come
+    // back from our own /api/uploads/document endpoint (Cloudinary).
+    const safeDocuments = Array.isArray(documents)
+      ? documents
+          .filter((d) => d && typeof d.url === "string" && d.url.startsWith("https://"))
+          .map((d) => ({ label: String(d.label || "Document"), url: d.url, publicId: d.publicId }))
+      : [];
 
     const aadhaarHash = hashAadhaar(aadhaarNumber);
 
@@ -38,6 +47,7 @@ export const applyForLoan = async (req, res) => {
       household_size,
       ration_card_type,
       district,
+      documents: safeDocuments,
       financialDataRef: financialData?._id || null,
       scoresRef: null,
       status: "PENDING",

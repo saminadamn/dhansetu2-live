@@ -116,6 +116,7 @@ The RabbitMQ management UI is at `http://localhost:15672` (guest/guest) if you w
 | `BHASHINI_USER_ID` / `BHASHINI_UDYAT_API_KEY` / `BHASHINI_INFERENCE_API_KEY` | no | credentials from [bhashini.gov.in](https://bhashini.gov.in) for `POST /api/bhashini/translate`. If unset, that endpoint returns `503 { configured: false }` and the frontend keeps using its built-in i18next translations. |
 | `BHASHINI_PIPELINE_ID` | no | defaults to Bhashini's public translation pipeline ID if unset |
 | `RABBITMQ_URL` | no | enables the async scoring pipeline (see above). Unset/unreachable → synchronous fallback. |
+| `CLOUDINARY_URL` | no | from your [Cloudinary](https://cloudinary.com) dashboard (`cloudinary://key:secret@cloud_name`). Enables `POST /api/uploads/document` — the loan form uploads attached documents (electricity bill, income certificate, business proof) and stores their hosted URLs on the application, visible as links in the officer's review screen. If unset, the form submits without attachments. |
 | `LOG_LEVEL` | no | pino log level (`info` default) — set `debug` for verbose output |
 | `SCORING_METRICS_PORT` / `DECISION_METRICS_PORT` / `NOTIFICATION_METRICS_PORT` | no | port each worker's `/metrics` server listens on (defaults `9101`/`9102`/`9103`) |
 

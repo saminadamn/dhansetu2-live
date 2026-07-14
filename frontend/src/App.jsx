@@ -30,9 +30,13 @@ function NotFound() {
 
 function App() {
   return (
-    <PageShell>
+    // BrowserRouter wraps PageShell so the Header/Footer can use <Link> —
+    // plain <a> tags here previously forced a full page reload on every
+    // nav click, which made navigation feel dead for a second or two.
+    <BrowserRouter>
       <AuthProvider>
-        <BrowserRouter>
+        <Toaster position="top-center" />
+        <PageShell>
           <Routes>
             {/* Public */}
             <Route path="/" element={<LandingPage />} />
@@ -82,9 +86,9 @@ function App() {
             {/* Fallback */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
+        </PageShell>
       </AuthProvider>
-    </PageShell>
+    </BrowserRouter>
   );
 }
 

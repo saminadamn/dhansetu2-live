@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function InfoBanner() {
   return (
     <section className="relative -mx-4 md:-mx-6 lg:-mx-8 mb-10">
@@ -18,18 +20,18 @@ export default function InfoBanner() {
           </div>
 
           <div className="flex flex-col items-stretch gap-3 min-w-fit">
-            <a
-              href="/application/new"
+            <Link
+              to="/application/new"
               className="px-6 py-3 rounded-xl bg-white text-govBlue font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-govGold focus:ring-offset-govBlue transition-all duration-200 text-center"
             >
               Apply for Loan
-            </a>
-            <a
-              href="/login/officer"
+            </Link>
+            <Link
+              to="/login/officer"
               className="px-6 py-3 rounded-xl border border-white/60 text-white font-medium hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white focus:ring-offset-govBlue transition-all duration-200 text-center"
             >
               Officer / Admin Login
-            </a>
+            </Link>
           </div>
         </div>
       </div>
