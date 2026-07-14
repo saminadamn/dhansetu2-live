@@ -1,5 +1,8 @@
 import { createContext, useState } from "react";
 
+// The context must be exported alongside its provider so existing consumers
+// can share the same instance.
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
 function loadStoredUser() {

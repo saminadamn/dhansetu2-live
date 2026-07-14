@@ -4,6 +4,8 @@ import { getMLPrediction } from "../services/ml.service.js";
 import { hashAadhaar, aadhaarLast4 } from "../utils/hashAadhaar.js";
 import { publishEvent } from "../services/eventBus.js";
 import { persistScoreAndUpdateApplication } from "../services/scoring.service.js";
+import DocumentUpload from "../models/DocumentUpload.js";
+import mongoose from "mongoose";
 
 export const applyForLoan = async (req, res) => {
   const log = req.log || console;
@@ -22,11 +24,18 @@ export const applyForLoan = async (req, res) => {
 
     // Only accept well-formed {label, url, publicId} entries — the URLs come
     // back from our own /api/uploads/document endpoint (Cloudinary).
-    const safeDocuments = Array.isArray(documents)
-      ? documents
-          .filter((d) => d && typeof d.url === "string" && d.url.startsWith("https://"))
-          .map((d) => ({ label: String(d.label || "Document"), url: d.url, publicId: d.publicId }))
+    const uploadIds = Array.isArray(documents) ? documents : [];
+    if (!uploadIds.every((id) => typeof id === "string" && mongoose.isValidObjectId(id))) {
+      return res.status(400).json({ message: "Invalid document upload reference" });
+    }
+    const uniqueUploadIds = [...new Set(uploadIds)];
+    const verifiedUploads = uniqueUploadIds.length
+      ? await DocumentUpload.find({ _id: { $in: uniqueUploadIds }, ownerId: req.user.id, applicationId: null })
       : [];
+    if (verifiedUploads.length !== uniqueUploadIds.length) {
+      return res.status(400).json({ message: "One or more documents do not belong to this account" });
+    }
+    const safeDocuments = verifiedUploads.map((document) => ({ label: document.label, uploadId: document._id }));
 
     const aadhaarHash = hashAadhaar(aadhaarNumber);
 
@@ -52,6 +61,13 @@ export const applyForLoan = async (req, res) => {
       scoresRef: null,
       status: "PENDING",
     });
+
+    if (verifiedUploads.length) {
+      await DocumentUpload.updateMany(
+        { _id: { $in: verifiedUploads.map((document) => document._id) }, applicationId: null },
+        { $set: { applicationId: application._id } }
+      );
+    }
 
     // Build ML Payload dynamically
     const mlPayload = {

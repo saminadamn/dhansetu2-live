@@ -129,7 +129,9 @@ formData.append("file", file); // MUST match multer.single("file")
   };
 
   useEffect(() => {
-    fetchData();
+    API.get("/channel/financial-data")
+      .then((res) => setProfiles(res.data.data))
+      .catch((error) => console.error("Failed to load profiles:", error));
   }, []);
 
   return (

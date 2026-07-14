@@ -111,13 +111,14 @@ async function uploadDocuments(formData) {
 
   const uploaded = [];
   for (const { label, file } of files) {
-    const body = new FormData();
-    body.append("file", file);
+      const body = new FormData();
+      body.append("file", file);
+      body.append("label", label);
     try {
       const res = await API.post("/uploads/document", body, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      uploaded.push({ label, url: res.data.url, publicId: res.data.publicId });
+      uploaded.push(res.data.uploadId);
     } catch (err) {
       if (err.response?.status === 503) {
         toast("Document storage isn't configured on this server — submitting without attachments.", { icon: "ℹ️" });

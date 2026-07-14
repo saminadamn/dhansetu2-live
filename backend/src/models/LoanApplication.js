@@ -31,13 +31,11 @@ const LoanApplicationSchema = new mongoose.Schema(
       default: null,
     },
 
-    // Supporting documents already uploaded to Cloudinary by the form
-    // (label: e.g. "Electricity Bill"; url: hosted secure_url)
+    // References to verified, private uploads. URLs are never persisted.
     documents: [
       {
         label: { type: String },
-        url: { type: String },
-        publicId: { type: String },
+        uploadId: { type: mongoose.Schema.Types.ObjectId, ref: "DocumentUpload" },
       },
     ],
 

@@ -5,7 +5,7 @@ import { authMiddleware } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.use(fileUpload());
+router.use(fileUpload({ limits: { fileSize: 10 * 1024 * 1024 }, abortOnLimit: true }));
 router.use(authMiddleware);
 
 router.post("/ocr", extractTextFromImage);

@@ -52,13 +52,13 @@ export default function BeneficiaryLogin() {
 
   return (
     <div className="min-h-[65vh] flex items-center justify-center py-8">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 w-full max-w-md overflow-hidden">
+      <div className="bg-govBlue rounded-2xl shadow-xl border border-blue-900/40 w-full max-w-md overflow-hidden">
         <RoleTabs active="beneficiary" />
 
         <div className="p-8">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Welcome to Dhansetu</h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+            <h2 className="text-2xl font-bold text-white">Welcome to Dhansetu</h2>
+            <p className="text-blue-100 text-sm mt-1">
               Login with your mobile number to apply for a loan and track your applications.
             </p>
           </div>
@@ -87,13 +87,13 @@ export default function BeneficiaryLogin() {
             <button
               onClick={handleLogin}
               disabled={loading || demoLoading}
-              className="w-full bg-govBlue text-white font-semibold py-2.5 rounded-lg shadow-md shadow-blue-900/10 text-sm transition-all duration-200 hover:brightness-110 active:scale-[0.99] disabled:opacity-60 disabled:hover:brightness-100"
+              className="w-full bg-white text-govBlue font-semibold py-2.5 rounded-lg shadow-md shadow-blue-900/10 text-sm transition-all duration-200 hover:bg-blue-50 active:scale-[0.99] disabled:opacity-60 disabled:hover:bg-white"
             >
               {loading ? "Logging in..." : "Login"}
             </button>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+          <div className="mt-6 pt-4 border-t border-white/20 text-center">
             <button
               onClick={handleDemoLogin}
               disabled={loading || demoLoading}

@@ -10,22 +10,35 @@ export function isCloudinaryConfigured() {
   return Boolean(process.env.CLOUDINARY_URL);
 }
 
-// Uploads a file buffer (from multer memory storage). `resource_type: "auto"`
-// lets Cloudinary accept PDFs as well as images.
-export function uploadDocument(buffer, filename) {
+// Uploads an authenticated, non-public asset. It is retrieved only through
+// our authorized document endpoint; no provider URL is returned to clients.
+export function uploadDocument(buffer, filename, mimeType) {
+  const resourceType = mimeType === "application/pdf" ? "raw" : "image";
+
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: "dhansetu/documents",
-        resource_type: "auto",
+        resource_type: resourceType,
+        type: "authenticated",
         filename_override: filename,
         use_filename: true,
       },
       (error, result) => {
         if (error) return reject(error);
-        resolve({ url: result.secure_url, publicId: result.public_id });
+        resolve({ publicId: result.public_id, resourceType: result.resource_type });
       }
     );
     stream.end(buffer);
+  });
+}
+
+// This signed delivery URL is used only by the backend document proxy.
+export function getPrivateDocumentUrl({ publicId, resourceType }) {
+  return cloudinary.url(publicId, {
+    resource_type: resourceType,
+    type: "authenticated",
+    secure: true,
+    sign_url: true,
   });
 }

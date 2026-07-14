@@ -55,7 +55,7 @@ i18n.use(initReactI18next).init({
     ur: { translation: ur }
   },
 
-  lng: "en",          // default language
+  lng: localStorage.getItem("dhansetu-language") || "en",
   fallbackLng: "en",  // if translation missing
   interpolation: {
     escapeValue: false

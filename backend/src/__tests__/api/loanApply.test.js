@@ -14,6 +14,7 @@ process.env.ML_API_URL = "http://ml-service.test/predict";
 const { default: app } = await import("../../app.js");
 const LoanApplication = (await import("../../models/LoanApplication.js")).default;
 const { Score } = await import("../../models/Score.js");
+const DocumentUpload = (await import("../../models/DocumentUpload.js")).default;
 
 function beneficiaryToken() {
   return jwt.sign({ id: "000000000000000000000000", role: "beneficiary" }, "test-secret");
@@ -48,6 +49,46 @@ describe("POST /api/loans/apply", () => {
   it("rejects the request with 401 when unauthenticated", async () => {
     const res = await request(app).post("/api/loans/apply").send({});
     expect(res.status).toBe(401);
+  });
+
+  it("rejects document IDs that were not created for the authenticated beneficiary", async () => {
+    const res = await request(app)
+      .post("/api/loans/apply")
+      .set("Authorization", `Bearer ${beneficiaryToken()}`)
+      .send({
+        applicantName: "Untrusted Document",
+        aadhaarNumber: "123456789012",
+        documents: ["000000000000000000000001"],
+      });
+
+    expect(res.status).toBe(400);
+    expect(res.body.message).toMatch(/do not belong/);
+  });
+
+  it("attaches only the beneficiary's verified upload record", async () => {
+    const upload = await DocumentUpload.create({
+      ownerId: "000000000000000000000000",
+      label: "Electricity Bill",
+      originalName: "bill.pdf",
+      mimeType: "application/pdf",
+      resourceType: "raw",
+      publicId: "dhansetu/documents/test-bill",
+    });
+    nock("http://ml-service.test").post("/predict").reply(200, mockMlResult);
+
+    const res = await request(app)
+      .post("/api/loans/apply")
+      .set("Authorization", `Bearer ${beneficiaryToken()}`)
+      .send({
+        applicantName: "Verified Document",
+        aadhaarNumber: "123456789012",
+        documents: [upload._id.toString()],
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.application.documents[0].uploadId.toString()).toBe(upload._id.toString());
+    expect(res.body.application.documents[0]).not.toHaveProperty("url");
+    expect((await DocumentUpload.findById(upload._id)).applicationId.toString()).toBe(res.body.application._id);
   });
 
   it("scores synchronously and returns 201 when RabbitMQ isn't configured", async () => {

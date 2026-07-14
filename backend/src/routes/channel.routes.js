@@ -5,7 +5,7 @@ import { authMiddleware } from "../middlewares/auth.js";
 import { authorizeRole } from "../middlewares/authorizeRole.js";
 
 const router = express.Router();
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
 router.use(authMiddleware, authorizeRole("channel"));
 

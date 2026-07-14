@@ -11,11 +11,10 @@ export default function InfoBanner() {
               Government of India · Dhansetu
             </p>
             <h1 className="text-3xl md:text-4xl font-bold leading-tight">
-              Smart NBCFDC Loan Screening System
+              Smart NBCFDC Loan Screening Portal
             </h1>
             <p className="text-sm md:text-base text-blue-100 max-w-2xl leading-relaxed">
-              End-to-end workflow using internal loan history, Account Aggregator
-              data, utility bill signals, and ML-based risk assessment.
+              A pilot initiative for fair &amp; data-driven credit access.
             </p>
           </div>
 

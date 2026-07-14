@@ -11,18 +11,21 @@ export default function ApplicationDetails() {
   const navigate = useNavigate();
   const [application, setApplication] = useState(null);
 
-  const fetchDetails = async () => {
-    try {
-      const res = await API.get(`/officer/applications/${id}`);
-      setApplication(res.data.application);
-    } catch (err) {
-      console.error("Error fetching details:", err);
-    }
-  };
-
   useEffect(() => {
-    fetchDetails();
-  }, []);
+    let isCurrent = true;
+
+    API.get(`/officer/applications/${id}`)
+      .then((res) => {
+        if (isCurrent) setApplication(res.data.application);
+      })
+      .catch((err) => {
+        if (isCurrent) console.error("Error fetching details:", err);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [id]);
 
   const updateStatus = async (status) => {
     await API.patch(`/officer/applications/${id}/decision`, {
@@ -30,6 +33,17 @@ export default function ApplicationDetails() {
       officerRemarks: "Reviewed by officer"
     });
     navigate("/dashboard/officer");
+  };
+
+  const openDocument = async (uploadId) => {
+    try {
+      const response = await API.get(`/uploads/document/${uploadId}`, { responseType: "blob" });
+      const url = URL.createObjectURL(response.data);
+      window.open(url, "_blank", "noopener,noreferrer");
+      window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch (err) {
+      console.error("Unable to open document:", err);
+    }
   };
 
   if (!application) return <p className="p-6">Loading...</p>;
@@ -61,14 +75,13 @@ export default function ApplicationDetails() {
             <ul className="space-y-1">
               {application.documents.map((doc, i) => (
                 <li key={i}>
-                  <a
-                    href={doc.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => openDocument(doc.uploadId)}
                     className="text-sm text-govBlue dark:text-blue-300 hover:underline"
                   >
                     📎 {doc.label}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>

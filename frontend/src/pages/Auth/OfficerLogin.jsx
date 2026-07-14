@@ -54,13 +54,13 @@ export default function OfficerLogin() {
 
   return (
     <div className="min-h-[65vh] flex items-center justify-center py-8">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 w-full max-w-md overflow-hidden">
+      <div className="bg-govBlue rounded-2xl shadow-xl border border-blue-900/40 w-full max-w-md overflow-hidden">
         <RoleTabs active="officer" />
 
         <div className="p-8">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Officer Portal</h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+            <h2 className="text-2xl font-bold text-white">Officer Portal</h2>
+            <p className="text-blue-100 text-sm mt-1">
               Verification & administration access control.
             </p>
           </div>
@@ -106,13 +106,13 @@ export default function OfficerLogin() {
             <button
               type="submit"
               disabled={loading || demoLoading}
-              className="w-full bg-slate-900 dark:bg-slate-700 text-white font-semibold py-2.5 rounded-lg shadow-md text-sm transition-all duration-200 hover:brightness-110 active:scale-[0.99] disabled:opacity-60 disabled:hover:brightness-100"
+              className="w-full bg-white text-govBlue font-semibold py-2.5 rounded-lg shadow-md text-sm transition-all duration-200 hover:bg-blue-50 active:scale-[0.99] disabled:opacity-60 disabled:hover:bg-white"
             >
               {loading ? "Logging in..." : "Secure Officer Login"}
             </button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+          <div className="mt-6 pt-4 border-t border-white/20 text-center">
             <button
               onClick={handleDemoLogin}
               disabled={loading || demoLoading}

@@ -9,9 +9,11 @@ export default function MyApplicationStatus() {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const aadhaar = localStorage.getItem("aadhaarNumber");
+  const missingAadhaar = !location.state?.application && !aadhaar;
 
   const [application, setApplication] = useState(location.state?.application || null);
-  const [loading, setLoading] = useState(!location.state?.application);
+  const [loading, setLoading] = useState(!location.state?.application && !missingAadhaar);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -19,12 +21,7 @@ export default function MyApplicationStatus() {
 
     // Direct link / refresh — no state passed. Refetch by the stored
     // Aadhaar and find this application in the list.
-    const aadhaar = localStorage.getItem("aadhaarNumber");
-    if (!aadhaar) {
-      setError("We couldn't identify your application. Please open it from My Applications.");
-      setLoading(false);
-      return;
-    }
+    if (!aadhaar) return;
 
     API.get(`/beneficiary/applications/${aadhaar}`)
       .then((res) => {
@@ -34,16 +31,16 @@ export default function MyApplicationStatus() {
       })
       .catch(() => setError("Failed to load application details."))
       .finally(() => setLoading(false));
-  }, [application, id]);
+  }, [application, id, aadhaar]);
 
   if (loading) {
     return <p className="text-sm text-slate-500 dark:text-slate-400">Loading application status…</p>;
   }
 
-  if (error || !application) {
+  if (error || missingAadhaar || !application) {
     return (
       <div className="section-box">
-        <p className="text-red-600 text-sm">{error || "Application not found."}</p>
+        <p className="text-red-600 text-sm">{error || (missingAadhaar ? "We couldn't identify your application. Please open it from My Applications." : "Application not found.")}</p>
         <a href="/dashboard/beneficiary" className="text-govBlue dark:text-blue-300 text-sm font-medium mt-3 inline-block">
           ← Back to My Applications
         </a>

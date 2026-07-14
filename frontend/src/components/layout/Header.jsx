@@ -12,6 +12,7 @@ export default function Header() {
 
   function handleLangChange(e) {
     const value = e.target.value;
+    localStorage.setItem("dhansetu-language", value);
     i18n.changeLanguage(value);
   }
 
@@ -33,10 +34,10 @@ export default function Header() {
               {t("header.ministry")}
             </p>
             <p className="font-semibold text-sm md:text-base text-white">
-              {t("header.title")}
+              DHANSETU - Smart NBCFDC Loan Screening Portal
             </p>
             <p className="text-[11px] text-white/80">
-              {t("header.subtitle")}
+              A pilot initiative for fair & data-driven credit access.
             </p>
           </div>
         </div>
