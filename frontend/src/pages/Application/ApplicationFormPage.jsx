@@ -149,6 +149,11 @@ async function handleSubmit(e) {
     household_size: Number(formData.household_size || 0),
     ration_card_type: formData.ration_card_type,
     district: formData.district,
+    // Step 2's electricity-units field is a real ML income-proxy input —
+    // it must reach the backend, or the model silently scores every
+    // first-time applicant on a null/imputed value instead of what they
+    // actually entered.
+    electricity_units: formData.electricity_units === "" ? null : Number(formData.electricity_units),
     documents
   };
 

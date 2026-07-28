@@ -19,6 +19,7 @@ export const applyForLoan = async (req, res) => {
       household_size,
       ration_card_type,
       district,
+      electricity_units,
       documents
     } = req.body;
 
@@ -93,7 +94,11 @@ export const applyForLoan = async (req, res) => {
       bank_avg_monthly_inflow: financialData?.bank_avg_monthly_inflow ?? null,
       bank_balance_median: financialData?.bank_balance_median ?? null,
       transaction_count_monthly: financialData?.transaction_count_monthly ?? null,
-      electricity_units: financialData?.electricity_units ?? null,
+      // Prefer what the applicant just entered on the form over a possibly
+      // stale/absent FinancialProfile record — this is the only income
+      // signal a first-time applicant (no FinancialProfile yet) provides
+      // directly, so it must not be discarded in favor of null.
+      electricity_units: electricity_units ?? financialData?.electricity_units ?? null,
       mobile_recharge_amount: financialData?.mobile_recharge_amount ?? null,
       asset_owned_count: financialData?.asset_owned_count ?? null,
       district_poverty_index: financialData?.district_poverty_index ?? null,
