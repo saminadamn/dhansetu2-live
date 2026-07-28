@@ -50,6 +50,9 @@ const [formData, setFormData] = useState({
   aadhaarNumber: "",
   electricityBill: null,
   electricity_units: "",
+  declared_monthly_income: "",
+  mobile_recharge_amount: "",
+  asset_owned_count: "",
   incomeCertificate: null,
   businessProof: null,
   lpgInfo: "",
@@ -154,6 +157,11 @@ async function handleSubmit(e) {
     // first-time applicant on a null/imputed value instead of what they
     // actually entered.
     electricity_units: formData.electricity_units === "" ? null : Number(formData.electricity_units),
+    // Same reasoning: these are real ML income-proxy inputs the applicant
+    // enters directly (step 3), not just descriptive form state.
+    declared_monthly_income: formData.declared_monthly_income === "" ? null : Number(formData.declared_monthly_income),
+    mobile_recharge_amount: formData.mobile_recharge_amount === "" ? null : Number(formData.mobile_recharge_amount),
+    asset_owned_count: formData.asset_owned_count === "" ? null : Number(formData.asset_owned_count),
     documents
   };
 
@@ -547,6 +555,63 @@ async function handleSubmit(e) {
           <section className="section-box">
             <h2 className="section-title mb-4">Utility & Digital Signals</h2>
 
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FormField
+                id="declared_monthly_income"
+                label="Declared Monthly Income (₹)"
+                required
+                hint="Your best estimate of total monthly household income."
+              >
+                <div className="relative">
+                  <input
+                    id="declared_monthly_income"
+                    type="number"
+                    min="0"
+                    value={formData.declared_monthly_income}
+                    onChange={(e) => updateField("declared_monthly_income", e.target.value)}
+                    className={fieldClass(false, true)}
+                  />
+                  <VoiceInputButton onResult={(text) => updateField("declared_monthly_income", text)} />
+                </div>
+              </FormField>
+
+              <FormField
+                id="mobile_recharge_amount"
+                label="Average Monthly Mobile Recharge (₹)"
+                hint="Approximate amount spent on mobile recharge each month."
+              >
+                <div className="relative">
+                  <input
+                    id="mobile_recharge_amount"
+                    type="number"
+                    min="0"
+                    value={formData.mobile_recharge_amount}
+                    onChange={(e) => updateField("mobile_recharge_amount", e.target.value)}
+                    className={fieldClass(false, true)}
+                  />
+                  <VoiceInputButton onResult={(text) => updateField("mobile_recharge_amount", text)} />
+                </div>
+              </FormField>
+
+              <FormField
+                id="asset_owned_count"
+                label="Assets Owned (count)"
+                hint="E.g. vehicle, livestock, land — count of major assets owned."
+              >
+                <div className="relative">
+                  <input
+                    id="asset_owned_count"
+                    type="number"
+                    min="0"
+                    value={formData.asset_owned_count}
+                    onChange={(e) => updateField("asset_owned_count", e.target.value)}
+                    className={fieldClass(false, true)}
+                  />
+                  <VoiceInputButton onResult={(text) => updateField("asset_owned_count", text)} />
+                </div>
+              </FormField>
+            </div>
+
             <FormField
               id="lpgInfo"
               label="LPG / Utility Usage Details"
@@ -578,8 +643,9 @@ async function handleSubmit(e) {
             </FormField>
 
             <div className="bg-govSoftBlue border border-blue-200 rounded-lg p-3 text-xs text-slate-700">
-              In a full deployment, additional signals may be securely fetched
-              via Account Aggregator and integrated into the scoring model.
+              Bank inflow, balance, and transaction-count signals are fetched
+              securely via Account Aggregator (with your consent on the next
+              step) rather than self-reported here.
             </div>
           </section>
         )}

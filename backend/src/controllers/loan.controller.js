@@ -20,6 +20,9 @@ export const applyForLoan = async (req, res) => {
       ration_card_type,
       district,
       electricity_units,
+      declared_monthly_income,
+      mobile_recharge_amount,
+      asset_owned_count,
       documents
     } = req.body;
 
@@ -90,17 +93,17 @@ export const applyForLoan = async (req, res) => {
       active_loans_count: financialData?.active_loans_count ?? 0,
       emi_bounce_count: financialData?.emi_bounce_count ?? 0,
       field_officer_repayment_rating: financialData?.field_officer_repayment_rating ?? 0,
-      declared_monthly_income: financialData?.declared_monthly_income ?? null,
+      // Prefer what the applicant just entered on the form over a possibly
+      // stale/absent FinancialProfile record — these are the only income
+      // signals a first-time applicant (no FinancialProfile yet) provides
+      // directly, so they must not be discarded in favor of null.
+      declared_monthly_income: declared_monthly_income ?? financialData?.declared_monthly_income ?? null,
       bank_avg_monthly_inflow: financialData?.bank_avg_monthly_inflow ?? null,
       bank_balance_median: financialData?.bank_balance_median ?? null,
       transaction_count_monthly: financialData?.transaction_count_monthly ?? null,
-      // Prefer what the applicant just entered on the form over a possibly
-      // stale/absent FinancialProfile record — this is the only income
-      // signal a first-time applicant (no FinancialProfile yet) provides
-      // directly, so it must not be discarded in favor of null.
       electricity_units: electricity_units ?? financialData?.electricity_units ?? null,
-      mobile_recharge_amount: financialData?.mobile_recharge_amount ?? null,
-      asset_owned_count: financialData?.asset_owned_count ?? null,
+      mobile_recharge_amount: mobile_recharge_amount ?? financialData?.mobile_recharge_amount ?? null,
+      asset_owned_count: asset_owned_count ?? financialData?.asset_owned_count ?? null,
       district_poverty_index: financialData?.district_poverty_index ?? null,
       income_to_loan_ratio: financialData?.income_to_loan_ratio ?? null,
       monthly_obligation_ratio: financialData?.monthly_obligation_ratio ?? null
