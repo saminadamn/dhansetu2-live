@@ -1,30 +1,34 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const TABS = [
-  { key: "beneficiary", label: "Beneficiary / Citizen", href: "/login/beneficiary" },
-  { key: "officer", label: "Internal Officer", href: "/login/officer" },
-  { key: "channel", label: "Third-Party / SHG", href: "/login/channel" },
+  { key: "beneficiary", href: "/login/beneficiary" },
+  { key: "officer", href: "/login/officer" },
+  { key: "channel", href: "/login/channel" },
 ];
 
 export default function RoleTabs({ active }) {
+  const { t } = useTranslation();
   return (
     <div className="p-4 pb-0">
-      <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-800 rounded-xl p-1">
+      {/* Sits on the govBlue login card, so the palette is white-on-blue
+          rather than the slate used elsewhere in the app. */}
+      <div className="flex items-center gap-1 bg-white/10 border border-white/20 rounded-xl p-1">
         {TABS.map((tab) =>
           tab.key === active ? (
             <span
               key={tab.key}
-              className="flex-1 text-center text-xs font-semibold py-2.5 px-2 rounded-lg bg-govBlue dark:bg-blue-600 text-white shadow transition-all"
+              className="flex-1 text-center text-xs font-semibold py-2.5 px-2 rounded-lg bg-white text-govBlue shadow transition-all"
             >
-              {tab.label}
+              {t(`auth.tabs.${tab.key}`)}
             </span>
           ) : (
             <Link
               key={tab.key}
               to={tab.href}
-              className="flex-1 text-center text-xs font-medium py-2.5 px-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-white/70 dark:hover:bg-slate-900/60 transition-colors"
+              className="flex-1 text-center text-xs font-medium py-2.5 px-2 rounded-lg text-blue-100 hover:text-white hover:bg-white/15 transition-colors"
             >
-              {tab.label}
+              {t(`auth.tabs.${tab.key}`)}
             </Link>
           )
         )}

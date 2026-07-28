@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import API from "../../services/axiosInstance";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import RoleTabs from "../../components/auth/RoleTabs";
 
 const inputClass =
@@ -10,6 +11,7 @@ const inputClass =
 const DEMO_MOBILE = "9999999999";
 
 export default function BeneficiaryLogin() {
+  const { t } = useTranslation();
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -22,7 +24,7 @@ export default function BeneficiaryLogin() {
     setErrorMsg("");
 
     if (number.length !== 10) {
-      setErrorMsg("Enter a valid 10 digit mobile number");
+      setErrorMsg(t("auth.beneficiary.invalidMobile"));
       return false;
     }
 
@@ -32,7 +34,7 @@ export default function BeneficiaryLogin() {
       navigate("/dashboard/beneficiary");
       return true;
     } catch (err) {
-      setErrorMsg(err.response?.data?.message || "Login failed");
+      setErrorMsg(err.response?.data?.message || t("auth.beneficiary.failed"));
       return false;
     }
   };
@@ -57,9 +59,9 @@ export default function BeneficiaryLogin() {
 
         <div className="p-8">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-white">Welcome to Dhansetu</h2>
+            <h2 className="text-2xl font-bold text-white">{t("auth.beneficiary.title")}</h2>
             <p className="text-blue-100 text-sm mt-1">
-              Login with your mobile number to apply for a loan and track your applications.
+              {t("auth.beneficiary.subtitle")}
             </p>
           </div>
 
@@ -71,13 +73,13 @@ export default function BeneficiaryLogin() {
 
           <div className="space-y-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                Mobile Number
+              <label className="text-xs font-semibold text-blue-100 uppercase tracking-wider">
+                {t("auth.beneficiary.mobileLabel")}
               </label>
               <input
                 type="text"
                 maxLength={10}
-                placeholder="Enter 10 digit mobile number"
+                placeholder={t("auth.beneficiary.mobilePlaceholder")}
                 value={mobileNumber}
                 onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, ""))}
                 className={inputClass}
@@ -89,7 +91,7 @@ export default function BeneficiaryLogin() {
               disabled={loading || demoLoading}
               className="w-full bg-white text-govBlue font-semibold py-2.5 rounded-lg shadow-md shadow-blue-900/10 text-sm transition-all duration-200 hover:bg-blue-50 active:scale-[0.99] disabled:opacity-60 disabled:hover:bg-white"
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading ? t("auth.loggingIn") : t("auth.beneficiary.submit")}
             </button>
           </div>
 
@@ -100,7 +102,7 @@ export default function BeneficiaryLogin() {
               title="Logs in with a fixed demo mobile number — for presentations/testing only"
               className="text-xs font-medium text-govGold border border-govGold/50 rounded-full px-4 py-1.5 hover:bg-govGold/10 transition disabled:opacity-60"
             >
-              {demoLoading ? "Signing in…" : "⚡ Demo Login"}
+              {demoLoading ? t("auth.signingIn") : `⚡ ${t("auth.demoLogin")}`}
             </button>
           </div>
         </div>

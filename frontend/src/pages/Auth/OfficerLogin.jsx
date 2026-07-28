@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import API from "../../services/axiosInstance";
 import { AuthContext } from "../../context/AuthContext";
 import RoleTabs from "../../components/auth/RoleTabs";
@@ -11,6 +12,7 @@ const DEMO_EMPLOYEE_ID = "DEMO001";
 const DEMO_PASSWORD = "demo1234";
 
 export default function OfficerLogin() {
+  const { t } = useTranslation();
   const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,7 +34,7 @@ export default function OfficerLogin() {
       setError("");
       await attemptLogin(employeeId, password);
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || t("auth.beneficiary.failed"));
     } finally {
       setLoading(false);
     }
@@ -46,7 +48,7 @@ export default function OfficerLogin() {
       setPassword(DEMO_PASSWORD);
       await attemptLogin(DEMO_EMPLOYEE_ID, DEMO_PASSWORD);
     } catch (err) {
-      setError(err.response?.data?.message || "Demo login failed");
+      setError(err.response?.data?.message || t("auth.beneficiary.failed"));
     } finally {
       setDemoLoading(false);
     }
@@ -59,9 +61,9 @@ export default function OfficerLogin() {
 
         <div className="p-8">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-white">Officer Portal</h2>
+            <h2 className="text-2xl font-bold text-white">{t("auth.officer.title")}</h2>
             <p className="text-blue-100 text-sm mt-1">
-              Verification & administration access control.
+              {t("auth.officer.subtitle")}
             </p>
           </div>
 
@@ -79,20 +81,20 @@ export default function OfficerLogin() {
             }}
           >
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                Employee ID
+              <label className="text-xs font-semibold text-blue-100 uppercase tracking-wider">
+                {t("auth.officer.idLabel")}
               </label>
               <input
                 className={inputClass}
-                placeholder="Enter employee ID"
+                placeholder={t("auth.officer.idPlaceholder")}
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                Password
+              <label className="text-xs font-semibold text-blue-100 uppercase tracking-wider">
+                {t("auth.passwordLabel")}
               </label>
               <input
                 type="password"
@@ -108,7 +110,7 @@ export default function OfficerLogin() {
               disabled={loading || demoLoading}
               className="w-full bg-white text-govBlue font-semibold py-2.5 rounded-lg shadow-md text-sm transition-all duration-200 hover:bg-blue-50 active:scale-[0.99] disabled:opacity-60 disabled:hover:bg-white"
             >
-              {loading ? "Logging in..." : "Secure Officer Login"}
+              {loading ? t("auth.loggingIn") : t("auth.officer.submit")}
             </button>
           </form>
 
@@ -119,7 +121,7 @@ export default function OfficerLogin() {
               title="Signs in with a seeded demo officer account — for presentations/testing only"
               className="text-xs font-medium text-govGold border border-govGold/50 rounded-full px-4 py-1.5 hover:bg-govGold/10 transition disabled:opacity-60"
             >
-              {demoLoading ? "Signing in…" : "⚡ Demo Login (skip credentials)"}
+              {demoLoading ? t("auth.signingIn") : `⚡ ${t("auth.demoLoginSkip")}`}
             </button>
           </div>
         </div>

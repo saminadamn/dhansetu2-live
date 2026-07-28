@@ -1,13 +1,14 @@
+import { useTranslation } from "react-i18next";
+
 export default function AboutSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="section-box">
-      <h2 className="section-title mb-4">About the Portal</h2>
+      <h2 className="section-title mb-4">{t("landing.about.title")}</h2>
 
       <p className="text-sm md:text-base text-slate-700 dark:text-slate-300 leading-relaxed max-w-prose">
-        This national credit-screening prototype is designed to modernize how NBCFDC
-        evaluates beneficiaries. It integrates verified identity data, internal loan
-        behavior, Account Aggregator financial signals, and utility consumption metrics
-        to generate a transparent and explainable credit-worthiness score.
+        {t("landing.about.body")}
       </p>
     </section>
   );

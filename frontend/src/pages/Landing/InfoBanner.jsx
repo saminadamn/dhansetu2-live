@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function InfoBanner() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative -mx-4 md:-mx-6 lg:-mx-8 mb-10">
       <div className="absolute inset-0 bg-linear-to-r from-sky-700 via-blue-700 to-blue-900" />
@@ -8,13 +11,13 @@ export default function InfoBanner() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
           <div className="space-y-3">
             <p className="text-[11px] uppercase tracking-[0.2em] text-govGold font-semibold">
-              Government of India · Dhansetu
+              {t("landing.hero.eyebrow")}
             </p>
             <h1 className="text-3xl md:text-4xl font-bold leading-tight">
-              Smart NBCFDC Loan Screening Portal
+              {t("landing.hero.title")}
             </h1>
             <p className="text-sm md:text-base text-blue-100 max-w-2xl leading-relaxed">
-              A pilot initiative for fair &amp; data-driven credit access.
+              {t("landing.hero.subtitle")}
             </p>
           </div>
 
@@ -23,13 +26,13 @@ export default function InfoBanner() {
               to="/application/new"
               className="px-6 py-3 rounded-xl bg-white text-govBlue font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-govGold focus:ring-offset-govBlue transition-all duration-200 text-center"
             >
-              Apply for Loan
+              {t("landing.hero.applyCta")}
             </Link>
             <Link
               to="/login/officer"
               className="px-6 py-3 rounded-xl border border-white/60 text-white font-medium hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white focus:ring-offset-govBlue transition-all duration-200 text-center"
             >
-              Officer / Admin Login
+              {t("landing.hero.officerCta")}
             </Link>
           </div>
         </div>

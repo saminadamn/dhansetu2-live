@@ -5,7 +5,10 @@ const getModel = () => {
   if (!model) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) throw new Error("GEMINI_API_KEY is not configured");
-    model = new GoogleGenerativeAI(apiKey.trim()).getGenerativeModel({ model: "gemini-2.5-flash" });
+    // "gemini-2.5-flash" returns 404 for this project ("no longer available
+    // to new users") even though it's listed by ListModels — use the
+    // rolling alias so this doesn't go stale again.
+    model = new GoogleGenerativeAI(apiKey.trim()).getGenerativeModel({ model: "gemini-flash-latest" });
   }
   return model;
 };

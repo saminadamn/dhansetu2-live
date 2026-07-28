@@ -1,50 +1,239 @@
 {
   "header": {
     "ministry": "Ministry of Social Justice & Empowerment",
-    "title": "Smart NBCFDC Loan Screening Portal",
+    "title": "Dhansetu — Smart NBCFDC Loan Screening Portal",
     "subtitle": "A pilot initiative for fair & data-driven credit access",
     "home": "Home",
     "apply": "Apply",
     "login": "Login",
-    "contact": "Contact"
+    "contact": "Contact",
+    "dashboard": "Dashboard",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
   },
   "landing": {
-    "heroTitle": "Building fair digital credit rails for every beneficiary",
-    "heroCta": "Start Application",
-    "aboutTitle": "About the Portal",
-    "benefitsTitle": "Why this matters",
-    "howItWorksTitle": "How the system works"
+    "hero": {
+      "eyebrow": "Government of India · Dhansetu",
+      "title": "Smart NBCFDC Loan Screening Portal",
+      "subtitle": "A pilot initiative for fair & data-driven credit access.",
+      "applyCta": "Apply for Loan",
+      "officerCta": "Officer / Admin Login"
+    },
+    "about": {
+      "title": "About the Portal",
+      "body": "This national credit-screening prototype is designed to modernize how NBCFDC evaluates beneficiaries. It integrates verified identity data, internal loan behavior, Account Aggregator financial signals, and utility consumption metrics to generate a transparent and explainable credit-worthiness score."
+    },
+    "dashboards": {
+      "title": "Role-based Dashboards",
+      "subtitle": "The portal provides a dedicated view for each type of user.",
+      "open": "Open",
+      "beneficiary": {
+        "tag": "Citizens / Beneficiaries",
+        "name": "Beneficiary Dashboard",
+        "shortName": "Beneficiary",
+        "description": "View your submitted applications, track status, and see your risk band and score."
+      },
+      "channel": {
+        "tag": "District / Block Officers",
+        "name": "Channel Partner Dashboard",
+        "shortName": "Channel Partner",
+        "description": "Access assigned applications, plan field visits, and upload verification details."
+      },
+      "officer": {
+        "tag": "State / Central Admins",
+        "name": "Officer / Reviewer Dashboard",
+        "shortName": "Officer / Reviewer",
+        "description": "Monitor all applications, review high-risk cases, and oversee scheme performance."
+      }
+    },
+    "benefits": {
+      "title": "Key Benefits",
+      "beneficiaries": {
+        "title": "For Beneficiaries",
+        "items": [
+          "Simple, guided loan application flow.",
+          "Less paperwork due to AA data integration.",
+          "Clear status updates and risk band transparency."
+        ]
+      },
+      "officers": {
+        "title": "For Field Officers",
+        "items": [
+          "Queue of verifications with clear priorities.",
+          "Unified document & evidence view per beneficiary.",
+          "Support for on-ground verification remarks."
+        ]
+      },
+      "administration": {
+        "title": "For NBCFDC & Administration",
+        "items": [
+          "Uniform scoring across districts.",
+          "Powerful audit trail for decisions.",
+          "Data insights for scheme monitoring."
+        ]
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "steps": [
+        "Applicant submits identity, household and occupation details.",
+        "Uploads electricity bill and optional income/business proof.",
+        "System fetches internal NBCFDC loan history.",
+        "AA integration retrieves verified banking behavior.",
+        "ML engine computes repayment score + income proxy score.",
+        "Final risk band generated & sent for officer review."
+      ]
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "Is my data safe?",
+      "a1": "All information is processed through secure channels. Banking data is shared only through Account Aggregator with user consent and is never stored in raw form.",
+      "q2": "Does a high score guarantee loan approval?",
+      "a2": "The score is advisory. Final approval depends on NBCFDC scheme rules and officer verification."
+    },
+    "contact": {
+      "title": "Help & Contact",
+      "body": "For assistance with loan applications, please contact your district-level NBCFDC nodal officer. Technical support is available through the designated helpdesk during working hours.",
+      "note": "This portal is a demonstration built for Smart India Hackathon, and may use sample data for prototype evaluation."
+    }
   },
- "form": {
-  "newApplicationTitle": "New Beneficiary Application",
-  "helperText": "Fill the sections step by step. Fields marked with",
-  "mandatory": "are mandatory.",
-  "draftNote": "Mobile-first form · Draft not yet connected",
-  "personalDetails": "Personal Details",
-  "applicantName": "Applicant Name",
-  "age": "Age",
-  "gender": "Gender",
-  "district": "District",
-  "address": "Address",
-  "occupation": "Occupation Type",
-  "education": "Education Level",
-  "select": "Select",
-  "female": "Female",
-  "male": "Male",
-  "other": "Other",
-  "farmer": "Farmer",
-  "dailyWage": "Daily Wage",
-  "selfEmployed": "Self Employed",
-  "privateJob": "Private Job",
-  "govtJob": "Govt Job",
-  "noEducation": "No Formal Education",
-  "primary": "Primary",
-  "middle": "Middle",
-  "secondary": "Secondary (10th)",
-  "higherSecondary": "Higher Secondary (12th)",
-  "graduate": "Graduate",
-  "postgraduate": "Postgraduate & above",
-  "householdSize": "Household Size",
-  "submitError": "Something went wrong while applying for loan!"
-}
+  "auth": {
+    "tabs": {
+      "beneficiary": "Beneficiary / Citizen",
+      "officer": "Internal Officer",
+      "channel": "Third-Party / SHG"
+    },
+    "beneficiary": {
+      "title": "Welcome to Dhansetu",
+      "subtitle": "Login with your mobile number to apply for a loan and track your applications.",
+      "mobileLabel": "Mobile Number",
+      "mobilePlaceholder": "Enter 10 digit mobile number",
+      "submit": "Login",
+      "submitting": "Logging in...",
+      "invalidMobile": "Enter a valid 10 digit mobile number",
+      "failed": "Login failed"
+    },
+    "officer": {
+      "title": "Officer Portal",
+      "subtitle": "Verification & administration access control.",
+      "idLabel": "Employee ID",
+      "idPlaceholder": "Enter employee ID",
+      "submit": "Secure Officer Login"
+    },
+    "channel": {
+      "title": "Third-Party Partner Portal",
+      "subtitle": "For SHGs, NGOs, and field agents coordinating group loan applications.",
+      "idLabel": "Partner ID",
+      "idPlaceholder": "Enter partner/coordinator ID",
+      "submit": "Partner Login"
+    },
+    "passwordLabel": "Password",
+    "loggingIn": "Logging in...",
+    "signingIn": "Signing in…",
+    "demoLogin": "Demo Login",
+    "demoLoginSkip": "Demo Login (skip credentials)"
+  },
+  "form": {
+    "newApplicationTitle": "New Beneficiary Application",
+    "helperText": "Fill the sections step by step. Fields marked with",
+    "mandatory": "are mandatory.",
+    "draftNote": "Mobile-first form · Draft not yet connected",
+    "personalDetails": "Personal Details",
+    "documents": "Documents",
+    "utilitySignals": "Utility & Digital Signals",
+    "reviewSubmit": "Review & Submit",
+    "applicantName": "Applicant Name",
+    "age": "Age",
+    "gender": "Gender",
+    "district": "District",
+    "districtPlaceholder": "Type to search district...",
+    "address": "Address",
+    "occupation": "Occupation Type",
+    "education": "Education Level",
+    "select": "Select",
+    "female": "Female",
+    "male": "Male",
+    "other": "Other",
+    "farmer": "Farmer",
+    "dailyWage": "Daily Wage",
+    "selfEmployed": "Self Employed",
+    "privateJob": "Private Job",
+    "govtJob": "Govt Job",
+    "illiterate": "Illiterate",
+    "noEducation": "No Formal Education",
+    "primary": "Primary",
+    "middle": "Middle",
+    "secondary": "Secondary (10th)",
+    "higherSecondary": "Higher Secondary (12th)",
+    "graduate": "Graduate",
+    "postgraduate": "Postgraduate & above",
+    "householdSize": "Household Size",
+    "householdSizeHint": "Number of people supported by this income.",
+    "rationCard": "Ration Card Type",
+    "aadhaar": "Aadhaar Number",
+    "aadhaarHint": "Used only as a unique identifier. The raw number is never displayed.",
+    "previous": "← Previous",
+    "next": "Next →",
+    "submit": "Submit Application",
+    "progressLabel": "Application Progress",
+    "stepOf": "Step {{current}} of {{total}} ({{percent}}%)",
+    "consentTitle": "Account Aggregator Consent",
+    "consentBody": "I confirm that the information provided above is accurate to the best of my knowledge, and I explicitly authorize DHANSETU to fetch my financial data (loan history, bank inflows, and utility consumption signals) via the Account Aggregator framework for the sole purpose of assessing my loan eligibility.",
+    "consentRequired": "This consent is required to submit your application.",
+    "submitSuccessAsync": "Application submitted! It's being scored now — check My Applications shortly for your result.",
+    "submitSuccessSync": "Application submitted and scored!",
+    "submitError": "Something went wrong while applying for loan. Please try again."
+  },
+  "dashboard": {
+    "myApplications": "My Applications",
+    "myApplicationsSubtitle": "Track the status of every loan application you've submitted.",
+    "newApplication": "+ New Application",
+    "logout": "Logout",
+    "applicationHistory": "Application History",
+    "noApplications": "No applications found for this Aadhaar number yet.",
+    "loading": "Loading your applications…",
+    "officerTitle": "Officer Dashboard",
+    "tabs": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "denied": "Denied",
+      "repeated": "Repeated Users"
+    },
+    "sortBy": "Sort by",
+    "applicant": "Applicant",
+    "aadhaar": "Aadhaar",
+    "compositeScore": "Composite Score",
+    "riskBand": "Risk Band",
+    "status": "Status",
+    "action": "Action",
+    "view": "View",
+    "noneInQueue": "No applications in this queue."
+  },
+  "status": {
+    "title": "Application Status",
+    "backToList": "← Back to My Applications",
+    "applicantDetails": "Applicant Details",
+    "creditAssessment": "Credit Assessment",
+    "compositeCreditScore": "Composite Credit Score",
+    "compositeSubtitle": "Weighted combination of your repayment behaviour and income proxy scores.",
+    "repaymentScore": "Repayment Score",
+    "repaymentHint": "Based on past loan performance, delays and EMI history.",
+    "incomeProxyScore": "Income Proxy Score",
+    "incomeProxyHint": "Estimated from utility consumption and declared income signals.",
+    "processing": "Your credit assessment is still being processed. Check back shortly.",
+    "officerRemarks": "Officer Remarks",
+    "explainTitle": "Why this score? (Explainability)",
+    "explainSubtitle": "Feature impact on the model's output, computed via SHAP — positive bars pushed the score up, negative bars pulled it down.",
+    "name": "Name",
+    "occupation": "Occupation",
+    "rationCard": "Ration Card",
+    "submitted": "Submitted"
+  },
+  "footer": {
+    "copyright": "NBCFDC – Smart Loan Screening System",
+    "inspired": "Prototype interface inspired by official MoSJE standards.",
+    "developedAs": "Designed & developed as part of",
+    "hackathon": "Smart India Hackathon",
+    "team": "Team: DORA DORA"
+  }
 }
