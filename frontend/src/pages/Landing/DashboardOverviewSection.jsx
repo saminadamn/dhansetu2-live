@@ -23,10 +23,10 @@ export default function DashboardOverviewSection() {
         {ROLES.map((role) => (
           <div
             key={role.key}
-            className="border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800/60 rounded-xl shadow-sm p-4 flex flex-col justify-between hover:shadow-md hover:-translate-y-[2px] transition"
+            className="border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/60 rounded-xl shadow-sm p-5 flex flex-col justify-between hover:border-brand-500 dark:hover:border-brand-500 hover:shadow-md hover:-translate-y-[2px] transition"
           >
             <div className="space-y-2">
-              <span className="inline-block text-[10px] uppercase tracking-wider font-semibold text-govBlue dark:text-blue-300 bg-govSoftBlue dark:bg-blue-900/40 px-2 py-0.5 rounded-full">
+              <span className="badge-pill">
                 {t(`landing.dashboards.${role.key}.tag`)}
               </span>
               <h3 className="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100">

@@ -29,14 +29,20 @@ body {
 
 /* Section Title */
 .section-title {
-  @apply text-xl md:text-2xl font-semibold mb-4 text-slate-900 border-l-4 pl-3 border-blue-900;
-  @apply dark:text-slate-100 dark:border-blue-500;
+  @apply text-lg md:text-xl font-bold mb-4 text-slate-900 border-l-4 pl-3 border-govBlue rounded-l-sm;
+  @apply dark:text-white dark:border-blue-500;
 }
 
 /* Card style */
 .card {
   @apply bg-white rounded-xl shadow-sm border border-slate-200;
   @apply dark:bg-slate-900 dark:border-slate-800;
+}
+
+/* Uppercase category badge (role tags, status pills) */
+.badge-pill {
+  @apply inline-block bg-govSoftBlue text-govBlue text-[0.68rem] font-bold tracking-wider uppercase px-2.5 py-1 rounded-md;
+  @apply dark:bg-blue-900/40 dark:text-blue-300;
 }
 
 /* Soft background gradients (light mode only — dark mode uses a flat page bg) */

@@ -12,8 +12,7 @@ const DASHBOARD_PATH = {
   channel: "/dashboard/channel",
 };
 
-const navLinkClass =
-  "text-white/90 hover:text-white transition-colors font-medium border-b-2 border-transparent hover:border-govGold pb-0.5";
+const navLinkClass = "text-slate-200 hover:text-white transition-colors font-medium";
 
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
@@ -36,11 +35,11 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-govBlue text-white shadow-md print:hidden">
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8 py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <header className="bg-govHeader dark:bg-govHeaderDark text-white shadow-sm sticky top-0 z-40 print:hidden">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8 py-3.5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         {/* Left */}
-        <div className="flex items-center gap-3">
-          <div className="h-15 w-10 overflow-hidden border border-white/40 bg-white/20 flex items-center justify-center rounded-sm">
+        <div className="flex items-center gap-3.5">
+          <div className="h-11 w-9 overflow-hidden border-r border-white/20 pr-3.5 flex items-center justify-center">
             <img
               src={ashoka}
               alt="Ashoka Emblem"
@@ -49,13 +48,13 @@ export default function Header() {
           </div>
 
           <div className="leading-tight">
-            <p className="text-[10px] uppercase tracking-wide text-white/80">
+            <p className="text-[10px] uppercase tracking-wider text-slate-300 font-semibold">
               {t("header.ministry")}
             </p>
-            <p className="font-semibold text-sm md:text-base text-white">
+            <p className="font-bold text-sm md:text-base text-white tracking-tight">
               {t("header.title")}
             </p>
-            <p className="text-[11px] text-white/70">
+            <p className="text-[11px] text-slate-300">
               {t("header.subtitle")}
             </p>
           </div>
@@ -92,26 +91,24 @@ export default function Header() {
             )}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 pl-2 border-l border-white/15">
             {/* Language selector */}
-            <div className="flex items-center bg-white/10 px-2.5 py-1.5 rounded-lg border border-white/20 hover:border-white/40 transition-colors">
-              <select
-                value={currentLang}
-                onChange={handleLangChange}
-                aria-label="Select language"
-                className="bg-transparent outline-none text-xs md:text-sm text-white cursor-pointer"
-              >
-                <option value="en" className="text-slate-900">English</option>
-                <option value="hi" className="text-slate-900">हिन्दी</option>
-              </select>
-            </div>
+            <select
+              value={currentLang}
+              onChange={handleLangChange}
+              aria-label="Select language"
+              className="bg-[#12365c] text-white border border-white/20 rounded px-2 py-1.5 text-xs md:text-sm outline-none cursor-pointer hover:border-white/40 transition-colors"
+            >
+              <option value="en" className="text-slate-900">English</option>
+              <option value="hi" className="text-slate-900">हिन्दी</option>
+            </select>
 
             {/* Theme toggle */}
             <button
               onClick={toggleTheme}
               aria-label={isDark ? t("header.lightMode") : t("header.darkMode")}
               title={isDark ? t("header.lightMode") : t("header.darkMode")}
-              className="flex items-center justify-center h-8 w-8 rounded-lg border border-white/20 bg-white/10 text-white hover:border-white/40 hover:bg-white/15 transition-colors"
+              className="flex items-center justify-center h-8 w-8 rounded border border-white/20 bg-[#12365c] text-white hover:border-white/40 hover:bg-[#184677] transition-colors"
             >
               {isDark ? (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">

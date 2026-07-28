@@ -6,7 +6,7 @@ export default function InfoBanner() {
 
   return (
     <section className="relative -mx-4 md:-mx-6 lg:-mx-8 mb-10">
-      <div className="absolute inset-0 bg-linear-to-r from-sky-700 via-blue-700 to-blue-900" />
+      <div className="absolute inset-0 bg-linear-to-br from-[#0d3862] via-[#154c84] to-[#1a5ca2]" />
       <div className="relative max-w-[1200px] mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-10 text-white">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
           <div className="space-y-3">
