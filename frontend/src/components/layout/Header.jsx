@@ -43,7 +43,7 @@ export default function Header() {
             <img
               src={ashoka}
               alt="Ashoka Emblem"
-              className="h-full w-full object-contain"
+              className="h-full w-full object-contain brightness-0 invert"
             />
           </div>
 
