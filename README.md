@@ -2,9 +2,15 @@
 
 A loan-eligibility and credit-scoring platform for three roles — **beneficiaries** (citizens applying for loans), **officers** (reviewing/approving applications), and **channel partners** (SHGs/NGOs/field agents bulk-importing applicant data). A Python ML service scores each application on a composite credit score with real SHAP-based explainability; scoring runs through an event-driven pipeline that degrades gracefully to synchronous processing when no message broker is available.
 
+## Screenshots
+
+| Landing page | Login |
+|---|---|
+| ![Landing page](docs/screenshots/landing.png) | ![Login page](docs/screenshots/login.png) |
+
 ## Feature overview
 
-- **Landing page** — government-portal styling, dark/light theme (fully restyled, not just a page-background toggle), 24-language UI (`frontend/src/language22/`, via i18next; includes 22 of India's scheduled languages plus English and Bodo).
+- **Landing page** — government-portal styling, dark/light theme (fully restyled, not just a page-background toggle), bilingual UI (English + Hindi, `frontend/src/language22/`, via i18next — fully translated on every page, not just the header).
 - **Beneficiary**: logs in with just a mobile number (no OTP/SMS step) → multi-step loan application (inline voice-to-text mic icon on each field, an Account Aggregator consent checkbox gating submission, an on-demand Bhashini translation widget) → redirected to **My Applications** (list of past/current applications with status + risk-band badges) → click into any application for its **status detail page** (composite score gauge, risk band, SHAP feature-impact chart with plain-English insights).
 - **Officer**: logs in with employee ID + password → dashboard with **Pending / Approved / Denied / Repeated Users** queue tabs and a sort control (date, composite score, income proxy) → per-application review screen (same score gauge + SHAP panel as the beneficiary view) → Approve / Reject / Ask Clarification.
 - **Channel partner**: logs in the same way as an officer, at a separate role — bulk-uploads a CSV of applicant financial data for mass onboarding (e.g. SHG cohorts).
